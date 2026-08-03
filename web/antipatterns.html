@@ -83,7 +83,7 @@
         <!-- Section 2: Full registry -->
         <div class="flex items-center justify-between mb-1 flex-wrap gap-3">
             <div>
-                <h2 class="heading-font text-2xl font-semibold text-slate-900">Полный реестр</h2>
+                <h2 class="heading-font text-2xl font-semibold text-slate-900">Полный реестр (<span id="registry-count">0</span>)</h2>
                 <p class="text-sm text-slate-500">Базовые (№1–18), управленческие (№19–22) и дополнительные (№23–31) антипаттерны из книги.</p>
             </div>
             <div class="flex gap-2" id="registry-filter">
@@ -137,10 +137,17 @@
         </div>
 
         <!-- Section 3: Quiz -->
-        <div class="bg-slate-900 text-slate-100 rounded-3xl p-7">
-            <div class="flex items-center gap-2 mb-1">
-                <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
-                <h2 class="heading-font text-2xl font-semibold">КВИЗ — Antipatterns</h2>
+        <div id="quiz-section" class="bg-slate-900 text-slate-100 rounded-3xl p-7">
+            <div class="flex items-start justify-between gap-3 flex-wrap">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+                    <h2 class="heading-font text-2xl font-semibold">КВИЗ — Antipatterns</h2>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <a href="diagnosis.html" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-stethoscope text-emerald-400"></i>Диагностика</a>
+                    <a href="roadmap.html" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-route text-emerald-400"></i>Roadmap</a>
+                    <button id="quiz-jump" class="text-xs px-3 py-2 rounded-2xl bg-emerald-700 hover:bg-emerald-600 border border-emerald-600 flex items-center gap-1.5"><i class="fa-solid fa-arrow-down"></i>К квизу</button>
+                </div>
             </div>
             <p class="text-sm text-slate-400 mb-5">Закрепи знания. Два режима билетов по 10 вопросов.</p>
 
@@ -422,6 +429,13 @@
     });
     document.getElementById('quiz-back').addEventListener('click', ()=>{
         resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+    });
+
+    // registry count + smooth jump to quiz
+    const rc = document.getElementById('registry-count');
+    if(rc) rc.textContent = REGISTRY.length;
+    document.getElementById('quiz-jump').addEventListener('click', ()=>{
+        document.getElementById('quiz-section').scrollIntoView({ behavior:'smooth', block:'start' });
     });
     </script>
 </body>
