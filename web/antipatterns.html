@@ -182,6 +182,7 @@
                     <i class="fa-solid fa-play"></i><span>Начать</span>
                 </button>
                 <p class="text-xs text-slate-500 leading-relaxed">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">1</kbd>–<kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">4</kbd> — выбрать ответ · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Enter</kbd> — начать / далее · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">R</kbd> — заново в том же режиме. В строгом режиме при ошибке сначала выбери верный вариант.</p>
+                <div id="quiz-progress-line" class="pt-1"></div>
             </div>
 
             <div id="quiz-run" class="hidden">
@@ -204,6 +205,7 @@
                 <div class="text-5xl mb-3"><i class="fa-solid fa-trophy text-emerald-400"></i></div>
                 <div id="quiz-score" class="heading-font text-3xl font-semibold mb-2"></div>
                 <div id="quiz-score-detail" class="text-slate-400 text-sm mb-6"></div>
+                <div id="quiz-result-status" class="text-emerald-400 text-xs font-medium mb-6"></div>
                 <div class="flex justify-center gap-3">
                     <button id="quiz-again" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Ещё раз</button>
                     <button id="quiz-back" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">К выбору билета</button>
@@ -384,6 +386,56 @@
         for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Билет №${i} (вопросы ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
     });
 
+    // ============ PROGRESS (localStorage) ============
+    const STORE_KEY = 'aipdlc.quiz.progress.v1';
+    const FIXED_COUNT = Math.ceil(QUIZ.length / TICKET_SIZE); // сейчас 7
+    function loadProgress(){
+        try {
+            const raw = localStorage.getItem(STORE_KEY);
+            if(!raw) return { done:{}, excellent:[] };
+            const p = JSON.parse(raw);
+            return { done: p.done||{}, excellent: p.excellent||[] };
+        } catch(e){ return { done:{}, excellent:[] }; }
+    }
+    function saveProgress(p){
+        try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch(e){ /* приватный режим — mute */ }
+    }
+    // лучший pct сохраняется; excellent — те, где pct >= 80
+    function recordResult(ticketKey, score, total){
+        const p = loadProgress();
+        const pct = total ? Math.round(score/total*100) : 0;
+        const prev = p.done[ticketKey];
+        const prevBest = prev ? prev.pct : -1;
+        const improved = pct > prevBest;
+        const isFirst = !prev;
+        // храним лучший результат
+        if(prevBest < 0 || pct >= prevBest){
+            p.done[ticketKey] = { score, total, pct, at: Date.now() };
+        }
+        // пересчитываем excellent по всем done
+        p.excellent = Object.keys(p.done).filter(k => (p.done[k].pct||0) >= 80);
+        saveProgress(p);
+        renderProgressLine();
+        return { isFirst, improved, isExcellent: pct>=80, prevBest, pct };
+    }
+    function ticketKeyOf(){
+        if(mode==='random') return 'random';
+        const k = parseInt(document.getElementById('ticket-select').value) - 1;
+        return 'fixed:' + (k+1);
+    }
+    function renderProgressLine(){
+        const p = loadProgress();
+        const done = p.excellent.filter(k => k.indexOf('fixed:')===0).length;
+        const wrap = document.getElementById('quiz-progress-line');
+        if(!wrap) return;
+        const pct = FIXED_COUNT ? Math.round(done/FIXED_COUNT*100) : 0;
+        wrap.innerHTML = `
+            <div class="text-xs text-slate-400 mb-1">Отлично пройдено: <span class="text-emerald-400 font-semibold">${done}</span> / ${FIXED_COUNT} билетов</div>
+            <div class="h-1 w-full rounded-full bg-slate-800 overflow-hidden">
+                <div class="h-full rounded-full bg-emerald-500 transition-all duration-500" style="width:${pct}%"></div>
+            </div>`;
+    }
+
     document.getElementById('quiz-start').addEventListener('click', startQuiz);
 
     function startQuiz(){
@@ -468,13 +520,22 @@
         const pct = Math.round(score/currentTicket.length*100);
         let msg = pct>=80 ? 'Отлично — ты видишь антипаттерны насквозь.' : pct>=50 ? 'Неплохо, но есть что повторить.' : 'Стоит перечитать раздел 7.4 книги.';
         document.getElementById('quiz-score-detail').textContent = `${pct}% верных · ${runEl.dataset.label} · ${msg}`;
+        // сохраняем прогресс
+        const r = recordResult(ticketKeyOf(), score, currentTicket.length);
+        const st = document.getElementById('quiz-result-status');
+        if(r.isExcellent){
+            st.textContent = r.isFirst ? '✓ Впервые пройдено на отлично — билет зачтён!' : (r.improved ? '✓ Результат улучшен — билет зачтён!' : '✓ Билет уже на отлично — зачтён.');
+        } else {
+            st.textContent = r.isFirst ? 'Пройдено. До «отлично» нужно ≥80%.' : (r.improved ? 'Результат улучшен, но до «отлично» ещё нужно ≥80%.' : `Лучший результат пока ${r.prevBest}%. До «отлично» нужно ≥80%.`);
+        }
+        renderProgressLine();
     }
 
     document.getElementById('quiz-again').addEventListener('click', ()=>{
-        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden'); renderProgressLine();
     });
     document.getElementById('quiz-back').addEventListener('click', ()=>{
-        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden'); renderProgressLine();
     });
 
     // "Ещё раз" запускает квиз в том же режиме (как R / Enter на результате)
@@ -483,6 +544,7 @@
     // registry count + smooth jump to quiz
     const rc = document.getElementById('registry-count');
     if(rc) rc.textContent = REGISTRY.length;
+    renderProgressLine();
     document.getElementById('quiz-jump').addEventListener('click', ()=>{
         document.getElementById('quiz-section').scrollIntoView({ behavior:'smooth', block:'start' });
     });
