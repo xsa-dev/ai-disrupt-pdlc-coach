@@ -84,7 +84,7 @@
         <div class="flex items-center justify-between mb-1 flex-wrap gap-3">
             <div>
                 <h2 class="heading-font text-2xl font-semibold text-slate-900">Полный реестр</h2>
-                <p class="text-sm text-slate-500">Базовые (№1–18) и управленческие (№19–22) антипаттерны.</p>
+                <p class="text-sm text-slate-500">Базовые (№1–18), управленческие (№19–22) и дополнительные (№23–31) антипаттерны из книги.</p>
             </div>
             <div class="flex gap-2" id="registry-filter">
                 <button data-type="all" class="filter-btn active text-sm px-4 py-2 rounded-2xl border border-slate-200">Все</button>
@@ -93,6 +93,48 @@
             </div>
         </div>
         <div id="registry-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12"></div>
+
+        <!-- Sub-block: SDD antipatterns (from book ch. on SDD) -->
+        <h3 class="heading-font text-xl font-semibold text-slate-900 mb-1">Антипаттерны SDD</h3>
+        <p class="text-sm text-slate-500 mb-4">Отдельный блок из главы про спецификацию (SDD). Превращают спецификацию из контракта в формальность.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">SDD как wiki</div>
+                <div class="text-xs text-rose-600 mb-2">Написана, но не контракт: нет гипотезы результата, класса применимости, карты участия человека.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">Обязательные блоки шаблона не опциональны.</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">SDD как ТЗ</div>
+                <div class="text-xs text-rose-600 mb-2">«Как» расписано до мелочей, лишает агента свободы выбора реализации.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">Фокус на «что» и «почему», а не на «как».</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">SDD как свершившийся факт</div>
+                <div class="text-xs text-rose-600 mb-2">Написана до этапа исследования и подогнана под реализацию.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">SDD ссылается на PR/FAQ и гипотезу результата; без них агент-ревьюер отклоняет.</div>
+            </div>
+        </div>
+
+        <!-- Sub-block: Discovery antipatterns -->
+        <h3 class="heading-font text-xl font-semibold text-slate-900 mb-1">Антипаттерны этапа Исследования (Discovery)</h3>
+        <p class="text-sm text-slate-500 mb-4">Отдельный блок из главы про Discovery.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-10">
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">Шаблонные ответы</div>
+                <div class="text-xs text-rose-600 mb-2">На все вопросы исследования дают шаблонные, не содержательные ответы.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">Взаимная проверка артефактов; культура честности.</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">Лишнее исследование тривиального</div>
+                <div class="text-xs text-rose-600 mb-2">Мелкие баг-фиксы и тривиальные фичи проходят полное исследование впустую.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">Оценка применимости агента определяет глубину; простые задачи пропускают часть.</div>
+            </div>
+            <div class="bg-white border border-slate-200 rounded-2xl p-4">
+                <div class="font-semibold text-slate-900 text-sm mb-1">Адаптация без перепроектирования</div>
+                <div class="text-xs text-rose-600 mb-2">Почти всегда выбирается адаптация без явного рассмотрения перепроектирования.</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2">Явный чекбокс «рассмотрено ли перепроектирование» в шаблоне.</div>
+            </div>
+        </div>
 
         <!-- Section 3: Quiz -->
         <div class="bg-slate-900 text-slate-100 rounded-3xl p-7">
@@ -201,7 +243,7 @@
         { n:9, type:"base", name:"Спецификация без Discovery", nameEn:"Spec without Discovery", sign:"SDD без гипотезы результата, без сверки с библиотекой паттернов.", fix:"Обязательный суб-цикл исследования перед SDD.", fixEn:"Mandatory Discovery sub-cycle before SDD." },
         { n:10, type:"base", name:"Бесконтрольный рост рабочих процессов", nameEn:"Uncontrolled workflow sprawl", sign:"200+ агентов без реестра, владельца и жизненного цикла.", fix:"Единый реестр с владельцем и жизненным циклом.", fixEn:"A single registry with an owner and lifecycle." },
         { n:11, type:"base", name:"Сэкономленное время уходит в никуда", nameEn:"Saved time goes nowhere", sign:"Время сэкономлено, но не превращено в результат.", fix:"Метрика доли перераспределения с первых пилотов (принцип внедрения №12).", fixEn:"Reallocation-rate metric from the first pilots (adoption principle #12)." },
-        { n:12, type:"base", name:"Валидация не успевает за реализацией", nameEn:"Validation can't keep up with implementation", sign:"Реализация ускорилась в 5 раз, валидация — узкое место.", fix:"I/V Tempo Ratio в еженедельном дашборде; принцип внедрения №12.", fixEn:"I/V Tempo Ratio on a weekly dashboard; adoption principle #12." },
+        { n:12, type:"base", name:"Валидация не успевает за реализацией (Implementation-Validation Gap)", nameEn:"Validation can't keep up (Implementation-Validation Gap)", sign:"Реализация ускорилась в 5 раз, валидация — узкое место (разрыв реализации и валидации).", fix:"I/V Tempo Ratio в еженедельном дашборде; принцип внедрения №12.", fixEn:"I/V Tempo Ratio on a weekly dashboard; adoption principle #12." },
         { n:13, type:"base", name:"Безоткатный запуск длительного агента", nameEn:"Risky long-running agent launch", sign:"Long-running агент без среды работы ИИ-агентов и точек сохранения.", fix:"Среда работы ИИ-агентов с протоколом передачи сессий.", fixEn:"Agent runtime with a session handoff protocol." },
         { n:14, type:"base", name:"Гонка за объёмом без бизнес-эффекта", nameEn:"Volume chase without business impact", sign:"Много PR от ИИ без бизнес-ценности.", fix:"Метрики объёма всегда в паре с метриками бизнес-результата.", fixEn:"Volume metrics always paired with business-outcome metrics." },
         { n:15, type:"base", name:"Перепрыгивание уровней автономии", nameEn:"Skipping autonomy levels", sign:"Длинные автономные сессии при недостаточной зрелости команды.", fix:"Контрольные точки перехода между уровнями.", fixEn:"Transition checkpoints between autonomy levels." },
@@ -211,7 +253,16 @@
         { n:19, type:"mgmt", name:"Управление, прикрученное сбоку", nameEn:"Governance bolted on the side", sign:"Проверка соответствия занимает больше времени, чем разработка; задачи блокируются на релизе.", fix:"Кодифицированные ограничения и Policy-as-Code с контуром на исследовании, а не на релизе.", fixEn:"Codified constraints and Policy-as-Code at design time, not at release." },
         { n:20, type:"mgmt", name:"Статичная лестница R-уровней", nameEn:"Static R-level ladder", sign:"Одинаковый надзор для документации и платёжной логики.", fix:"Контекстно-зависимая автономия.", fixEn:"Context-dependent autonomy." },
         { n:21, type:"mgmt", name:"Адаптивные контроли без отучивания", nameEn:"Adaptive controls without unlearning", sign:"Набор политик растёт на 10–20% в месяц без удаления.", fix:"Механизмы отучивания: регулярный пересмотр, явные операции «забывания».", fixEn:"Unlearning mechanisms: regular review and explicit forget operations." },
-        { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", nameEn:"AI oversight as a free pass", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек.", fixEn:"Training in accountable practices; a human stays the owner." }
+        { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", nameEn:"AI oversight as a free pass", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек.", fixEn:"Training in accountable practices; a human stays the owner." },
+        { n:23, type:"base", name:"SDD как wiki", nameEn:"SDD as wiki", sign:"Спецификация написана, но не является контрактом: нет гипотезы результата, класса применимости агента, карты участия человека.", fix:"Обязательные блоки шаблона не опциональны." },
+        { n:24, type:"base", name:"SDD как ТЗ", nameEn:"SDD as spec-of-work", sign:"«Как» расписано до мелочей, лишает агента свободы выбора реализации.", fix:"Фокус команды на «что» и «почему», а не на «как»." },
+        { n:25, type:"base", name:"SDD как свершившийся факт", nameEn:"SDD as fait accompli", sign:"Спецификация написана до этапа исследования и подогнана под реализацию.", fix:"SDD ссылается на артефакты исследования (PR/FAQ, гипотеза результата); без них агент-ревьюер отклоняет." },
+        { n:26, type:"base", name:"Шаблонные ответы в Discovery", nameEn:"Templated Discovery answers", sign:"На все вопросы исследования дают шаблонные, не содержательные ответы.", fix:"Взаимная проверка артефактов исследования; культура честности." },
+        { n:27, type:"base", name:"Лишнее исследование тривиального", nameEn:"Over-researching trivial tasks", sign:"Мелкие баг-фиксы и тривиальные фичи проходят полное исследование, тратя время впустую.", fix:"Оценка применимости агента определяет нужную глубину; простые задачи пропускают часть." },
+        { n:28, type:"base", name:"Адаптация без перепроектирования", nameEn:"Adaptation without redesign", sign:"Почти всегда выбирается адаптация без явного рассмотрения перепроектирования.", fix:"Явный чекбокс «рассмотрено ли перепроектирование» в шаблоне исследования." },
+        { n:29, type:"base", name:"Промежуточный вариант", nameEn:"The halfway option", sign:"Псевдо-перепроектирование: процесс переосмыслен частично, без поддержки заказчиков или с компромиссами в ключевых точках.", fix:"Явный владелец решения (product engineer); фиксация в SDD; явные критерии успеха." },
+        { n:30, type:"base", name:"ИИ без ролевых образовательных маршрутов", nameEn:"AI without curated role tracks", sign:"Внедрение ИИ без курируемых ролевых образовательных маршрутов для команды.", fix:"Курируемые ролевые образовательные маршруты по компетенциям (валидационная грамотность, фасилитация исследования)." },
+        { n:31, type:"base", name:"Обход через >50 подкоманд", nameEn:"Bypassing via >50 subcommands", sign:"Пользователь вносит в белый список более 50 подкоманд, фактически отключая проверку.", fix:"Ограничение частоты и событие аудита при превышении порога; эскалация к AI Security Officer." }
     ];
 
     // ============ QUIZ GENERATION (RU text + EN terms in options) ============
