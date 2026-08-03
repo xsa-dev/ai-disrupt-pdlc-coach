@@ -421,22 +421,34 @@
     }
 
     function answer(btn,opt,q){
-        if(answered) return; answered=true;
+        // уже отвечено: повторный клик по варианту, если ответ был верным, ведёт дальше
+        if(answered){
+            if(opt===q.correct){ goNext(); }
+            return;
+        }
+        answered=true;
         const opts = document.querySelectorAll('#quiz-options .quiz-opt');
         const next = document.getElementById('quiz-next');
-        opts.forEach(o=>o.disabled=true);
-        if(opt===q.correct){ btn.classList.add('correct'); score++; next.classList.remove('hidden'); }
-        else {
+        // отключаем все варианты, кроме верного (чтобы повторный клик по нему вёл вперёд)
+        opts.forEach(o=>{ if(o.textContent!==q.correct) o.disabled=true; });
+        if(opt===q.correct){
+            btn.classList.add('correct'); score++; next.classList.remove('hidden');
+        } else {
             btn.classList.add('wrong');
             const correctBtn = [...opts].find(o=>o.textContent===q.correct);
             if(correctBtn){
-                correctBtn.classList.add('correct');
                 if(strictMode){
-                    // в строгом режиме блокируем переход, пока не кликнут верный
-                    correctBtn.disabled = false;
+                    // подсветка верного НЕ показывается до клика пользователя;
+                    // оставляем кликабельным, после клика — подсветка + разблокировка
                     correctBtn.classList.add('ring-2','ring-emerald-400');
-                    correctBtn.addEventListener('click', ()=>{ next.classList.remove('hidden'); }, { once:true });
-                } else { next.classList.remove('hidden'); }
+                    correctBtn.addEventListener('click', ()=>{
+                        correctBtn.classList.add('correct');
+                        next.classList.remove('hidden');
+                    }, { once:true });
+                } else {
+                    correctBtn.classList.add('correct');
+                    next.classList.remove('hidden');
+                }
             } else { next.classList.remove('hidden'); }
         }
         const ex=document.getElementById('quiz-explain'); ex.textContent=q.explain; ex.classList.remove('hidden');
@@ -444,9 +456,11 @@
         next.textContent = (idx+1===currentTicket.length) ? 'Показать результат' : 'Далее';
     }
 
-    document.getElementById('quiz-next').addEventListener('click', ()=>{
+    function goNext(){
         if(idx+1>=currentTicket.length){ finishQuiz(); } else { idx++; showQuestion(); }
-    });
+    }
+
+    document.getElementById('quiz-next').addEventListener('click', ()=>{ goNext(); });
 
     function finishQuiz(){
         runEl.classList.add('hidden'); resultEl.classList.remove('hidden');
@@ -512,15 +526,23 @@
                     const opts = document.querySelectorAll('#quiz-options .quiz-opt');
                     if(opts[n-1]){ e.preventDefault(); opts[n-1].click(); return; }
                 }
-            } else if(key==='Enter'){
-                // в строгом режиме после ошибки кнопка "Далее" скрыта, пока не выбран верный
-                const next=document.getElementById('quiz-next');
-                if(next.classList.contains('hidden')){ e.preventDefault(); return; }
-                e.preventDefault();
-                next.click();
-                return;
-            } else if(key==='r' || key==='R'){
-                e.preventDefault(); startQuiz(); return;
+            } else {
+                // уже отвечено
+                if(key==='Enter'){
+                    const next=document.getElementById('quiz-next');
+                    if(next.classList.contains('hidden')){ e.preventDefault(); return; }
+                    e.preventDefault(); next.click(); return;
+                } else if(key==='r' || key==='R'){
+                    e.preventDefault(); startQuiz(); return;
+                } else {
+                    // повторное нажатие цифры: если это верный вариант -> след. вопрос
+                    const n = parseInt(key,10);
+                    if(n>=1 && n<=10){
+                        const opts = document.querySelectorAll('#quiz-options .quiz-opt');
+                        const o = opts[n-1];
+                        if(o && o.textContent===currentTicket[idx].correct){ e.preventDefault(); goNext(); return; }
+                    }
+                }
             }
         } else if(inSetup){
             if(key==='Enter'){ e.preventDefault(); startQuiz(); return; }
