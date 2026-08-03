@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disrupt PDLC Coach — Диагностика зрелости команды</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- jsPDF for programmatic PDF like in TG bot -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        .heading-font {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+    </style>
+
+</head>
+<body class="bg-slate-50">
+    <!-- Top Navigation Header -->
+    <div class="bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-6 py-2.5 flex items-center justify-between text-sm">
+            <div class="flex items-center gap-x-5">
+                <a href="diagnosis.html" class="font-semibold text-slate-900 hover:text-indigo-600 transition-colors">Диагностика</a>
+                <a href="roadmap.html" class="text-slate-600 hover:text-slate-900 transition-colors">Roadmap</a>
+            </div>
+            <div class="text-xs text-slate-400 font-medium">Disrupt PDLC Coach</div>
+        </div>
+    </div>
+
+    <!-- Header (formatted like roadmap) -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-indigo-600 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-stethoscope text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="heading-font text-2xl font-semibold tracking-tight text-slate-900">Disrupt PDLC Coach</div>
+                    <div class="text-xs text-slate-500 -mt-1">Диагностика зрелости команды</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        <p class="text-slate-600 text-sm mb-5">
+            Диагностика зрелости команды по принципам книги<br>
+            <span class="text-xs">"Среда важнее модели"</span>
+        </p>
+
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="bg-white border border-slate-200 rounded-2xl p-8 shadow-sm">
+                <h2 class="text-2xl font-semibold text-slate-900 mb-4">Диагностика зрелости команды</h2>
+                
+                <div class="space-y-4 text-slate-700">
+                    <p>Этот инструмент поможет честно оценить текущий уровень зрелости команды по двум осям:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="border border-slate-200 rounded-xl p-4">
+                            <div class="font-medium text-indigo-700">L-уровень</div>
+                            <div class="text-sm">Организационная зрелость команды (L0 — L5)</div>
+                        </div>
+                        <div class="border border-slate-200 rounded-xl p-4">
+                            <div class="font-medium text-indigo-700">R-уровень</div>
+                            <div class="text-sm">Автономия агентов (R0 — R5)</div>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-slate-500">
+                        Отвечайте максимально честно. Завышение уровня не помогает развитию.
+                    </p>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Название команды</label>
+                    <input id="team-name" type="text" value="Моя команда" 
+                           class="w-full px-4 py-2 border border-slate-300 rounded-xl focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <button onclick="startDiagnosis()"
+                        class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-2xl transition-colors">
+                    Начать диагностику
+                </button>
+
+    
+            <div id="roadmap-section" class="hidden mt-8" style="display:none">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Roadmap трансформации</h3>
+                    <button onclick="hideRoadmap()" class="text-sm text-slate-500 hover:text-slate-700">Скрыть</button>
+                </div>
+                <div id="roadmap-container" class="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                    <!-- Roadmap content injected by JS -->
+                </div>
+            </div>
+
+            <div class="mt-4 text-center text-sm">
+                    <a href="https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf" 
+                       target="_blank" 
+                       class="text-indigo-600 hover:text-indigo-700 hover:underline">
+                        Руководство по генеративной разработке ПО →
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Screen -->
+        <div id="questions-screen" class="hidden">
+            <div class="flex items-center justify-between mb-4">
+                <div>
+                    <span id="progress-text" class="text-sm font-medium text-slate-600"></span>
+                </div>
+                <div class="text-sm text-slate-400" id="team-display"></div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl p-7 shadow-sm">
+                <div id="question-container">
+                    <!-- Questions injected by JS -->
+                </div>
+
+                <div class="mt-8 flex gap-3">
+                    <button onclick="prevQuestion()" 
+                            class="px-5 py-2.5 rounded-2xl border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium">
+                        Назад
+                    </button>
+                    <button onclick="nextQuestion()" id="next-btn"
+                            class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 rounded-2xl transition-colors">
+                        Далее
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="hidden">
+            <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-2xl font-semibold text-slate-900">Результат диагностики</h2>
+                <button onclick="restart()" 
+                        class="text-sm px-4 py-2 text-slate-600 hover:text-slate-900 flex items-center gap-1">
+                    ← Начать заново
+                </button>
+            </div>
+
+            <div id="report-container" class="report-card border border-slate-200 rounded-2xl p-7 shadow-sm">
+                <!-- Report content injected by JS -->
+            </div>
+
+            <div class="mt-6 flex gap-3">
+                <button onclick="copyReport()" 
+                        class="flex-1 px-5 py-3 border border-slate-300 rounded-2xl hover:bg-slate-50 font-medium text-slate-700">
+                    Скопировать отчёт
+                </button>
+                <button onclick="window.print()" 
+                        class="flex-1 bg-slate-900 hover:bg-black text-white px-5 py-3 rounded-2xl font-medium">
+                    Печать / PDF
+                </button>
+                <button onclick="goToRoadmap()" 
+                        class="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-3 rounded-2xl font-medium">
+                    Построить Roadmap
+                </button>
+            </div>
+
+
+            <div id="roadmap-section" class="hidden mt-8" style="display:none">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xl font-semibold text-slate-900">Roadmap трансформации</h3>
+                    <button onclick="hideRoadmap()" class="text-sm text-slate-500 hover:text-slate-700">Скрыть</button>
+                </div>
+                <div id="roadmap-container" class="border border-slate-200 rounded-2xl p-6 bg-white shadow-sm">
+                    <!-- Roadmap content injected by JS -->
+                </div>
+            </div>
+
+            <div class="mt-4 text-center text-sm">
+                <a href="https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf" 
+                   target="_blank" 
+                   class="text-indigo-600 hover:text-indigo-700 hover:underline">
+                    Руководство по генеративной разработке ПО →
+                </a>
+            </div>
+
+            <div class="mt-8 text-center text-xs text-slate-400">
+                Disrupt PDLC Coach • 2026
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === Данные из levels.py и assessment.py ===
+                const L_LEVELS = {
+            0: { 
+                name: "L0 - Нет устойчивой ИИ-практики", 
+                task_horizon: "Нет агентных задач",
+                key_practices: ["Базовый доступ к IDE-плагину", "Гигиена промптов", "Простые эксперименты"],
+                gate: "Доступ к IDE-плагину + базовая гигиена промптов. Доля сотрудников, использующих агентный режим."
+            },
+            1: { 
+                name: "L1 - Эксперименты с IDE-плагинами", 
+                task_horizon: "Минуты (автодополнение)",
+                key_practices: ["SDD-lite", "AI-gate в CI", "Первые evals", "Измерение Agentic Coding"],
+                gate: "SDD-lite, AI-gate в CI, первые evals. Старт замера проявления навыков Agentic Coding."
+            },
+            2: { 
+                name: "L2 - ИИ для рутинных задач", 
+                task_horizon: "До 30 минут",
+                key_practices: ["Обязательный SDD", "Агент-ревьюер", "Evidence Bundle", "Проверка в CI"],
+                gate: "Обязательный SDD, агент-ревьюер, проверочный пакет (Evidence Bundle). ≥5 полных SDD."
+            },
+            3: { 
+                name: "L3 - SDD + Агент-ревьюер", 
+                task_horizon: "До 2 часов",
+                key_practices: ["Среда долговременных процессов", "Библиотека паттернов", "Методика валидации", "I/V Tempo Ratio"],
+                gate: "Среда исполнения долговременных процессов, библиотека паттернов ≥30, методика валидации."
+            },
+            4: { 
+                name: "L4 - Параллельное выполнение", 
+                task_horizon: "До 4 часов",
+                key_practices: ["Протокол A2A", "Скоординированные команды агентов", "Объяснимость в реальном времени"],
+                gate: "Протокол A2A внедрён, скоординированные команды работают операционно."
+            },
+            5: { 
+                name: "L5 - Скоординированные команды агентов", 
+                task_horizon: "Длительные задачи",
+                key_practices: ["Платформенная поддержка", "Полный цикл ADLC", "Реал-тайм Governance Mesh"],
+                gate: "Требует зрелой платформенной команды и работающего контура управления."
+            }
+        };
+
+        const R_LEVELS = {
+            0: { name: "R0 - Только подсказывает" },
+            1: { name: "R1 - Ограниченная автономия" },
+            2: { name: "R2" },
+            3: { name: "R3" },
+            4: { name: "R4" },
+            5: { name: "R5 - Автономная работа в очерченном домене" }
+        };
+
+        const QUESTIONS = [
+            {
+                id: "ai_usage",
+                text: "Как сейчас в команде используется ИИ в разработке?",
+                options: [
+                    { label: "A", text: "В основном как умное автодополнение (Copilot и т.п.)", score: 1, axis: "L" },
+                    { label: "B", text: "Генерация кода и тестов для рутинных задач (до 30 мин)", score: 2, axis: "L" },
+                    { label: "C", text: "Агенты работают над задачами до 2 часов под ревью", score: 3, axis: "L" },
+                    { label: "D", text: "Параллельная работа нескольких агентов над сложными задачами", score: 4, axis: "L" },
+                    { label: "E", text: "Скоординированные команды агентов с длительным горизонтом", score: 5, axis: "L" },
+                    { label: "F", text: "ИИ почти не используется систематически", score: 0, axis: "L" }
+                ]
+            },
+            {
+                id: "sdd",
+                text: "Используете ли вы разработку через спецификацию (SDD / spec-first)?",
+                options: [
+                    { label: "A", text: "Нет, код пишется сразу", score: 0, axis: "L" },
+                    { label: "B", text: "Иногда пишем промпты или описания, но не системно", score: 1, axis: "L" },
+                    { label: "C", text: "Есть обязательный этап спецификации перед кодом (SDD-lite)", score: 2, axis: "L" },
+                    { label: "D", text: "Полноценный SDD + агент-ревьюер проверяет работу", score: 3, axis: "L" },
+                    { label: "E", text: "SDD + сильная валидация + библиотека паттернов", score: 4, axis: "L" }
+                ]
+            },
+            {
+                id: "validation",
+                text: "Как происходит валидация результатов работы ИИ?",
+                options: [
+                    { label: "A", text: "Только ручной ревью разработчиком", score: 1, axis: "L" },
+                    { label: "B", text: "Есть AI-gate в CI (автоматические проверки)", score: 2, axis: "L" },
+                    { label: "C", text: "Агент-ревьюер + Evidence Bundle (проверочный пакет)", score: 3, axis: "L" },
+                    { label: "D", text: "Интегрированная методика валидации + контрольные точки", score: 4, axis: "L" },
+                    { label: "E", text: "Полная объяснимость в реальном времени + ADLC", score: 5, axis: "L" }
+                ]
+            },
+            {
+                id: "governance",
+                text: "Есть ли в команде guardrails / Governance Mesh для работы с агентами?",
+                options: [
+                    { label: "A", text: "Нет, всё отдано на откуп разработчикам", score: 0, axis: "L" },
+                    { label: "B", text: "Базовые правила и политики (промпты, безопасность)", score: 1, axis: "L" },
+                    { label: "C", text: "Guardian Agents + политики доступа", score: 3, axis: "L" },
+                    { label: "D", text: "Полноценный Governance Mesh + аудит и объяснимость", score: 4, axis: "L" }
+                ]
+            },
+            {
+                id: "environment_vs_model",
+                text: "Когда что-то не работает с ИИ, что вы меняете в первую очередь?",
+                options: [
+                    { label: "A", text: "Пробуем другую модель или более мощный промпт", score: 0, axis: "L" },
+                    { label: "B", text: "Улучшаем контекст, инструменты, harness, процесс", score: 3, axis: "L" },
+                    { label: "C", text: "Меняем и модель, и среду в зависимости от проблемы", score: 2, axis: "L" }
+                ]
+            },
+            {
+                id: "task_horizon",
+                text: "Какие по длительности задачи вы доверяете агентам прямо сейчас?",
+                options: [
+                    { label: "A", text: "Только автодополнение и мелкие правки (минуты)", score: 0, axis: "L" },
+                    { label: "B", text: "Рутинные задачи до 30 минут", score: 2, axis: "L" },
+                    { label: "C", text: "Задачи до 1-2 часов с последующим ревью", score: 3, axis: "L" },
+                    { label: "D", text: "Сложные задачи до половины рабочего дня", score: 4, axis: "L" },
+                    { label: "E", text: "Длительные задачи с несколькими сессиями и контрольными точками", score: 5, axis: "L" }
+                ]
+            },
+            {
+                id: "agent_reviewer",
+                text: "Используете ли вы отдельного 'агент-ревьюера' (или эквивалент) для проверки работы основного агента?",
+                options: [
+                    { label: "A", text: "Нет, только человек ревьюит", score: 0, axis: "R" },
+                    { label: "B", text: "Иногда просим агента проверить себя", score: 1, axis: "R" },
+                    { label: "C", text: "Да, есть отдельный агент-ревьюер + Evidence Bundle", score: 3, axis: "R" },
+                    { label: "D", text: "Полноценный процесс с Guardian Agents и аудитом", score: 4, axis: "R" }
+                ]
+            },
+            {
+                id: "measurement",
+                text: "Как вы измеряете эффективность работы с ИИ?",
+                options: [
+                    { label: "A", text: "Вообще не измеряем", score: 0, axis: "L" },
+                    { label: "B", text: "Субъективно: 'стало быстрее'", score: 1, axis: "L" },
+                    { label: "C", text: "Есть метрики по времени на задачу и качеству (PR acceptance)", score: 2, axis: "L" },
+                    { label: "D", text: "Системные метрики + evals + I/V Tempo Ratio", score: 3, axis: "L" }
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let answers = {};
+        let teamName = "Моя команда";
+        let currentResult = null;
+        let currentTeamName = "";
+
+        function startDiagnosis() {
+            teamName = document.getElementById('team-name').value.trim() || "Моя команда";
+            currentTeamName = teamName;
+            
+            document.getElementById('start-screen').classList.add('hidden');
+            document.getElementById('questions-screen').classList.remove('hidden');
+            
+            currentQuestion = 0;
+            answers = {};
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const container = document.getElementById('question-container');
+            const q = QUESTIONS[currentQuestion];
+            
+            document.getElementById('progress-text').textContent = 
+                `Вопрос ${currentQuestion + 1} из ${QUESTIONS.length}`;
+            document.getElementById('team-display').textContent = teamName;
+
+            let html = `
+                <div class="mb-6">
+                    <div class="text-lg font-medium text-slate-900 mb-1">${q.text}</div>
+                </div>
+                <div class="space-y-2">
+            `;
+
+            q.options.forEach((opt, index) => {
+                const isSelected = answers[q.id] === opt.label;
+                html += `
+                    <label onclick="selectAnswer('${q.id}', '${opt.label}')"
+                           class="option-label flex items-start gap-3 border ${isSelected ? 'selected border-indigo-300' : 'border-slate-200'} rounded-2xl p-4 cursor-pointer">
+                        <div class="w-6 h-6 rounded-full border flex-shrink-0 mt-0.5 flex items-center justify-center text-xs font-medium
+                            ${isSelected ? 'bg-indigo-600 text-white border-indigo-600' : 'border-slate-300 text-slate-500'}">
+                            ${opt.label}
+                        </div>
+                        <div class="flex-1 text-slate-800">${opt.text}</div>
+                    </label>
+                `;
+            });
+
+            html += `</div>`;
+            container.innerHTML = html;
+
+            // Update next button text
+            const nextBtn = document.getElementById('next-btn');
+            if (currentQuestion === QUESTIONS.length - 1) {
+                nextBtn.textContent = "Завершить диагностику";
+            } else {
+                nextBtn.textContent = "Далее";
+            }
+        }
+
+        function selectAnswer(questionId, answer) {
+            answers[questionId] = answer;
+            renderQuestion();
+        }
+
+        function nextQuestion() {
+            const q = QUESTIONS[currentQuestion];
+            if (!answers[q.id]) {
+                alert("Пожалуйста, выберите вариант ответа");
+                return;
+            }
+
+            if (currentQuestion < QUESTIONS.length - 1) {
+                currentQuestion++;
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                renderQuestion();
+            }
+        }
+
+        function runAssessment(answers) {
+            let lScores = [];
+            let rScores = [];
+
+            QUESTIONS.forEach(q => {
+                const answer = answers[q.id];
+                if (!answer) return;
+
+                const opt = q.options.find(o => o.label === answer);
+                if (opt) {
+                    if (opt.axis === "L") lScores.push(opt.score);
+                    else rScores.push(opt.score);
+                }
+            });
+
+            if (lScores.length === 0) {
+                return {
+                    l_level: 0, r_level: 0,
+                    task_horizon: "Нет данных",
+                    justification: "Недостаточно ответов для оценки.",
+                    strengths: [], gaps: ["Нет данных"], recommendations: ["Пройдите диагностику заново."],
+                    confidence: 0.2, warnings: ["Диагностика не завершена."]
+                };
+            }
+
+            let l_raw = lScores.reduce((a, b) => a + b, 0) / lScores.length;
+            let r_raw = rScores.length > 0 
+                ? rScores.reduce((a, b) => a + b, 0) / rScores.length 
+                : Math.max(0, l_raw * 0.7);
+
+            // Guardrails
+            let final_l = Math.round(l_raw);
+            let final_r = Math.round(r_raw);
+            let warnings = [];
+
+            // Guardrail 1
+            const sdd = answers.sdd || "A";
+            const validation = answers.validation || "A";
+            if (final_l >= 3 && (sdd === "A" || sdd === "B") && (validation === "A" || validation === "B")) {
+                warnings.push("Оценка снижена: заявлен высокий уровень, но отсутствует системный SDD и встроенная валидация.");
+                final_l = Math.min(final_l, 2);
+            }
+
+            // Guardrail 2
+            const env = answers.environment_vs_model || "A";
+            if (final_l >= 3 && env === "A") {
+                warnings.push("Предупреждение: при высоком уровне преобладает подход 'меняем модель вместо среды'.");
+                final_l = Math.min(final_l, 2);
+            }
+
+            // Guardrail 3
+            if (final_r > final_l + 1) {
+                warnings.push("Автономия агентов (R) не может сильно опережать организационную зрелость (L).");
+                final_r = Math.min(final_r, final_l + 1);
+            }
+
+            // Guardrail 4
+            const reviewer = answers.agent_reviewer || "A";
+            if (final_r >= 3 && (reviewer === "A" || reviewer === "B")) {
+                warnings.push("Высокая автономия (R) без агент-ревьюера выглядит нереалистично.");
+                final_r = Math.min(final_r, 2);
+            }
+
+            final_l = Math.max(0, Math.min(5, final_l));
+            final_r = Math.max(0, Math.min(5, final_r));
+
+            const lInfo = L_LEVELS[final_l];
+            const rInfo = R_LEVELS[final_r];
+
+            // Justification
+            const justification = `На основании ответов команда оценивается на уровне ${lInfo.name}. ` +
+                `Горизонт задач примерно соответствует «${lInfo.task_horizon}». ` +
+                `Уровень автономии агентов — ${rInfo.name}.`;
+
+            // Strengths and gaps (simplified but close to Python version)
+            let strengths = [];
+            let gaps = [];
+
+            if (final_l >= 2) strengths.push("Есть начальная дисциплина использования ИИ для реальных задач.");
+            if (final_l >= 3) strengths.push("Появляются элементы SDD и встроенной валидации.");
+            if (env === "B") strengths.push("Команда демонстрирует правильный фокус на улучшении среды, а не только модели.");
+
+            if (final_l < 2) gaps.push("ИИ используется в основном эпизодически или как автодополнение.");
+            if (final_l < 3 && (sdd === "A" || sdd === "B")) gaps.push("Отсутствует системный подход к спецификациям (SDD).");
+            if ((validation === "A" || validation === "B") && final_l >= 2) gaps.push("Валидация остаётся преимущественно ручной.");
+
+            // Recommendations
+            let recommendations = [];
+            const nextLevel = Math.min(5, final_l + 1);
+            recommendations.push(`Для перехода к уровню ${L_LEVELS[nextLevel].name}: см. gate-критерии в книге.`);
+
+            if (final_r < final_l) {
+                recommendations.push("Рассмотрите возможность повысить автономию агентов (внедрить агент-ревьюера).");
+            }
+
+            const confidence = Object.keys(answers).length >= 5 ? 0.7 : 0.5;
+
+            return {
+                l_level: final_l,
+                r_level: final_r,
+                task_horizon: lInfo.task_horizon,
+                justification,
+                strengths: strengths.length ? strengths : ["Пока недостаточно данных для сильных сторон"],
+                gaps: gaps.length ? gaps : ["Пока недостаточно данных о пробелах"],
+                recommendations,
+                confidence,
+                warnings
+            };
+        }
+
+        function showResults() {
+            document.getElementById('questions-screen').classList.add('hidden');
+            document.getElementById('results-screen').classList.remove('hidden');
+
+            const result = runAssessment(answers);
+            const container = document.getElementById('report-container');
+
+            let html = `
+                <div class="mb-6">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-sm text-slate-500">Диагностика команды</div>
+                            <div class="text-2xl font-semibold">${teamName}</div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-xs text-slate-500">Уверенность оценки</div>
+                            <div class="font-semibold">${Math.round(result.confidence * 100)}%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                        <div class="text-xs font-medium text-slate-500 mb-1">Организационный уровень</div>
+                        <div class="text-xl font-semibold leading-tight">${L_LEVELS[result.l_level].name}</div>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+                        <div class="text-xs font-medium text-slate-500 mb-1">Автономия агентов (R)</div>
+                        <div class="text-xl font-semibold leading-tight">${R_LEVELS[result.r_level].name}</div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-sm font-semibold mb-2">Обоснование</div>
+                    <div class="text-slate-700">${result.justification}</div>
+                </div>
+            `;
+
+            if (result.warnings.length > 0) {
+                html += `
+                    <div class="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl">
+                        <div class="text-sm font-medium text-amber-800 mb-1">Предупреждения</div>
+                        <ul class="text-sm text-amber-700 space-y-1">
+                            ${result.warnings.map(w => `<li>• ${w}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <div class="text-sm font-semibold mb-2 text-emerald-700">Сильные стороны</div>
+                        <ul class="text-sm space-y-1 text-slate-700">
+                            ${result.strengths.map(s => `<li>• ${s}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="text-sm font-semibold mb-2 text-rose-700">Зоны роста</div>
+                        <ul class="text-sm space-y-1 text-slate-700">
+                            ${result.gaps.map(g => `<li>• ${g}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <div class="text-sm font-semibold mb-2">Рекомендации</div>
+                    <ul class="text-sm space-y-1 text-slate-700">
+                        ${result.recommendations.map(r => `<li>• ${r}</li>`).join('')}
+                    </ul>
+                </div>
+
+                <!-- Ваши ответы -->
+                <div class="mt-6 pt-6 border-t border-slate-200">
+                    <div class="text-sm font-semibold mb-3 text-slate-600">Ваши ответы</div>
+                    <div class="space-y-3 text-sm">
+                        ${QUESTIONS.map((q, idx) => {
+                            const selectedLabel = answers[q.id];
+                            if (!selectedLabel) return '';
+                            const opt = q.options.find(o => o.label === selectedLabel);
+                            const answerText = opt ? opt.text : '';
+                            return `
+                                <div class="flex gap-3">
+                                    <div class="flex-shrink-0 w-5 text-xs text-slate-400 pt-0.5">${idx + 1}.</div>
+                                    <div class="flex-1">
+                                        <div class="text-slate-700">${q.text}</div>
+                                        <div class="mt-0.5 text-slate-800">
+                                            <span class="inline-block px-1.5 py-0.5 bg-indigo-100 text-indigo-700 rounded text-xs font-medium mr-1">${selectedLabel}</span>
+                                            ${answerText}
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+
+            html += `
+                <div class="mt-6 pt-6 border-t border-slate-200">
+                    <div class="text-sm font-semibold mb-3 text-slate-600">Релевантные выдержки из белой книги</div>
+                    <div class="space-y-3 text-sm text-slate-700">
+                        <div class="pl-3 border-l-2 border-slate-300 italic">
+                            «Практические следствия перехода к Governance Mesh: Ограничения управляемости мы фиксируем в спецификации (SDD) до начала реализации. Блок «Кодифицированные ограничения» содержит машиночитаемые правила, которые среда применяет автоматически.»
+                        </div>
+                        <div class="pl-3 border-l-2 border-slate-300 italic">
+                            «Наставничество как замена bootcamp-модели. В ИИ-эпоху входной уровень требует full-stack-мышления, мышления спецификациями и умения работать с валидацией. Практическое наставничество даёт нужную глубину.»
+                        </div>
+                    </div>
+                </div>
+            `;
+
+                        currentResult = result;
+            currentTeamName = teamName;
+            container.innerHTML = html;
+        }
+
+        function copyReport() {
+            const container = document.getElementById('report-container');
+            const text = container.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btns = document.querySelectorAll('#results-screen button');
+                const originalText = event.target ? event.target.innerText : '';
+                alert("Отчёт скопирован в буфер обмена");
+            });
+        }
+
+        function restart() {
+            document.getElementById('results-screen').classList.add('hidden');
+            document.getElementById('start-screen').classList.remove('hidden');
+            document.getElementById('questions-screen').classList.add('hidden');
+            
+            currentQuestion = 0;
+            answers = {};
+        }
+
+        // Keyboard support
+        document.addEventListener('keydown', function(e) {
+            if (document.getElementById('questions-screen').classList.contains('hidden')) return;
+
+            if (e.key === 'Enter') {
+                nextQuestion();
+            }
+        });
+
+        // Allow starting with Enter on team name
+
+        function goToRoadmap() {
+            if (!currentResult) {
+                // Open clean roadmap page
+                window.location.href = 'roadmap.html';
+                return;
+            }
+            const currentL = currentResult.l_level || 2;
+            // Open roadmap page with current level prefilled
+            window.location.href = `roadmap.html?currentL=${currentL}&auto=true`;
+        }
+
+
+        document.getElementById('team-name').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startDiagnosis();
+            }
+        });
+
+        function showRoadmapSelector() {
+            if (!currentResult) {
+                alert("Сначала пройдите диагностику");
+                return;
+            }
+
+            const container = document.getElementById('roadmap-container');
+            const section = document.getElementById('roadmap-section');
+            
+            const currentL = currentResult.l_level;
+            let html = `
+                <div class="mb-4">
+                    <div class="text-sm text-slate-600 mb-2">Текущий уровень: <span class="font-semibold">${L_LEVELS[currentL].name}</span></div>
+                    
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Целевой уровень L</label>
+                    <select id="target-level" class="w-full px-4 py-2 border border-slate-300 rounded-xl mb-4">
+            `;
+
+            for (let i = currentL + 1; i <= 5; i++) {
+                const selected = i === Math.min(currentL + 2, 5) ? 'selected' : '';
+                html += `<option value="${i}" ${selected}>${L_LEVELS[i].name}</option>`;
+            }
+
+            html += `
+                    </select>
+
+                    <button onclick="generateAndShowRoadmap()" 
+                            class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 rounded-2xl">
+                        Сгенерировать Roadmap
+                    </button>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            section.classList.remove('hidden');
+        }
+
+        function generateAndShowRoadmap() {
+            const targetSelect = document.getElementById('target-level');
+            if (!targetSelect || !currentResult) return;
+
+            const currentL = currentResult.l_level;
+            const targetL = parseInt(targetSelect.value);
+
+            const roadmap = generateRoadmap(currentL, targetL);
+            renderRoadmap(roadmap);
+        }
+
+        function generateRoadmap(currentL, targetL) {
+            const stages = [];
+            let timeTotal = 0;
+
+            for (let level = currentL; level < targetL; level++) {
+                const from = L_LEVELS[level];
+                const to = L_LEVELS[level + 1];
+
+                let duration = "Несколько недель";
+                let practices = to.key_practices || [];
+                let gate = to.gate || "См. белую книгу";
+                let risks = [];
+
+                if (level === 0) { duration = "Дни — 1 месяц"; risks = ["Эпизодическое использование", "Нет стандартов"]; }
+                else if (level === 1) { duration = "1–3 месяца"; risks = ["Остаются только автодополнение", "Нет измерений"]; }
+                else if (level === 2) { duration = "6–12 месяцев"; risks = ["Слабый SDD", "Ревью только человеком"]; }
+                else if (level === 3) { duration = "12–18 месяцев"; risks = ["Слабая валидация", "Нет параллельной работы"]; }
+                else { duration = "12+ месяцев"; risks = ["Недостаточная платформа", "Слабый Governance"]; }
+
+                stages.push({
+                    from: from.name,
+                    to: to.name,
+                    duration: duration,
+                    practices: practices,
+                    gate: gate,
+                    risks: risks
+                });
+            }
+
+            return {
+                current: L_LEVELS[currentL].name,
+                target: L_LEVELS[targetL].name,
+                stages: stages,
+                totalDuration: stages.length > 0 ? stages[stages.length-1].duration : "—"
+            };
+        }
+
+        function renderRoadmap(roadmap) {
+            const container = document.getElementById('roadmap-container');
+            
+            let html = `
+                <div class="mb-6">
+                    <div class="flex items-center gap-2 text-sm">
+                        <span class="px-3 py-1 bg-slate-100 rounded-full">${roadmap.current}</span>
+                        <span>→</span>
+                        <span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full font-medium">${roadmap.target}</span>
+                    </div>
+                </div>
+            `;
+
+            roadmap.stages.forEach((stage, index) => {
+                html += `
+                    <div class="mb-6 border border-slate-200 rounded-xl p-4">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <div class="text-xs text-slate-500">Этап ${index + 1}</div>
+                                <div class="font-semibold">${stage.from} → ${stage.to}</div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-medium text-emerald-600">${stage.duration}</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                            <div>
+                                <div class="font-medium text-slate-700 mb-1">Ключевые практики</div>
+                                <ul class="space-y-1 text-slate-600">
+                                    ${stage.practices.map(p => `<li>• ${p}</li>`).join('')}
+                                </ul>
+                            </div>
+                            <div>
+                                <div class="font-medium text-slate-700 mb-1">Gate-критерий перехода</div>
+                                <div class="text-slate-600 text-xs bg-slate-50 p-2 rounded">${stage.gate}</div>
+                                
+                                ${stage.risks.length > 0 ? `
+                                <div class="mt-3">
+                                    <div class="font-medium text-rose-600 text-xs mb-1">Основные риски / антипаттерны</div>
+                                    <ul class="text-xs text-slate-600">
+                                        ${stage.risks.map(r => `<li>• ${r}</li>`).join('')}
+                                    </ul>
+                                </div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="mt-4 text-xs text-slate-500 text-center">
+                    Данные основаны на AI-Disrupt PDLC (Whitepaper v2.0). Актуальные сроки зависят от контекста команды.
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function hideRoadmap() {
+            document.getElementById('roadmap-section').classList.add('hidden');
+        }
+
+    
+
+
+    
+    </script>
+</body>
+</html>

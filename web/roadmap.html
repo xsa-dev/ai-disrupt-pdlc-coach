@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Roadmap трансформации • Disrupt PDLC Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Space+Grotesk:wght@500;600&amp;display=swap');
+        
+        :root {
+            --primary: 16 185 129;
+        }
+        
+        body {
+            font-family: 'Inter', system_ui, sans-serif;
+        }
+        
+        .heading-font {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 600;
+        }
+
+        .roadmap-card {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .stage-header {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .level-badge {
+            font-size: 0.75rem;
+            padding: 2px 10px;
+            border-radius: 9999px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body class="bg-slate-50">
+    <!-- Top Navigation Header -->
+    <div class="bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-6 py-2.5 flex items-center justify-between text-sm">
+            <div class="flex items-center gap-x-5">
+                <a href="diagnosis.html" class="font-semibold text-slate-900 hover:text-emerald-600 transition-colors">Диагностика</a>
+                <a href="roadmap.html" class="text-slate-600 hover:text-slate-900 transition-colors font-semibold">Roadmap</a>
+            </div>
+            <div class="text-xs text-slate-400 font-medium">Disrupt PDLC Coach</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="max-w-5xl mx-auto px-6 py-5 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-emerald-600 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-route text-white text-xl"></i>
+                </div>
+                <div>
+                    <div class="heading-font text-2xl font-semibold tracking-tight text-slate-900">Disrupt PDLC Coach</div>
+                    <div class="text-xs text-slate-500 -mt-1">Roadmap трансформации</div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-2">
+                <a href="diagnosis.html" 
+                   class="flex items-center gap-x-2 text-sm px-4 py-2 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i>
+                    <span>К диагностике</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-6 py-8">
+        
+        <!-- Title -->
+        <div class="mb-8">
+            <h1 class="heading-font text-4xl font-semibold tracking-tighter text-slate-900">Roadmap трансформации</h1>
+            <p class="text-slate-600 mt-2 max-w-md">
+                Постройте реалистичный путь от текущего уровня зрелости к целевому.
+            </p>
+        </div>
+
+        <!-- Input Section -->
+        <div id="input-section" class="bg-white border border-slate-200 rounded-3xl p-7 shadow-sm mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                
+                <!-- Current Level -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Текущий уровень (L)</label>
+                    <select id="current-level" 
+                            class="w-full px-4 py-3 border border-slate-300 rounded-2xl text-sm focus:outline-none focus:border-emerald-400">
+                        <option value="0">L0 — Нет устойчивой ИИ-практики</option>
+                        <option value="1">L1 — Эксперименты с IDE-плагинами</option>
+                        <option value="2" selected>L2 — ИИ для рутинных задач</option>
+                        <option value="3">L3 — SDD + Агент-ревьюер</option>
+                        <option value="4">L4 — Параллельное выполнение</option>
+                        <option value="5">L5 — Скоординированные команды агентов</option>
+                    </select>
+                </div>
+
+                <!-- Target Level -->
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Целевой уровень (L)</label>
+                    <select id="target-level" 
+                            class="w-full px-4 py-3 border border-slate-300 rounded-2xl text-sm focus:outline-none focus:border-emerald-400">
+                        <option value="1">L1 — Эксперименты с IDE-плагинами</option>
+                        <option value="2">L2 — ИИ для рутинных задач</option>
+                        <option value="3" selected>L3 — SDD + Агент-ревьюер</option>
+                        <option value="4">L4 — Параллельное выполнение</option>
+                        <option value="5">L5 — Скоординированные команды агентов</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mt-6 flex gap-3">
+                <button onclick="generateRoadmap()"
+                        class="flex-1 bg-emerald-600 hover:bg-emerald-700 transition-colors text-white font-medium py-3.5 rounded-2xl flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magic"></i>
+                    <span>Сгенерировать Roadmap</span>
+                </button>
+                
+                <button onclick="loadExample()"
+                        class="px-6 py-3.5 border border-slate-300 hover:bg-slate-50 text-slate-700 font-medium rounded-2xl flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb"></i>
+                    <span>Пример</span>
+                </button>
+            </div>
+            
+            <p class="text-xs text-slate-500 mt-3">
+                Временные горизонты взяты из AI-Disrupt PDLC (Whitepaper v2.0)
+            </p>
+        </div>
+
+        <!-- Roadmap Output -->
+        <div id="roadmap-output" class="hidden">
+            <div class="flex items-center justify-between mb-4">
+                <h2 class="text-xl font-semibold text-slate-900">Ваш Roadmap</h2>
+                <div class="flex gap-2">
+                    <button onclick="copyRoadmapAsMarkdown()" 
+                            class="flex items-center gap-2 text-sm px-4 py-2 border border-slate-300 hover:bg-slate-50 rounded-2xl">
+                        <i class="fa-solid fa-copy"></i>
+                        <span>Markdown</span>
+                    </button>
+                    <button onclick="downloadPDF()" 
+                            class="flex items-center gap-2 text-sm px-4 py-2 bg-slate-900 text-white rounded-2xl hover:bg-black">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Скачать PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div id="roadmap-summary" 
+                 class="mb-6 bg-white border border-slate-200 rounded-3xl p-5 flex items-center justify-between">
+                <!-- filled by JS -->
+            </div>
+
+            <!-- Stages -->
+            <div class="text-xs text-slate-500 mb-3">Этапы сгруппированы по горизонтам внедрения из раздела 7.2 книги (Г1: 0–6 мес, Г2: 6–18 мес, Г3: 18–36 мес).</div>
+                <div id="stages-container" class="space-y-4">
+                <!-- stages will be inserted here -->
+            </div>
+
+            <div class="mt-8 text-center">
+                <a href="https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf" 
+                   target="_blank"
+                   class="inline-flex items-center text-sm text-emerald-700 hover:text-emerald-800">
+                    <i class="fa-solid fa-book mr-2"></i>
+                    Руководство по генеративной разработке ПО →
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script>
+        const L_LEVELS = {
+            0: { name: "L0 - Нет устойчивой ИИ-практики", short: "L0", horizon: "Нет агентных задач" },
+            1: { name: "L1 - Эксперименты с IDE-плагинами", short: "L1", horizon: "Минуты" },
+            2: { name: "L2 - ИИ для рутинных задач", short: "L2", horizon: "До 30 минут" },
+            3: { name: "L3 - SDD + Агент-ревьюер", short: "L3", horizon: "До 2 часов" },
+            4: { name: "L4 - Параллельное выполнение", short: "L4", horizon: "До 4 часов" },
+            5: { name: "L5 - Скоординированные команды агентов", short: "L5", horizon: "Длительные задачи" }
+        };
+
+        // Transition data aligned with section 7.2 "Горизонты внедрения"
+        const TRANSITIONS = {
+            0: { 
+                duration: "0–3 месяца", 
+                horizon: "Горизонт 1 (0–6 мес)",
+                horizonShort: "Г1",
+                practices: ["Базовый доступ к IDE-плагину", "Гигиена промптов", "Ритуалы Discovery (PR/FAQ)"],
+                gate: "Доступ к IDE-плагину + базовая гигиена промптов. Первые ритуалы Discovery.",
+                risks: ["Эпизодическое использование", "Пропуск фундамента → возврат через 12–18 мес"]
+            },
+            1: { 
+                duration: "3–6 месяцев", 
+                horizon: "Горизонт 1 (0–6 мес)",
+                horizonShort: "Г1",
+                practices: ["SDD-lite", "AI-gate в CI", "Первые evals", "Outcome Hypothesis"],
+                gate: "SDD-lite, AI-gate в CI, первые пять фич через PR/FAQ. Базовый Evidence Bundle.",
+                risks: ["Остаются только автодополнение", "Нет системных измерений"]
+            },
+            2: { 
+                duration: "6–12 месяцев", 
+                horizon: "Горизонт 2 (6–18 мес)",
+                horizonShort: "Г2",
+                practices: ["Обязательный SDD", "Агент-ревьюер", "Evidence Bundle", "Библиотека паттернов (10–15)"],
+                gate: "Обязательный SDD, агент-ревьюер, проверочный пакет. Lead Time −20%.",
+                risks: ["Слабый SDD", "Рост инцидентов при отсутствии governance"]
+            },
+            3: { 
+                duration: "12–18 месяцев", 
+                horizon: "Горизонт 2 (6–18 мес)",
+                horizonShort: "Г2",
+                practices: ["Среда долговременных процессов", "Библиотека паттернов ≥30", "Объяснимость в реальном времени", "Управление жизненным циклом агентов"],
+                gate: "Долгие сессии в проде, семантический слой, доля повторного использования спецификаций ≥25%.",
+                risks: ["Недостаточная валидация", "Нет параллельной работы"]
+            },
+            4: { 
+                duration: "18–36 месяцев", 
+                horizon: "Горизонт 3 (18–36 мес)",
+                horizonShort: "Г3",
+                practices: ["Протокол A2A", "Скоординированные команды агентов (L5)", "Полный цикл ADLC", "Multi-Agent Adoption ≥30%"],
+                gate: "L5 координированные команды, Explanation Coverage >99%, Outcome Validation Rate ≥70%.",
+                risks: ["Попытка L5 без платформы и Governance Mesh", "Высокий агентный риск"]
+            }
+        };
+
+        function getUrlParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function initFromDiagnosis() {
+            const current = getUrlParam('currentL');
+            if (current !== null) {
+                const select = document.getElementById('current-level');
+                select.value = current;
+                
+                // Suggest reasonable target
+                const suggestedTarget = Math.min(parseInt(current) + 2, 5);
+                document.getElementById('target-level').value = suggestedTarget;
+            }
+        }
+
+        function generateRoadmap() {
+            const currentL = parseInt(document.getElementById('current-level').value);
+            const targetL = parseInt(document.getElementById('target-level').value);
+
+            if (targetL <= currentL) {
+                alert("Целевой уровень должен быть выше текущего");
+                return;
+            }
+
+            const stages = [];
+            for (let level = currentL; level < targetL; level++) {
+                const transition = TRANSITIONS[level];
+                stages.push({
+                    from: level,
+                    to: level + 1,
+                    duration: transition.duration,
+                    practices: transition.practices,
+                    gate: transition.gate,
+                    risks: transition.risks
+                });
+            }
+
+            renderRoadmap(currentL, targetL, stages);
+        }
+
+
+        function getRelevantExcerpts(currentL, targetL) {
+            const excerpts = [];
+
+            excerpts.push({
+                text: "Среда работы ИИ-агентов важнее модели. Модель задаёт минимально доступное качество. Среда определяет, что в принципе можно достичь.",
+                context: "Общий принцип"
+            });
+
+            if (currentL <= 2 && targetL >= 2) {
+                excerpts.push({
+                    text: "Переход к L2–L3 требует обязательного SDD и агент-ревьюера. Без этого агентный код остаётся неуправляемым, а рост скорости оборачивается ростом техдолга.",
+                    context: "Переход на SDD + ревью"
+                });
+            }
+
+            if (currentL <= 2 && targetL >= 3) {
+                excerpts.push({
+                    text: "Evidence Bundle — это не дополнительная стадия, а встроенная валидация. Результат работы агента считается готовым только после того, как он прошёл проверочный пакет и агент-ревьюер.",
+                    context: "Валидация и Evidence Bundle"
+                });
+            }
+
+            if (targetL >= 4) {
+                excerpts.push({
+                    text: "На уровнях L4–L5 ключевым становится Governance Mesh — контур управления, который работает в реальном времени, а не постфактум. Ограничения фиксируются в спецификации заранее.",
+                    context: "Governance Mesh"
+                });
+            }
+
+            if (targetL >= 3) {
+                excerpts.push({
+                    text: "Чем дальше горизонт задачи, тем важнее становится среда: структурированный контекст, библиотека паттернов, надёжные механизмы валидации и объяснимость.",
+                    context: "Task Horizon и среда"
+                });
+            }
+
+            const unique = [];
+            const seen = new Set();
+            for (const ex of excerpts) {
+                if (!seen.has(ex.text)) {
+                    seen.add(ex.text);
+                    unique.push(ex);
+                }
+            }
+            return unique.slice(0, 2);
+        }
+
+        function renderRoadmap(currentL, targetL, stages) {
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('roadmap-output').classList.remove('hidden');
+
+            // Summary
+            const summary = document.getElementById('roadmap-summary');
+            summary.innerHTML = `
+                <div class="w-full">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <div class="text-xs text-slate-500">Текущий уровень</div>
+                            <div class="font-semibold text-lg">${L_LEVELS[currentL].name}</div>
+                        </div>
+                        <div class="text-3xl text-emerald-600 px-4">→</div>
+                        <div class="text-right">
+                            <div class="text-xs text-slate-500">Целевой уровень</div>
+                            <div class="font-semibold text-lg">${L_LEVELS[targetL].name}</div>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-3 border-t border-slate-200 text-xs text-slate-500 flex justify-between items-center">
+                        <div>Ориентировочная длительность: <span class="font-medium text-emerald-700">${stages.length > 0 ? stages[stages.length-1].duration : '—'}</span></div>
+                        <div class="text-emerald-600 font-medium">Соответствует разделу 7.2 книги</div>
+                    </div>
+                </div>
+            `;
+
+            // Stages
+            const container = document.getElementById('stages-container');
+            container.innerHTML = '';
+
+            stages.forEach((stage, index) => {
+                const fromName = L_LEVELS[stage.from].name;
+                const toName = L_LEVELS[stage.to].name;
+
+                const card = document.createElement('div');
+                card.className = `roadmap-card bg-white border border-slate-200 rounded-3xl overflow-hidden`;
+                
+                card.innerHTML = `
+                    <div class="stage-header px-5 py-3 text-white flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-7 h-7 bg-white/20 rounded-2xl flex items-center justify-center text-sm font-semibold">
+                                ${index + 1}
+                            </div>
+                            <div>
+                                <span class="font-semibold">${fromName}</span>
+                                <span class="mx-2 opacity-70">→</span>
+                                <span class="font-semibold">${toName}</span>
+                            </div>
+                        </div>
+                        <div class="text-sm bg-white/20 px-3 py-1 rounded-2xl font-medium">
+                            ${stage.duration}
+                        </div>
+                    </div>
+                    
+                    <div class="p-5 grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- Practices -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="uppercase tracking-widest text-xs font-semibold text-emerald-700">Ключевые практики</div>
+                                ${stage.horizon ? `<div class="text-[10px] px-2 py-0.5 bg-emerald-100 text-emerald-700 rounded font-medium">${stage.horizon}</div>` : ''}
+                            </div>
+                            <ul class="space-y-1.5 text-sm">
+                                ${stage.practices.map(p => `<li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5">•</span><span>${p}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                        
+                        <!-- Gate -->
+                        <div class="md:col-span-1">
+                            <div class="uppercase tracking-widest text-xs font-semibold text-emerald-700 mb-2">Gate-критерий перехода</div>
+                            <div class="bg-emerald-50 text-emerald-900 p-3 rounded-2xl text-sm leading-snug">
+                                ${stage.gate}
+                            </div>
+                        </div>
+                        
+                        <!-- Risks -->
+                        <div>
+                            <div class="uppercase tracking-widest text-xs font-semibold text-rose-600 mb-2">Риски и антипаттерны</div>
+                            <ul class="space-y-1.5 text-sm">
+                                ${stage.risks.map(r => `<li class="flex items-start gap-2 text-rose-600"><span class="mt-0.5">•</span><span>${r}</span></li>`).join('')}
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Add excerpts from the book
+            const excerpts = getRelevantExcerpts(currentL, targetL);
+            if (excerpts.length > 0) {
+                const excerptsDiv = document.createElement('div');
+                excerptsDiv.className = 'mt-8 pt-6 border-t border-slate-200';
+                let html = '<div class="text-sm font-semibold mb-3 text-slate-600">Релевантные выдержки из белой книги</div>';
+                html += '<div class="space-y-3 text-sm text-slate-700">';
+                excerpts.forEach(ex => {
+                    html += `
+                        <div class="pl-3 border-l-2 border-emerald-300">
+                            <div class="italic">«${ex.text}»</div>
+                            <div class="text-xs text-emerald-600 mt-1 not-italic">— ${ex.context}</div>
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                html += '<div class="mt-2 text-[10px] text-slate-400">Выдержки из AI-Disrupt PDLC (Whitepaper v2.0)</div>';
+                excerptsDiv.innerHTML = html;
+                container.appendChild(excerptsDiv);
+            }
+
+            // === Аргументация по руководству (new section) ===
+            const argDiv = document.createElement('div');
+            argDiv.className = 'mt-8 p-6 bg-slate-900 text-slate-100 rounded-3xl';
+            argDiv.innerHTML = `
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fa-solid fa-gavel text-emerald-400"></i>
+                    <div class="font-semibold text-lg">Аргументация по руководству</div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">ОБОСНОВАНИЕ СРОКОВ (по руководству, раздел 7.2)</div>
+                    <div class="text-sm space-y-2 text-slate-300">
+                        <div>• <strong>Горизонт 1 (0–6 месяцев)</strong> — L0 → L2: закладка фундамента (Discovery, SDD, Validation с первого дня).</div>
+                        <div>• <strong>Горизонт 2 (6–18 месяцев)</strong> — L2 → L4: масштабирование SDD и long-running процессов.</div>
+                        <div>• <strong>Горизонт 3 (18–36 месяцев)</strong> — L4 → L5: операционная зрелость скоординированных агентных команд.</div>
+                    </div>
+                    <div class="mt-3 text-xs text-slate-400 italic">
+                        «ИИ-нативный подход требует 6–12 месяцев на одновременное изменение процесса и команды»<br>
+                        «Команды, пропускающие фундаментальные шаги, возвращаются к нему через 12–18 месяцев в режиме дорогостоящего исправления.»
+                    </div>
+                </div>
+
+                <div>
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">ГОТОВЫЕ ФОРМУЛИРОВКИ ДЛЯ РУКОВОДСТВА</div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                        <div class="bg-slate-800 p-3 rounded-2xl">
+                            «Поверхностный подход даёт эффект за 90 дней, но уже к концу года упирается в потолок. Реальная трансформация требует 6–18 месяцев на изменение процесса и навыков одновременно.»
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-2xl">
+                            «По разделу 7.2 книги мы делим путь на три горизонта. Пропуск Горизонта 1 почти гарантированно приводит к откату через 12–18 месяцев с большими затратами.»
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-2xl">
+                            «L2 → L3 по книге занимает 6–12 месяцев. Это не “медленно”, это реалистичный срок на внедрение обязательного SDD и агент-ревьюера.»
+                        </div>
+                        <div class="bg-slate-800 p-3 rounded-2xl">
+                            «К 18 месяцам мы выходим на L4 с измеримыми улучшениями Lead Time и снижением техдолга. Это подтверждается горизонтами из раздела 7.2.»
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.appendChild(argDiv);
+        }
+
+        function loadExample() {
+            document.getElementById('current-level').value = 1;
+            document.getElementById('target-level').value = 3;
+            generateRoadmap();
+        }
+
+        function copyRoadmapAsMarkdown() {
+            const currentL = parseInt(document.getElementById('current-level').value);
+            const targetL = parseInt(document.getElementById('target-level').value);
+            
+            let md = `# Roadmap трансформации\n\n`;
+            md += `**От:** ${L_LEVELS[currentL].name}\n`;
+            md += `**До:** ${L_LEVELS[targetL].name}\n\n`;
+
+            // We don't have the stages stored globally, so we regenerate them
+            const stages = [];
+            for (let level = currentL; level < targetL; level++) {
+                const t = TRANSITIONS[level];
+                stages.push({ from: level, to: level+1, duration: t.duration, practices: t.practices, gate: t.gate, risks: t.risks });
+            }
+
+            stages.forEach((s, i) => {
+                md += `## Этап ${i+1}: ${L_LEVELS[s.from].name} → ${L_LEVELS[s.to].name}\n`;
+                md += `**Длительность:** ${s.duration}\n\n`;
+                md += `**Ключевые практики:**\n${s.practices.map(p => `- ${p}`).join('\n')}\n\n`;
+                md += `**Gate-критерий:** ${s.gate}\n\n`;
+                md += `**Риски:**\n${s.risks.map(r => `- ${r}`).join('\n')}\n\n`;
+            });
+
+            md += `> Сгенерировано в Disrupt PDLC Coach\n`;
+            md += `> https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf`;
+
+            // Add excerpts
+            const exs = getRelevantExcerpts(currentL, targetL);
+            if (exs.length > 0) {
+                md += `\n\n## Релевантные выдержки из белой книги\n\n`;
+                exs.forEach((ex) => {
+                    md += `> «${ex.text}»\n`;
+                    md += `> — ${ex.context}\n\n`;
+                });
+            }
+
+            // Add argumentation section
+            md += `\n\n## Аргументация по руководству (раздел 7.2)\n\n`;
+            md += `**Обоснование сроков:**\n`;
+            md += `- Горизонт 1 (0–6 мес): L0 → L2\n`;
+            md += `- Горизонт 2 (6–18 мес): L2 → L4\n`;
+            md += `- Горизонт 3 (18–36 мес): L4 → L5\n\n`;
+            md += `> «ИИ-нативный подход требует 6–12 месяцев на одновременное изменение процесса и команды»\n`;
+            md += `> «Команды, пропускающие фундаментальные шаги, возвращаются к нему через 12–18 месяцев в режиме дорогостоящего исправления.»\n`;
+
+            navigator.clipboard.writeText(md).then(() => {
+                const originalText = event.target?.innerHTML || '';
+                const btns = document.querySelectorAll('button');
+                // simple feedback
+                alert('Markdown скопирован в буфер обмена');
+            });
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('roadmap-output');
+            const opt = {
+                margin: 10,
+                filename: 'roadmap-transformatsii.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(element).save();
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initFromDiagnosis();
+            
+            // If parameters are present, auto-generate
+            if (getUrlParam('currentL') && getUrlParam('auto') === 'true') {
+                setTimeout(() => {
+                    generateRoadmap();
+                }, 300);
+            }
+            
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !document.getElementById('roadmap-output').classList.contains('hidden')) {
+                    // do nothing special
+                }
+            });
+        });
+    </script>
+</body>
+</html>

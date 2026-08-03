@@ -1,0 +1,17 @@
+# Secrets
+.env
+.env.*
+secrets*
+*.pdf
+
+# Python
+__pycache__/
+*.pyc
+.coverage
+
+# Node
+node_modules/
+
+# OS / editor
+.DS_Store
+*.swp
