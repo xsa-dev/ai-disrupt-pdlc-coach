@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Антипаттерны трансформации • Disrupt PDLC Coach</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+
+        body { font-family: 'Inter', system-ui, sans-serif; }
+        .heading-font { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
+        :root { --primary: 16 185 129; }
+
+        .ap-card { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ap-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+
+        .filter-btn.active { background: #059669; color: #fff; }
+        .quiz-opt { transition: all 0.15s ease; }
+        .quiz-opt:hover:not(:disabled) { border-color: #10b981; }
+        .quiz-opt.correct { background: #ecfdf5; border-color: #10b981; color: #065f46; }
+        .quiz-opt.wrong { background: #fef2f2; border-color: #f43f5e; color: #9f1239; }
+    </style>
+</head>
+<body class="bg-slate-50">
+
+    <!-- Top Navigation Header -->
+    <div class="bg-white border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-6 py-2.5 flex items-center justify-between text-sm">
+            <div class="flex items-center gap-x-5">
+                <a href="diagnosis.html" class="font-semibold text-slate-900 hover:text-emerald-600 transition-colors">Диагностика</a>
+                <a href="roadmap.html" class="text-slate-600 hover:text-slate-900 transition-colors font-semibold">Roadmap</a>
+                <a href="antipatterns.html" class="text-emerald-700 hover:text-emerald-800 transition-colors font-semibold border-b-2 border-emerald-600">Антипаттерны</a>
+            </div>
+            <div class="text-xs text-slate-400 font-medium">Disrupt PDLC Coach</div>
+        </div>
+    </div>
+
+    <!-- Hero -->
+    <div class="border-b border-slate-200 bg-white">
+        <div class="max-w-6xl mx-auto px-6 py-6 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-9 h-9 bg-emerald-600 rounded-2xl flex items-center justify-center">
+                    <i class="fa-solid fa-triangle-exclamation text-white text-lg"></i>
+                </div>
+                <div>
+                    <div class="heading-font text-2xl font-semibold tracking-tight text-slate-900">Disrupt PDLC Coach</div>
+                    <div class="text-xs text-slate-500 -mt-1">Антипаттерны трансформации</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-x-2">
+                <a href="diagnosis.html" class="flex items-center gap-x-2 text-sm px-4 py-2 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-600">
+                    <i class="fa-solid fa-arrow-left mr-1"></i><span>К диагностике</span>
+                </a>
+                <a href="roadmap.html" class="flex items-center gap-x-2 text-sm px-4 py-2 rounded-2xl border border-slate-200 hover:bg-slate-50 text-slate-600">
+                    <i class="fa-solid fa-route mr-1"></i><span>Roadmap</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-6 py-8">
+
+        <!-- Intro -->
+        <div class="mb-8">
+            <h1 class="heading-font text-4xl font-semibold tracking-tighter text-slate-900">Антипаттерны: curriculum к успеху</h1>
+            <p class="text-slate-600 mt-2 max-w-2xl">
+                Что <span class="text-rose-600 font-medium">не делать</span> — и что делать вместо. Все антипаттерны собраны из белой книги AI-Disrupt PDLC (раздел 7.4). Ниже — разбор частых ошибок первого года, полный реестр и викторина для закрепления.
+            </p>
+            <div class="mt-4 flex flex-wrap gap-3 text-xs">
+                <span class="px-3 py-1.5 rounded-2xl bg-rose-50 text-rose-600 font-medium"><i class="fa-solid fa-ban mr-1"></i>Чего избегать</span>
+                <span class="px-3 py-1.5 rounded-2xl bg-emerald-50 text-emerald-700 font-medium"><i class="fa-solid fa-check mr-1"></i>Структурный фикс</span>
+                <span class="px-3 py-1.5 rounded-2xl bg-slate-100 text-slate-600 font-medium"><i class="fa-solid fa-magnifying-glass-chart mr-1"></i>Признак раннего предупреждения</span>
+            </div>
+        </div>
+
+        <!-- Section 1: Frequent first year -->
+        <h2 class="heading-font text-2xl font-semibold text-slate-900 mb-1">Частые в первый год</h2>
+        <p class="text-sm text-slate-500 mb-5">Семь самых частых антипаттернов внедрения на старте трансформации.</p>
+        <div id="freq-container" class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12"></div>
+
+        <!-- Section 2: Full registry -->
+        <div class="flex items-center justify-between mb-1 flex-wrap gap-3">
+            <div>
+                <h2 class="heading-font text-2xl font-semibold text-slate-900">Полный реестр</h2>
+                <p class="text-sm text-slate-500">Базовые (№1–18) и управленческие (№19–22) антипаттерны.</p>
+            </div>
+            <div class="flex gap-2" id="registry-filter">
+                <button data-type="all" class="filter-btn active text-sm px-4 py-2 rounded-2xl border border-slate-200">Все</button>
+                <button data-type="base" class="filter-btn text-sm px-4 py-2 rounded-2xl border border-slate-200">Базовые</button>
+                <button data-type="mgmt" class="filter-btn text-sm px-4 py-2 rounded-2xl border border-slate-200">Управление</button>
+            </div>
+        </div>
+        <div id="registry-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-12"></div>
+
+        <!-- Section 3: Quiz -->
+        <div class="bg-slate-900 text-slate-100 rounded-3xl p-7">
+            <div class="flex items-center gap-2 mb-1">
+                <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
+                <h2 class="heading-font text-2xl font-semibold">К ВИЗ — викторина по антипаттернам</h2>
+            </div>
+            <p class="text-sm text-slate-400 mb-5">Закрепи знания. Два режима билетов по 10 вопросов.</p>
+
+            <div id="quiz-setup" class="space-y-5">
+                <div>
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">Режим билета</div>
+                    <div class="flex flex-wrap gap-3">
+                        <button id="mode-random" class="quiz-mode text-sm px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700">
+                            <i class="fa-solid fa-shuffle mr-2"></i>Случайный билет
+                        </button>
+                        <button id="mode-fixed" class="quiz-mode text-sm px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700">
+                            <i class="fa-solid fa-ticket mr-2"></i>По билетам (фиксированные)
+                        </button>
+                    </div>
+                </div>
+                <div id="ticket-select-wrap" class="hidden">
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">Номер билета</div>
+                    <select id="ticket-select" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm"></select>
+                </div>
+                <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2">
+                    <i class="fa-solid fa-play"></i><span>Начать</span>
+                </button>
+            </div>
+
+            <div id="quiz-run" class="hidden">
+                <div class="flex items-center justify-between mb-4 text-sm">
+                    <div id="quiz-label" class="text-emerald-400 font-semibold"></div>
+                    <div id="quiz-progress" class="text-slate-400"></div>
+                </div>
+                <div id="quiz-progress-bar" class="h-1.5 bg-slate-800 rounded-full mb-5 overflow-hidden">
+                    <div id="quiz-progress-fill" class="h-full bg-emerald-500 transition-all" style="width:0%"></div>
+                </div>
+                <div id="quiz-question" class="text-lg font-medium mb-1"></div>
+                <div id="quiz-explain" class="text-sm text-slate-400 mb-4 hidden"></div>
+                <div id="quiz-options" class="space-y-3"></div>
+                <div class="mt-6 flex gap-3">
+                    <button id="quiz-next" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Далее</button>
+                </div>
+            </div>
+
+            <div id="quiz-result" class="hidden text-center py-4">
+                <div class="text-5xl mb-3"><i class="fa-solid fa-trophy text-emerald-400"></i></div>
+                <div id="quiz-score" class="heading-font text-3xl font-semibold mb-2"></div>
+                <div id="quiz-score-detail" class="text-slate-400 text-sm mb-6"></div>
+                <div class="flex justify-center gap-3">
+                    <button id="quiz-again" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Ещё раз</button>
+                    <button id="quiz-back" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">К выбору билета</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    // ============ DATA (из раздела 7.4 белой книги AI-Disrupt PDLC) ============
+    const TICKET_SIZE = 10;
+
+    // 7 подробных антипаттернов «частые в первый год»
+    const FREQ = [
+        { name: "«Полный цикл от вендора» (vendor lock-in)", icon: "fa-link-slash",
+          sign: "Более 70% зависимостей завязаны на одного провайдера, абстрактные адаптеры отсутствуют.",
+          fix: "Вендор-нейтральные протоколы MCP, A2A и AG-UI как обязательный стандарт среды (принцип 10) и абстракционные слои с первого спринта.",
+          horizon: "Горизонт 2 (6–18 мес)" },
+        { name: "«Десятки директив вместо принципов»", icon: "fa-list-check",
+          sign: "В среде больше 40–50 активных правил; агент игнорирует их из-за перегруженного контекста, принудительное исполнение становится случайным.",
+          fix: "Ежеквартальный аудит реестра правил, приоритизация по критичности, архивирование устаревших директив, назначение владельца каждому правилу.",
+          horizon: "Горизонт 1–2" },
+        { name: "«Подмена модели вместо перепроектирования среды»", icon: "fa-arrows-rotate",
+          sign: "Команда меняла модель дважды за квартал без измеримого улучшения доли подтверждённых результатов.",
+          fix: "Аудит среды по чек-листу (контекст, ограничители, набор оценок) перед каждой сменой; решение о смене — только после исключения средовых факторов.",
+          horizon: "Горизонт 1" },
+        { name: "«Vibe coding без оценок»", icon: "fa-wand-magic-sparkles",
+          sign: "В SDD нет раздела «Eval Strategy», реестр оценок отсутствует, карта решений с участием человека не заполнена.",
+          fix: "Разработка от оценок как обязательное требование (принцип внедрения №5); SDD без раздела оценок блокируется на ИИ-контроле.",
+          horizon: "Горизонт 1" },
+        { name: "«Big bang миграция вместо инкрементального подхода»", icon: "fa-bomb",
+          sign: "План не содержит критериев выхода из горизонта, масштабирование запланировано до завершения 90-дневного MVP.",
+          fix: "Обязательная пилотная фаза (принцип 2); масштабирование только по критериям выхода из Горизонта 1, не более 2–3 команд на одного проводника.",
+          horizon: "Горизонт 1" },
+        { name: "«Безграничный auto-approve (усталость от согласований)»", icon: "fa-hand-wave",
+          sign: "Среднее время на ревью агентного PR ниже 2 минут, доля согласий выше 95%, CFR растёт.",
+          fix: "Адаптивная лестница автономии (принцип внедрения №8) с явными точками участия человека для R3+; владелец результата — всегда человек.",
+          horizon: "Горизонт 2" },
+        { name: "«Метрики без целей»", icon: "fa-chart-line",
+          sign: "За квартал ни одно решение о корректировке процесса не принято на основании дашборда; пороги тревог не установлены.",
+          fix: "Для каждой метрики — три значения (базовое, целевое, порог тревоги); ретроспектива начинается с обзора отклонений; метрики без цели удаляются.",
+          horizon: "Горизонт 1–2" }
+    ];
+
+    // Полный реестр №1–22 (base: 1-18, mgmt: 19-22)
+    const REGISTRY = [
+        { n:1, type:"base", name:"Зоопарк ИИ-инструментов", sign:"Множество инструментов без оркестрации.", fix:"IDP с единой средой исполнения." },
+        { n:2, type:"base", name:"Культурный балласт", sign:"Формальный доступ к ИИ, работа по старым процессам.", fix:"Проводники изменений, обучение по ролям." },
+        { n:3, type:"base", name:"ИИ только в кодировании", sign:"ИИ применяется только в кодировании (25–35% времени).", fix:"Применение ИИ на всех фазах PDLC." },
+        { n:4, type:"base", name:"Инерционный вендор-лок", sign:"Зависимость от одного поставщика.", fix:"Стандартные протоколы MCP/A2A." },
+        { n:5, type:"base", name:"Пилоты не масштабируются", sign:"Пилоты успешны, но не выходят за рамки одной команды.", fix:"Проводники изменений; политика перераспределения ресурсов." },
+        { n:6, type:"base", name:"Внедрение без обучения по ролям", sign:"Нет системного обучения.", fix:"Программы наставничества." },
+        { n:7, type:"base", name:"Ожидание корпоративного стандарта", sign:"Ожидание общекорпоративного стандарта до начала внедрения.", fix:"Доменно-специфичные решения на общей платформе." },
+        { n:8, type:"base", name:"Игнорирование рисков безопасности", sign:"Игнорирование рисков агентной инфраструктуры.", fix:"Security-by-design на старте." },
+        { n:9, type:"base", name:"Спецификация без Discovery", sign:"SDD без гипотезы результата, без сверки с библиотекой паттернов.", fix:"Обязательный суб-цикл исследования перед SDD." },
+        { n:10, type:"base", name:"Бесконтрольный рост рабочих процессов", sign:"200+ агентов без реестра, владельца и жизненного цикла.", fix:"Единый реестр с владельцем и жизненным циклом." },
+        { n:11, type:"base", name:"Сэкономленное время уходит в никуда", sign:"Время сэкономлено, но не превращено в результат.", fix:"Метрика доли перераспределения с первых пилотов (принцип внедрения №12)." },
+        { n:12, type:"base", name:"Валидация не успевает за реализацией", sign:"Реализация ускорилась в 5 раз, валидация — узкое место.", fix:"I/V Tempo Ratio в еженедельном дашборде; принцип внедрения №12." },
+        { n:13, type:"base", name:"Безоткатный запуск длительного агента", sign:"Long-running агент без среды работы ИИ-агентов и точек сохранения.", fix:"Среда работы ИИ-агентов с протоколом передачи сессий." },
+        { n:14, type:"base", name:"Гонка за объёмом без бизнес-эффекта", sign:"Много PR от ИИ без бизнес-ценности.", fix:"Метрики объёма всегда в паре с метриками бизнес-результата." },
+        { n:15, type:"base", name:"Перепрыгивание уровней автономии", sign:"Длинные автономные сессии при недостаточной зрелости команды.", fix:"Контрольные точки перехода между уровнями." },
+        { n:16, type:"base", name:"Мультиагентность без оркестрации", sign:"Несколько агентов без оркестратора — конфликты и хаос.", fix:"Обязательный оркестратор над агентами-исполнителями." },
+        { n:17, type:"base", name:"Надежда на полную автономию", sign:"Задача делегируется агенту целиком без точек участия человека.", fix:"Явное разделение шагов на автономные и требующие подтверждения." },
+        { n:18, type:"base", name:"Разрастание семантического слоя", sign:"Команда PDLC берётся за бизнес-схемы вместо схем артефактов.", fix:"Семантика бизнес-данных вне зоны ответственности PDLC." },
+        { n:19, type:"mgmt", name:"Управление, прикрученное сбоку", sign:"Проверка соответствия занимает больше времени, чем разработка; задачи блокируются на релизе.", fix:"Кодифицированные ограничения и Policy-as-Code с контуром на исследовании, а не на релизе." },
+        { n:20, type:"mgmt", name:"Статичная лестница R-уровней", sign:"Одинаковый надзор для документации и платёжной логики.", fix:"Контекстно-зависимая автономия." },
+        { n:21, type:"mgmt", name:"Адаптивные контроли без отучивания", sign:"Набор политик растёт на 10–20% в месяц без удаления.", fix:"Механизмы отучивания: регулярный пересмотр, явные операции «забывания»." },
+        { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек." }
+    ];
+
+    // ============ QUIZ GENERATION (name + fix по каждому АП) ============
+    const ALL_NAMES = REGISTRY.map(a => a.name);
+    const ALL_FIXES = REGISTRY.map(a => a.fix);
+    const QUIZ = [];
+    REGISTRY.forEach(a => {
+        // тип name: по признаку -> название
+        QUIZ.push({ apId:a.n, type:'name',
+            q:`Какой антипаттерн описывает этот признак: «${a.sign}»`,
+            correct:a.name, pool: shuffle(ALL_NAMES.slice()).slice(0,3).concat(a.name),
+            explain:`«${a.name}» — ${a.fix}` });
+        // тип fix: по названию -> фикс
+        QUIZ.push({ apId:a.n, type:'fix',
+            q:`Для антипаттерна «${a.name}» выберите правильный структурный фикс.`,
+            correct:a.fix, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fix),
+            explain:`Верный фикс: ${a.fix}` });
+    });
+
+    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+    // ============ RENDER: FREQ ============
+    const freqC = document.getElementById('freq-container');
+    FREQ.forEach(a => {
+        const el = document.createElement('div');
+        el.className = 'ap-card bg-white border border-slate-200 rounded-3xl p-6';
+        el.innerHTML = `
+            <div class="flex items-start gap-3 mb-3">
+                <div class="w-10 h-10 bg-rose-50 rounded-2xl flex items-center justify-center shrink-0">
+                    <i class="fa-solid ${a.icon} text-rose-500"></i>
+                </div>
+                <div>
+                    <div class="font-semibold text-slate-900 leading-snug">${a.name}</div>
+                    <div class="text-xs text-slate-400 mt-0.5">${a.horizon}</div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <div class="text-xs font-semibold text-rose-600 mb-1 uppercase tracking-wide"><i class="fa-solid fa-ban mr-1"></i>Чего избегать</div>
+                <div class="text-sm text-slate-600">${a.sign}</div>
+            </div>
+            <div>
+                <div class="text-xs font-semibold text-emerald-700 mb-1 uppercase tracking-wide"><i class="fa-solid fa-check mr-1"></i>Что делать вместо</div>
+                <div class="text-sm text-slate-700 bg-emerald-50 rounded-2xl p-3">${a.fix}</div>
+            </div>`;
+        freqC.appendChild(el);
+    });
+
+    // ============ RENDER: REGISTRY ============
+    const regC = document.getElementById('registry-container');
+    function renderRegistry(filter){
+        regC.innerHTML = '';
+        REGISTRY.filter(a => filter==='all' || a.type===filter).forEach(a => {
+            const isMgmt = a.type==='mgmt';
+            const badge = isMgmt
+                ? '<span class="text-[10px] px-2 py-0.5 rounded bg-indigo-100 text-indigo-700 font-medium">Управление</span>'
+                : '<span class="text-[10px] px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-medium">Базовый</span>';
+            const el = document.createElement('div');
+            el.className = 'ap-card bg-white border border-slate-200 rounded-2xl p-4';
+            el.innerHTML = `
+                <div class="flex items-center justify-between mb-2">
+                    <div class="font-semibold text-slate-900 text-sm">№${a.n} · ${a.name}</div>
+                    ${badge}
+                </div>
+                <div class="text-xs text-rose-600 mb-2"><i class="fa-solid fa-ban mr-1"></i>${a.sign}</div>
+                <div class="text-xs text-emerald-700 bg-emerald-50 rounded-xl p-2"><i class="fa-solid fa-check mr-1"></i>${a.fix}</div>`;
+            regC.appendChild(el);
+        });
+    }
+    renderRegistry('all');
+    document.getElementById('registry-filter').addEventListener('click', e => {
+        const btn = e.target.closest('.filter-btn'); if(!btn) return;
+        document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        renderRegistry(btn.dataset.type);
+    });
+
+    // ============ QUIZ ENGINE ============
+    const setupEl = document.getElementById('quiz-setup');
+    const runEl = document.getElementById('quiz-run');
+    const resultEl = document.getElementById('quiz-result');
+    let mode = 'random';
+    let currentTicket = [];
+    let idx = 0, score = 0, answered = false;
+
+    document.querySelectorAll('.quiz-mode').forEach(b=>b.classList.add('border-slate-600'));
+    document.getElementById('mode-random').addEventListener('click', ()=>{ mode='random'; document.getElementById('ticket-select-wrap').classList.add('hidden'); });
+    document.getElementById('mode-fixed').addEventListener('click', ()=>{
+        mode='fixed';
+        const wrap = document.getElementById('ticket-select-wrap'); wrap.classList.remove('hidden');
+        const sel = document.getElementById('ticket-select');
+        const count = Math.ceil(QUIZ.length / TICKET_SIZE);
+        sel.innerHTML = '';
+        for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Билет №${i} (вопросы ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
+    });
+
+    document.getElementById('quiz-start').addEventListener('click', ()=>{
+        if(mode==='random'){
+            const seed = Math.floor(Math.random()*9000)+1000;
+            currentTicket = shuffle(QUIZ.slice()).slice(0, TICKET_SIZE);
+            runEl.dataset.label = `Случайный билет №${seed}`;
+        } else {
+            const k = parseInt(document.getElementById('ticket-select').value) - 1;
+            currentTicket = QUIZ.slice(k*TICKET_SIZE, k*TICKET_SIZE + TICKET_SIZE);
+            runEl.dataset.label = `Билет №${k+1}`;
+        }
+        idx=0; score=0; setupEl.classList.add('hidden'); resultEl.classList.add('hidden'); runEl.classList.remove('hidden');
+        showQuestion();
+    });
+
+    function showQuestion(){
+        answered=false;
+        const q = currentTicket[idx];
+        document.getElementById('quiz-label').textContent = runEl.dataset.label;
+        document.getElementById('quiz-progress').textContent = `Вопрос ${idx+1} из ${currentTicket.length}`;
+        document.getElementById('quiz-progress-fill').style.width = `${(idx/currentTicket.length)*100}%`;
+        document.getElementById('quiz-question').textContent = q.q;
+        const ex = document.getElementById('quiz-explain'); ex.classList.add('hidden'); ex.textContent='';
+        const opts = document.getElementById('quiz-options'); opts.innerHTML='';
+        document.getElementById('quiz-next').classList.add('hidden');
+        shuffle(q.pool.slice()).forEach(opt=>{
+            const b=document.createElement('button');
+            b.className='quiz-opt w-full text-left text-sm px-4 py-3 rounded-2xl border border-slate-700 bg-slate-800';
+            b.textContent=opt;
+            b.onclick=()=>answer(b,opt,q);
+            opts.appendChild(b);
+        });
+    }
+
+    function answer(btn,opt,q){
+        if(answered) return; answered=true;
+        const opts = document.querySelectorAll('#quiz-options .quiz-opt');
+        opts.forEach(o=>o.disabled=true);
+        if(opt===q.correct){ btn.classList.add('correct'); score++; }
+        else { btn.classList.add('wrong'); opts.forEach(o=>{ if(o.textContent===q.correct) o.classList.add('correct'); }); }
+        const ex=document.getElementById('quiz-explain'); ex.textContent=q.explain; ex.classList.remove('hidden');
+        document.getElementById('quiz-progress-fill').style.width = `${((idx+1)/currentTicket.length)*100}%`;
+        const next=document.getElementById('quiz-next');
+        next.classList.remove('hidden');
+        next.textContent = (idx+1===currentTicket.length) ? 'Показать результат' : 'Далее';
+    }
+
+    document.getElementById('quiz-next').addEventListener('click', ()=>{
+        if(idx+1>=currentTicket.length){ finishQuiz(); } else { idx++; showQuestion(); }
+    });
+
+    function finishQuiz(){
+        runEl.classList.add('hidden'); resultEl.classList.remove('hidden');
+        document.getElementById('quiz-score').textContent = `${score} из ${currentTicket.length}`;
+        const pct = Math.round(score/currentTicket.length*100);
+        let msg = pct>=80 ? 'Отлично — ты видишь антипаттерны насквозь.' : pct>=50 ? 'Неплохо, но есть что повторить.' : 'Стоит перечитать раздел 7.4 книги.';
+        document.getElementById('quiz-score-detail').textContent = `${pct}% верных · ${runEl.dataset.label} · ${msg}`;
+    }
+
+    document.getElementById('quiz-again').addEventListener('click', ()=>{
+        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+    });
+    document.getElementById('quiz-back').addEventListener('click', ()=>{
+        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+    });
+    </script>
+</body>
+</html>
