@@ -21,6 +21,10 @@
         .quiz-opt:hover:not(:disabled) { border-color: #10b981; }
         .quiz-opt.correct { background: #ecfdf5; border-color: #10b981; color: #065f46; }
         .quiz-opt.wrong { background: #fef2f2; border-color: #f43f5e; color: #9f1239; }
+
+        /* fullscreen quiz: center + comfortable reading */
+        #quiz-section:fullscreen { max-width: 900px; margin: auto; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+        #quiz-section:-webkit-full-screen { max-width: 900px; margin: auto; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -149,6 +153,7 @@
                 <div class="flex flex-wrap gap-2">
                     <a href="diagnosis.html" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-stethoscope text-emerald-400"></i>Диагностика</a>
                     <a href="roadmap.html" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-route text-emerald-400"></i>Roadmap</a>
+                    <button id="quiz-fullscreen" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-expand"></i><span>На весь экран</span></button>
                 </div>
             </div>
             <p class="text-sm text-slate-400 mb-5">Закрепи знания. Два режима билетов по 10 вопросов.</p>
@@ -439,6 +444,30 @@
     document.getElementById('quiz-jump').addEventListener('click', ()=>{
         document.getElementById('quiz-section').scrollIntoView({ behavior:'smooth', block:'start' });
     });
+
+    // quiz fullscreen toggle
+    const fsBtn = document.getElementById('quiz-fullscreen');
+    const fsIcon = fsBtn.querySelector('i');
+    const fsLabel = fsBtn.querySelector('span');
+    function toggleFs(){
+        const el = document.getElementById('quiz-section');
+        if(!document.fullscreenElement){
+            (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+        } else {
+            (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+        }
+    }
+    fsBtn.addEventListener('click', toggleFs);
+    function syncFs(){
+        const on = !!document.fullscreenElement;
+        fsBtn.classList.toggle('bg-emerald-700', on);
+        fsBtn.classList.toggle('border-emerald-600', on);
+        fsIcon.classList.toggle('fa-expand', !on);
+        fsIcon.classList.toggle('fa-compress', on);
+        fsLabel.textContent = on ? 'Выйти из полного' : 'На весь экран';
+    }
+    document.addEventListener('fullscreenchange', syncFs);
+    document.addEventListener('webkitfullscreenchange', syncFs);
     </script>
 </body>
 </html>
