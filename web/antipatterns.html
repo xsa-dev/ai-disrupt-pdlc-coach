@@ -177,6 +177,7 @@
                 <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2">
                     <i class="fa-solid fa-play"></i><span>Начать</span>
                 </button>
+                <p class="text-xs text-slate-500 leading-relaxed">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">1</kbd>–<kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">4</kbd> — выбрать ответ · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Enter</kbd> — начать / далее · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">R</kbd> — заново в том же режиме</p>
             </div>
 
             <div id="quiz-run" class="hidden">
@@ -378,7 +379,9 @@
         for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Билет №${i} (вопросы ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
     });
 
-    document.getElementById('quiz-start').addEventListener('click', ()=>{
+    document.getElementById('quiz-start').addEventListener('click', startQuiz);
+
+    function startQuiz(){
         if(mode==='random'){
             const seed = Math.floor(Math.random()*9000)+1000;
             currentTicket = shuffle(QUIZ.slice()).slice(0, TICKET_SIZE);
@@ -390,7 +393,7 @@
         }
         idx=0; score=0; setupEl.classList.add('hidden'); resultEl.classList.add('hidden'); runEl.classList.remove('hidden');
         showQuestion();
-    });
+    }
 
     function showQuestion(){
         answered=false;
@@ -443,6 +446,9 @@
         resultEl.classList.add('hidden'); setupEl.classList.remove('hidden');
     });
 
+    // "Ещё раз" запускает квиз в том же режиме (как R / Enter на результате)
+    document.getElementById('quiz-again').addEventListener('click', startQuiz);
+
     // registry count + smooth jump to quiz
     const rc = document.getElementById('registry-count');
     if(rc) rc.textContent = REGISTRY.length;
@@ -473,6 +479,35 @@
     }
     document.addEventListener('fullscreenchange', syncFs);
     document.addEventListener('webkitfullscreenchange', syncFs);
+    // keyboard support for the quiz
+    document.addEventListener('keydown', (e)=>{
+        const t = e.target;
+        if(t && (t.tagName==='INPUT' || t.tagName==='SELECT' || t.tagName==='TEXTAREA')) return;
+        const key = e.key;
+        const inSetup = !setupEl.classList.contains('hidden');
+        const inRun = !runEl.classList.contains('hidden');
+        const inResult = !resultEl.classList.contains('hidden');
+
+        if(inRun){
+            if(!answered){
+                const n = parseInt(key,10);
+                if(n>=1 && n<=10){
+                    const opts = document.querySelectorAll('#quiz-options .quiz-opt');
+                    if(opts[n-1]){ e.preventDefault(); opts[n-1].click(); return; }
+                }
+            } else if(key==='Enter'){
+                e.preventDefault();
+                document.getElementById('quiz-next').click();
+                return;
+            } else if(key==='r' || key==='R'){
+                e.preventDefault(); startQuiz(); return;
+            }
+        } else if(inSetup){
+            if(key==='Enter'){ e.preventDefault(); startQuiz(); return; }
+        } else if(inResult){
+            if(key==='Enter' || key==='r' || key==='R'){ e.preventDefault(); startQuiz(); return; }
+        }
+    });
     </script>
 </body>
 </html>
