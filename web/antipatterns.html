@@ -188,47 +188,47 @@
           horizon: "Горизонт 1–2" }
     ];
 
-    // Полный реестр №1–22 (base: 1-18, mgmt: 19-22)
+    // Полный реестр №1–22 (base: 1-18, mgmt: 19-22). nameEn/fixEn — для EN-квиза.
     const REGISTRY = [
-        { n:1, type:"base", name:"Зоопарк ИИ-инструментов", sign:"Множество инструментов без оркестрации.", fix:"IDP с единой средой исполнения." },
-        { n:2, type:"base", name:"Культурный балласт", sign:"Формальный доступ к ИИ, работа по старым процессам.", fix:"Проводники изменений, обучение по ролям." },
-        { n:3, type:"base", name:"ИИ только в кодировании", sign:"ИИ применяется только в кодировании (25–35% времени).", fix:"Применение ИИ на всех фазах PDLC." },
-        { n:4, type:"base", name:"Инерционный вендор-лок", sign:"Зависимость от одного поставщика.", fix:"Стандартные протоколы MCP/A2A." },
-        { n:5, type:"base", name:"Пилоты не масштабируются", sign:"Пилоты успешны, но не выходят за рамки одной команды.", fix:"Проводники изменений; политика перераспределения ресурсов." },
-        { n:6, type:"base", name:"Внедрение без обучения по ролям", sign:"Нет системного обучения.", fix:"Программы наставничества." },
-        { n:7, type:"base", name:"Ожидание корпоративного стандарта", sign:"Ожидание общекорпоративного стандарта до начала внедрения.", fix:"Доменно-специфичные решения на общей платформе." },
-        { n:8, type:"base", name:"Игнорирование рисков безопасности", sign:"Игнорирование рисков агентной инфраструктуры.", fix:"Security-by-design на старте." },
-        { n:9, type:"base", name:"Спецификация без Discovery", sign:"SDD без гипотезы результата, без сверки с библиотекой паттернов.", fix:"Обязательный суб-цикл исследования перед SDD." },
-        { n:10, type:"base", name:"Бесконтрольный рост рабочих процессов", sign:"200+ агентов без реестра, владельца и жизненного цикла.", fix:"Единый реестр с владельцем и жизненным циклом." },
-        { n:11, type:"base", name:"Сэкономленное время уходит в никуда", sign:"Время сэкономлено, но не превращено в результат.", fix:"Метрика доли перераспределения с первых пилотов (принцип внедрения №12)." },
-        { n:12, type:"base", name:"Валидация не успевает за реализацией", sign:"Реализация ускорилась в 5 раз, валидация — узкое место.", fix:"I/V Tempo Ratio в еженедельном дашборде; принцип внедрения №12." },
-        { n:13, type:"base", name:"Безоткатный запуск длительного агента", sign:"Long-running агент без среды работы ИИ-агентов и точек сохранения.", fix:"Среда работы ИИ-агентов с протоколом передачи сессий." },
-        { n:14, type:"base", name:"Гонка за объёмом без бизнес-эффекта", sign:"Много PR от ИИ без бизнес-ценности.", fix:"Метрики объёма всегда в паре с метриками бизнес-результата." },
-        { n:15, type:"base", name:"Перепрыгивание уровней автономии", sign:"Длинные автономные сессии при недостаточной зрелости команды.", fix:"Контрольные точки перехода между уровнями." },
-        { n:16, type:"base", name:"Мультиагентность без оркестрации", sign:"Несколько агентов без оркестратора — конфликты и хаос.", fix:"Обязательный оркестратор над агентами-исполнителями." },
-        { n:17, type:"base", name:"Надежда на полную автономию", sign:"Задача делегируется агенту целиком без точек участия человека.", fix:"Явное разделение шагов на автономные и требующие подтверждения." },
-        { n:18, type:"base", name:"Разрастание семантического слоя", sign:"Команда PDLC берётся за бизнес-схемы вместо схем артефактов.", fix:"Семантика бизнес-данных вне зоны ответственности PDLC." },
-        { n:19, type:"mgmt", name:"Управление, прикрученное сбоку", sign:"Проверка соответствия занимает больше времени, чем разработка; задачи блокируются на релизе.", fix:"Кодифицированные ограничения и Policy-as-Code с контуром на исследовании, а не на релизе." },
-        { n:20, type:"mgmt", name:"Статичная лестница R-уровней", sign:"Одинаковый надзор для документации и платёжной логики.", fix:"Контекстно-зависимая автономия." },
-        { n:21, type:"mgmt", name:"Адаптивные контроли без отучивания", sign:"Набор политик растёт на 10–20% в месяц без удаления.", fix:"Механизмы отучивания: регулярный пересмотр, явные операции «забывания»." },
-        { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек." }
+        { n:1, type:"base", name:"Зоопарк ИИ-инструментов", nameEn:"AI tool zoo", sign:"Множество инструментов без оркестрации.", fix:"IDP с единой средой исполнения.", fixEn:"IDP with a unified execution environment." },
+        { n:2, type:"base", name:"Культурный балласт", nameEn:"Cultural ballast", sign:"Формальный доступ к ИИ, работа по старым процессам.", fix:"Проводники изменений, обучение по ролям.", fixEn:"Change agents and role-based training." },
+        { n:3, type:"base", name:"ИИ только в кодировании", nameEn:"AI only in coding", sign:"ИИ применяется только в кодировании (25–35% времени).", fix:"Применение ИИ на всех фазах PDLC.", fixEn:"Apply AI across all PDLC phases." },
+        { n:4, type:"base", name:"Инерционный вендор-лок", nameEn:"Inertial vendor lock-in", sign:"Зависимость от одного поставщика.", fix:"Стандартные протоколы MCP/A2A.", fixEn:"Vendor-neutral MCP/A2A protocols." },
+        { n:5, type:"base", name:"Пилоты не масштабируются", nameEn:"Pilots don't scale", sign:"Пилоты успешны, но не выходят за рамки одной команды.", fix:"Проводники изменений; политика перераспределения ресурсов.", fixEn:"Change agents and resource reallocation policy." },
+        { n:6, type:"base", name:"Внедрение без обучения по ролям", nameEn:"Rollout without role training", sign:"Нет системного обучения.", fix:"Программы наставничества.", fixEn:"Mentorship programs." },
+        { n:7, type:"base", name:"Ожидание корпоративного стандарта", nameEn:"Waiting for a corporate standard", sign:"Ожидание общекорпоративного стандарта до начала внедрения.", fix:"Доменно-специфичные решения на общей платформе.", fixEn:"Domain-specific solutions on a shared platform." },
+        { n:8, type:"base", name:"Игнорирование рисков безопасности", nameEn:"Ignoring agent security risks", sign:"Игнорирование рисков агентной инфраструктуры.", fix:"Security-by-design на старте.", fixEn:"Security-by-design from day one." },
+        { n:9, type:"base", name:"Спецификация без Discovery", nameEn:"Spec without Discovery", sign:"SDD без гипотезы результата, без сверки с библиотекой паттернов.", fix:"Обязательный суб-цикл исследования перед SDD.", fixEn:"Mandatory Discovery sub-cycle before SDD." },
+        { n:10, type:"base", name:"Бесконтрольный рост рабочих процессов", nameEn:"Uncontrolled workflow sprawl", sign:"200+ агентов без реестра, владельца и жизненного цикла.", fix:"Единый реестр с владельцем и жизненным циклом.", fixEn:"A single registry with an owner and lifecycle." },
+        { n:11, type:"base", name:"Сэкономленное время уходит в никуда", nameEn:"Saved time goes nowhere", sign:"Время сэкономлено, но не превращено в результат.", fix:"Метрика доли перераспределения с первых пилотов (принцип внедрения №12).", fixEn:"Reallocation-rate metric from the first pilots (adoption principle #12)." },
+        { n:12, type:"base", name:"Валидация не успевает за реализацией", nameEn:"Validation can't keep up with implementation", sign:"Реализация ускорилась в 5 раз, валидация — узкое место.", fix:"I/V Tempo Ratio в еженедельном дашборде; принцип внедрения №12.", fixEn:"I/V Tempo Ratio on a weekly dashboard; adoption principle #12." },
+        { n:13, type:"base", name:"Безоткатный запуск длительного агента", nameEn:"Risky long-running agent launch", sign:"Long-running агент без среды работы ИИ-агентов и точек сохранения.", fix:"Среда работы ИИ-агентов с протоколом передачи сессий.", fixEn:"Agent runtime with a session handoff protocol." },
+        { n:14, type:"base", name:"Гонка за объёмом без бизнес-эффекта", nameEn:"Volume chase without business impact", sign:"Много PR от ИИ без бизнес-ценности.", fix:"Метрики объёма всегда в паре с метриками бизнес-результата.", fixEn:"Volume metrics always paired with business-outcome metrics." },
+        { n:15, type:"base", name:"Перепрыгивание уровней автономии", nameEn:"Skipping autonomy levels", sign:"Длинные автономные сессии при недостаточной зрелости команды.", fix:"Контрольные точки перехода между уровнями.", fixEn:"Transition checkpoints between autonomy levels." },
+        { n:16, type:"base", name:"Мультиагентность без оркестрации", nameEn:"Multi-agent without orchestration", sign:"Несколько агентов без оркестратора — конфликты и хаос.", fix:"Обязательный оркестратор над агентами-исполнителями.", fixEn:"Mandatory orchestrator over worker agents." },
+        { n:17, type:"base", name:"Надежда на полную автономию", nameEn:"Hoping for full autonomy", sign:"Задача делегируется агенту целиком без точек участия человека.", fix:"Явное разделение шагов на автономные и требующие подтверждения.", fixEn:"Explicit split of steps into autonomous vs. confirmation-required." },
+        { n:18, type:"base", name:"Разрастание семантического слоя", nameEn:"Semantic-layer sprawl", sign:"Команда PDLC берётся за бизнес-схемы вместо схем артефактов.", fix:"Семантика бизнес-данных вне зоны ответственности PDLC.", fixEn:"Business-data semantics outside the PDLC team's scope." },
+        { n:19, type:"mgmt", name:"Управление, прикрученное сбоку", nameEn:"Governance bolted on the side", sign:"Проверка соответствия занимает больше времени, чем разработка; задачи блокируются на релизе.", fix:"Кодифицированные ограничения и Policy-as-Code с контуром на исследовании, а не на релизе.", fixEn:"Codified constraints and Policy-as-Code at design time, not at release." },
+        { n:20, type:"mgmt", name:"Статичная лестница R-уровней", nameEn:"Static R-level ladder", sign:"Одинаковый надзор для документации и платёжной логики.", fix:"Контекстно-зависимая автономия.", fixEn:"Context-dependent autonomy." },
+        { n:21, type:"mgmt", name:"Адаптивные контроли без отучивания", nameEn:"Adaptive controls without unlearning", sign:"Набор политик растёт на 10–20% в месяц без удаления.", fix:"Механизмы отучивания: регулярный пересмотр, явные операции «забывания».", fixEn:"Unlearning mechanisms: regular review and explicit forget operations." },
+        { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", nameEn:"AI oversight as a free pass", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек.", fixEn:"Training in accountable practices; a human stays the owner." }
     ];
 
-    // ============ QUIZ GENERATION (name + fix по каждому АП, EN) ============
-    const ALL_NAMES = REGISTRY.map(a => a.name);
-    const ALL_FIXES = REGISTRY.map(a => a.fix);
+    // ============ QUIZ GENERATION (EN options) ============
+    const ALL_NAMES = REGISTRY.map(a => a.nameEn);
+    const ALL_FIXES = REGISTRY.map(a => a.fixEn);
     const QUIZ = [];
     REGISTRY.forEach(a => {
-        // тип name: по признаку -> название
+        // тип name: по признаку -> название (EN)
         QUIZ.push({ apId:a.n, type:'name',
             q:`Which antipattern matches this sign: "${a.sign}"`,
-            correct:a.name, pool: shuffle(ALL_NAMES.slice()).slice(0,3).concat(a.name),
-            explain:`"${a.name}" — ${a.fix}` });
-        // тип fix: по названию -> фикс
+            correct:a.nameEn, pool: shuffle(ALL_NAMES.slice()).slice(0,3).concat(a.nameEn),
+            explain:`"${a.nameEn}" — ${a.fixEn}` });
+        // тип fix: по названию -> фикс (EN)
         QUIZ.push({ apId:a.n, type:'fix',
-            q:`For the antipattern "${a.name}", choose the correct structural fix.`,
-            correct:a.fix, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fix),
-            explain:`Correct fix: ${a.fix}` });
+            q:`For the antipattern "${a.nameEn}", choose the correct structural fix.`,
+            correct:a.fixEn, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fixEn),
+            explain:`Correct fix: ${a.fixEn}` });
     });
 
     function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
