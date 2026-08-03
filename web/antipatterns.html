@@ -174,10 +174,14 @@
                     <div class="text-emerald-400 text-sm font-semibold mb-2">Номер билета</div>
                     <select id="ticket-select" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm"></select>
                 </div>
+                <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
+                    <input type="checkbox" id="quiz-strict" class="w-4 h-4 rounded border-slate-600 bg-slate-800 text-emerald-500">
+                    <span>Строгий режим: при ошибке нужно выбрать верный ответ, прежде чем идти дальше</span>
+                </label>
                 <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2">
                     <i class="fa-solid fa-play"></i><span>Начать</span>
                 </button>
-                <p class="text-xs text-slate-500 leading-relaxed">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">1</kbd>–<kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">4</kbd> — выбрать ответ · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Enter</kbd> — начать / далее · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">R</kbd> — заново в том же режиме</p>
+                <p class="text-xs text-slate-500 leading-relaxed">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">1</kbd>–<kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">4</kbd> — выбрать ответ · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Enter</kbd> — начать / далее · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">R</kbd> — заново в том же режиме. В строгом режиме при ошибке сначала выбери верный вариант.</p>
             </div>
 
             <div id="quiz-run" class="hidden">
@@ -367,6 +371,7 @@
     let mode = 'random';
     let currentTicket = [];
     let idx = 0, score = 0, answered = false;
+    let strictMode = false;
 
     document.querySelectorAll('.quiz-mode').forEach(b=>b.classList.add('border-slate-600'));
     document.getElementById('mode-random').addEventListener('click', ()=>{ mode='random'; document.getElementById('ticket-select-wrap').classList.add('hidden'); });
@@ -382,6 +387,7 @@
     document.getElementById('quiz-start').addEventListener('click', startQuiz);
 
     function startQuiz(){
+        strictMode = document.getElementById('quiz-strict').checked;
         if(mode==='random'){
             const seed = Math.floor(Math.random()*9000)+1000;
             currentTicket = shuffle(QUIZ.slice()).slice(0, TICKET_SIZE);
@@ -417,13 +423,24 @@
     function answer(btn,opt,q){
         if(answered) return; answered=true;
         const opts = document.querySelectorAll('#quiz-options .quiz-opt');
+        const next = document.getElementById('quiz-next');
         opts.forEach(o=>o.disabled=true);
-        if(opt===q.correct){ btn.classList.add('correct'); score++; }
-        else { btn.classList.add('wrong'); opts.forEach(o=>{ if(o.textContent===q.correct) o.classList.add('correct'); }); }
+        if(opt===q.correct){ btn.classList.add('correct'); score++; next.classList.remove('hidden'); }
+        else {
+            btn.classList.add('wrong');
+            const correctBtn = [...opts].find(o=>o.textContent===q.correct);
+            if(correctBtn){
+                correctBtn.classList.add('correct');
+                if(strictMode){
+                    // в строгом режиме блокируем переход, пока не кликнут верный
+                    correctBtn.disabled = false;
+                    correctBtn.classList.add('ring-2','ring-emerald-400');
+                    correctBtn.addEventListener('click', ()=>{ next.classList.remove('hidden'); }, { once:true });
+                } else { next.classList.remove('hidden'); }
+            } else { next.classList.remove('hidden'); }
+        }
         const ex=document.getElementById('quiz-explain'); ex.textContent=q.explain; ex.classList.remove('hidden');
         document.getElementById('quiz-progress-fill').style.width = `${((idx+1)/currentTicket.length)*100}%`;
-        const next=document.getElementById('quiz-next');
-        next.classList.remove('hidden');
         next.textContent = (idx+1===currentTicket.length) ? 'Показать результат' : 'Далее';
     }
 
@@ -496,8 +513,11 @@
                     if(opts[n-1]){ e.preventDefault(); opts[n-1].click(); return; }
                 }
             } else if(key==='Enter'){
+                // в строгом режиме после ошибки кнопка "Далее" скрыта, пока не выбран верный
+                const next=document.getElementById('quiz-next');
+                if(next.classList.contains('hidden')){ e.preventDefault(); return; }
                 e.preventDefault();
-                document.getElementById('quiz-next').click();
+                next.click();
                 return;
             } else if(key==='r' || key==='R'){
                 e.preventDefault(); startQuiz(); return;
