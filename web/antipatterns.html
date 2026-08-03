@@ -281,19 +281,24 @@
 
     // ============ QUIZ GENERATION (RU text + EN terms in options) ============
     // name-вопросы: варианты = англ. термины (nameEn). fix-вопросы: варианты = рус. формулировки fix с EN-терминами внутри.
+    // Дистракторы берутся из пула БЕЗ правильного ответа -> пул всегда из 4 уникальных вариантов.
     const ALL_NAMES = REGISTRY.map(a => a.nameEn);
     const ALL_FIXES = REGISTRY.map(a => a.fix);
     const QUIZ = [];
+    function buildPool(correct, all){
+        const distractors = shuffle(all.filter(x => x !== correct));
+        return shuffle(distractors.slice(0,3).concat(correct));
+    }
     REGISTRY.forEach(a => {
         // тип name: по признаку -> название (термин, EN)
         QUIZ.push({ apId:a.n, type:'name',
             q:`Какой антипаттерн (термин) описывает этот признак: «${a.sign}»`,
-            correct:a.nameEn, pool: shuffle(ALL_NAMES.slice()).slice(0,3).concat(a.nameEn),
+            correct:a.nameEn, pool: buildPool(a.nameEn, ALL_NAMES),
             explain:`«${a.nameEn}» — ${a.fix}` });
         // тип fix: по названию -> фикс (RU текст, EN термины внутри)
         QUIZ.push({ apId:a.n, type:'fix',
             q:`Для антипаттерна «${a.nameEn}» выберите правильный структурный фикс.`,
-            correct:a.fix, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fix),
+            correct:a.fix, pool: buildPool(a.fix, ALL_FIXES),
             explain:`Верный фикс: ${a.fix}` });
     });
 
