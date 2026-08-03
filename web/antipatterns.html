@@ -98,28 +98,28 @@
         <div class="bg-slate-900 text-slate-100 rounded-3xl p-7">
             <div class="flex items-center gap-2 mb-1">
                 <i class="fa-solid fa-graduation-cap text-emerald-400"></i>
-                <h2 class="heading-font text-2xl font-semibold">Quiz — Antipatterns</h2>
+                <h2 class="heading-font text-2xl font-semibold">КВИЗ — Antipatterns</h2>
             </div>
-            <p class="text-sm text-slate-400 mb-5">Test your knowledge. Two ticket modes, 10 questions each.</p>
+            <p class="text-sm text-slate-400 mb-5">Закрепи знания. Два режима билетов по 10 вопросов.</p>
 
             <div id="quiz-setup" class="space-y-5">
                 <div>
-                    <div class="text-emerald-400 text-sm font-semibold mb-2">Ticket mode</div>
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">Режим билета</div>
                     <div class="flex flex-wrap gap-3">
                         <button id="mode-random" class="quiz-mode text-sm px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700">
-                            <i class="fa-solid fa-shuffle mr-2"></i>Random ticket
+                            <i class="fa-solid fa-shuffle mr-2"></i>Случайный билет
                         </button>
                         <button id="mode-fixed" class="quiz-mode text-sm px-5 py-3 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700">
-                            <i class="fa-solid fa-ticket mr-2"></i>Fixed tickets
+                            <i class="fa-solid fa-ticket mr-2"></i>По билетам (фиксированные)
                         </button>
                     </div>
                 </div>
                 <div id="ticket-select-wrap" class="hidden">
-                    <div class="text-emerald-400 text-sm font-semibold mb-2">Ticket number</div>
+                    <div class="text-emerald-400 text-sm font-semibold mb-2">Номер билета</div>
                     <select id="ticket-select" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm"></select>
                 </div>
                 <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2">
-                    <i class="fa-solid fa-play"></i><span>Start</span>
+                    <i class="fa-solid fa-play"></i><span>Начать</span>
                 </button>
             </div>
 
@@ -135,7 +135,7 @@
                 <div id="quiz-explain" class="text-sm text-slate-400 mb-4 hidden"></div>
                 <div id="quiz-options" class="space-y-3"></div>
                 <div class="mt-6 flex gap-3">
-                    <button id="quiz-next" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Next</button>
+                    <button id="quiz-next" class="hidden bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Далее</button>
                 </div>
             </div>
 
@@ -144,8 +144,8 @@
                 <div id="quiz-score" class="heading-font text-3xl font-semibold mb-2"></div>
                 <div id="quiz-score-detail" class="text-slate-400 text-sm mb-6"></div>
                 <div class="flex justify-center gap-3">
-                    <button id="quiz-again" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Retry</button>
-                    <button id="quiz-back" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">Change ticket</button>
+                    <button id="quiz-again" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Ещё раз</button>
+                    <button id="quiz-back" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">К выбору билета</button>
                 </div>
             </div>
         </div>
@@ -214,21 +214,22 @@
         { n:22, type:"mgmt", name:"ИИ-надзор как индульгенция", nameEn:"AI oversight as a free pass", sign:"Разработчики штампуют предложения агента без ревью; доля дефектов растёт.", fix:"Обучение ответственным практикам; владельцем остаётся человек.", fixEn:"Training in accountable practices; a human stays the owner." }
     ];
 
-    // ============ QUIZ GENERATION (EN options) ============
+    // ============ QUIZ GENERATION (RU text + EN terms in options) ============
+    // name-вопросы: варианты = англ. термины (nameEn). fix-вопросы: варианты = рус. формулировки fix с EN-терминами внутри.
     const ALL_NAMES = REGISTRY.map(a => a.nameEn);
-    const ALL_FIXES = REGISTRY.map(a => a.fixEn);
+    const ALL_FIXES = REGISTRY.map(a => a.fix);
     const QUIZ = [];
     REGISTRY.forEach(a => {
-        // тип name: по признаку -> название (EN)
+        // тип name: по признаку -> название (термин, EN)
         QUIZ.push({ apId:a.n, type:'name',
-            q:`Which antipattern matches this sign: "${a.sign}"`,
+            q:`Какой антипаттерн (термин) описывает этот признак: «${a.sign}»`,
             correct:a.nameEn, pool: shuffle(ALL_NAMES.slice()).slice(0,3).concat(a.nameEn),
-            explain:`"${a.nameEn}" — ${a.fixEn}` });
-        // тип fix: по названию -> фикс (EN)
+            explain:`«${a.nameEn}» — ${a.fix}` });
+        // тип fix: по названию -> фикс (RU текст, EN термины внутри)
         QUIZ.push({ apId:a.n, type:'fix',
-            q:`For the antipattern "${a.nameEn}", choose the correct structural fix.`,
-            correct:a.fixEn, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fixEn),
-            explain:`Correct fix: ${a.fixEn}` });
+            q:`Для антипаттерна «${a.nameEn}» выберите правильный структурный фикс.`,
+            correct:a.fix, pool: shuffle(ALL_FIXES.slice()).slice(0,3).concat(a.fix),
+            explain:`Верный фикс: ${a.fix}` });
     });
 
     function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
@@ -304,18 +305,18 @@
         const sel = document.getElementById('ticket-select');
         const count = Math.ceil(QUIZ.length / TICKET_SIZE);
         sel.innerHTML = '';
-        for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Ticket #${i} (questions ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
+        for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Билет №${i} (вопросы ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
     });
 
     document.getElementById('quiz-start').addEventListener('click', ()=>{
         if(mode==='random'){
             const seed = Math.floor(Math.random()*9000)+1000;
             currentTicket = shuffle(QUIZ.slice()).slice(0, TICKET_SIZE);
-            runEl.dataset.label = `Random ticket #${seed}`;
+            runEl.dataset.label = `Случайный билет №${seed}`;
         } else {
             const k = parseInt(document.getElementById('ticket-select').value) - 1;
             currentTicket = QUIZ.slice(k*TICKET_SIZE, k*TICKET_SIZE + TICKET_SIZE);
-            runEl.dataset.label = `Ticket #${k+1}`;
+            runEl.dataset.label = `Билет №${k+1}`;
         }
         idx=0; score=0; setupEl.classList.add('hidden'); resultEl.classList.add('hidden'); runEl.classList.remove('hidden');
         showQuestion();
@@ -325,7 +326,7 @@
         answered=false;
         const q = currentTicket[idx];
         document.getElementById('quiz-label').textContent = runEl.dataset.label;
-        document.getElementById('quiz-progress').textContent = `Question ${idx+1} of ${currentTicket.length}`;
+        document.getElementById('quiz-progress').textContent = `Вопрос ${idx+1} из ${currentTicket.length}`;
         document.getElementById('quiz-progress-fill').style.width = `${(idx/currentTicket.length)*100}%`;
         document.getElementById('quiz-question').textContent = q.q;
         const ex = document.getElementById('quiz-explain'); ex.classList.add('hidden'); ex.textContent='';
@@ -350,7 +351,7 @@
         document.getElementById('quiz-progress-fill').style.width = `${((idx+1)/currentTicket.length)*100}%`;
         const next=document.getElementById('quiz-next');
         next.classList.remove('hidden');
-        next.textContent = (idx+1===currentTicket.length) ? 'Show result' : 'Next';
+        next.textContent = (idx+1===currentTicket.length) ? 'Показать результат' : 'Далее';
     }
 
     document.getElementById('quiz-next').addEventListener('click', ()=>{
@@ -359,10 +360,10 @@
 
     function finishQuiz(){
         runEl.classList.add('hidden'); resultEl.classList.remove('hidden');
-        document.getElementById('quiz-score').textContent = `${score} / ${currentTicket.length}`;
+        document.getElementById('quiz-score').textContent = `${score} из ${currentTicket.length}`;
         const pct = Math.round(score/currentTicket.length*100);
-        let msg = pct>=80 ? 'Great — you see antipatterns through.' : pct>=50 ? 'Not bad, but worth a re-read.' : 'Consider re-reading section 7.4 of the book.';
-        document.getElementById('quiz-score-detail').textContent = `${pct}% correct · ${runEl.dataset.label} · ${msg}`;
+        let msg = pct>=80 ? 'Отлично — ты видишь антипаттерны насквозь.' : pct>=50 ? 'Неплохо, но есть что повторить.' : 'Стоит перечитать раздел 7.4 книги.';
+        document.getElementById('quiz-score-detail').textContent = `${pct}% верных · ${runEl.dataset.label} · ${msg}`;
     }
 
     document.getElementById('quiz-again').addEventListener('click', ()=>{
