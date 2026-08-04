@@ -22,9 +22,15 @@
         .quiz-opt.correct { background: #ecfdf5; border-color: #10b981; color: #065f46; }
         .quiz-opt.wrong { background: #fef2f2; border-color: #f43f5e; color: #9f1239; }
 
-        /* fullscreen quiz: center + comfortable reading */
+        /* fullscreen quiz: native API + CSS fallback for Telegram/WebView */
         #quiz-section:fullscreen { max-width: 900px; margin: auto; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
         #quiz-section:-webkit-full-screen { max-width: 900px; margin: auto; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+        #quiz-section.quiz-fullscreen-fallback {
+            position: fixed; inset: 0; z-index: 9999; width: 100vw; height: 100vh;
+            height: 100dvh; max-width: none; margin: 0; border-radius: 0;
+            display: flex; flex-direction: column; justify-content: center; overflow-y: auto;
+        }
+        body.quiz-fullscreen-lock { overflow: hidden; }
     </style>
 </head>
 <body class="bg-slate-50">
@@ -553,27 +559,55 @@
     const fsBtn = document.getElementById('quiz-fullscreen');
     const fsIcon = fsBtn.querySelector('i');
     const fsLabel = fsBtn.querySelector('span');
+    function nativeFsOn(){ return !!(document.fullscreenElement || document.webkitFullscreenElement); }
+    function fallbackFsOn(){ return document.getElementById('quiz-section').classList.contains('quiz-fullscreen-fallback'); }
+    function enableFsFallback(){
+        const el = document.getElementById('quiz-section');
+        if(nativeFsOn()) return;
+        el.classList.add('quiz-fullscreen-fallback');
+        document.body.classList.add('quiz-fullscreen-lock');
+        syncFs();
+    }
+    function disableFsFallback(){
+        document.getElementById('quiz-section').classList.remove('quiz-fullscreen-fallback');
+        document.body.classList.remove('quiz-fullscreen-lock');
+        syncFs();
+    }
     function toggleFs(){
         const el = document.getElementById('quiz-section');
-        if(!document.fullscreenElement){
-            (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
-        } else {
-            (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+        if(fallbackFsOn()){ disableFsFallback(); return; }
+        if(nativeFsOn()){
+            const exit = document.exitFullscreen || document.webkitExitFullscreen;
+            if(exit) exit.call(document);
+            return;
         }
+        const request = el.requestFullscreen || el.webkitRequestFullscreen;
+        if(!request){ enableFsFallback(); return; }
+        try {
+            const result = request.call(el);
+            if(result && typeof result.catch==='function') result.catch(enableFsFallback);
+            // Некоторые WebView кратковременно входят и сразу выходят из fullscreen.
+            // Даём нативному режиму стабилизироваться; если через 800 мс его нет — CSS fallback.
+            setTimeout(()=>{ if(!nativeFsOn()) enableFsFallback(); }, 800);
+        } catch(e){ enableFsFallback(); }
     }
     fsBtn.addEventListener('click', toggleFs);
     function syncFs(){
-        const on = !!document.fullscreenElement;
+        const on = nativeFsOn() || fallbackFsOn();
         fsBtn.classList.toggle('bg-emerald-700', on);
         fsBtn.classList.toggle('border-emerald-600', on);
         fsIcon.classList.toggle('fa-expand', !on);
         fsIcon.classList.toggle('fa-compress', on);
         fsLabel.textContent = on ? 'Выйти из полного' : 'На весь экран';
+        if(nativeFsOn()) document.body.classList.remove('quiz-fullscreen-lock');
     }
     document.addEventListener('fullscreenchange', syncFs);
     document.addEventListener('webkitfullscreenchange', syncFs);
     // keyboard support for the quiz
     document.addEventListener('keydown', (e)=>{
+        if(e.key==='Escape' && fallbackFsOn()){
+            e.preventDefault(); disableFsFallback(); return;
+        }
         const t = e.target;
         if(t && (t.tagName==='INPUT' || t.tagName==='SELECT' || t.tagName==='TEXTAREA')) return;
         const key = e.key;
