@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f8fafc">
+    <title>Методики AI-Disrupt PDLC • Disrupt PDLC Coach</title>
+    <script src="vendor/tailwind-cdn.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: light; }
+        body { font-family: Inter, sans-serif; background: #f8fafc; color: #0f172a; }
+        .heading-font { font-family: "Space Grotesk", sans-serif; }
+        .filter-btn[aria-pressed="true"] { background: #0f766e; color: white; border-color: #0f766e; }
+        .stage-btn[aria-pressed="true"] { background: #ecfdf5; color: #047857; border-color: #6ee7b7; }
+        details > summary { list-style: none; cursor: pointer; }
+        details > summary::-webkit-details-marker { display: none; }
+        details[open] .details-chevron { transform: rotate(180deg); }
+        .focus-ring:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+            outline: 3px solid #34d399; outline-offset: 3px;
+        }
+        @media (max-width: 640px) {
+            .hero-title { font-size: 2.25rem; line-height: 1.05; }
+            .stage-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 py-2.5 flex items-center justify-between gap-4 text-sm">
+            <nav aria-label="Основная навигация" class="flex items-center gap-x-3 sm:gap-x-5 flex-wrap">
+                <a href="diagnosis.html" class="font-semibold text-slate-600 hover:text-emerald-700 focus-ring">Диагностика</a>
+                <a href="roadmap.html" class="font-semibold text-slate-600 hover:text-emerald-700 focus-ring">Roadmap</a>
+                <a href="methodologies.html" aria-current="page" class="font-semibold text-emerald-700 focus-ring">Методики</a>
+                <a href="antipatterns.html" class="text-slate-600 hover:text-emerald-700 focus-ring">Антипаттерны</a>
+            </nav>
+            <div class="hidden sm:block text-xs text-slate-400 font-medium whitespace-nowrap">Disrupt PDLC Coach</div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <section class="mb-10">
+            <div class="flex items-start gap-4">
+                <div class="w-12 h-12 shrink-0 rounded-2xl bg-emerald-50 text-emerald-700 flex items-center justify-center text-xl" aria-hidden="true">
+                    <i class="fa-solid fa-compass-drafting"></i>
+                </div>
+                <div>
+                    <p class="text-xs uppercase tracking-[0.2em] text-emerald-700 font-semibold mb-2">AI-Disrupt PDLC</p>
+                    <h1 class="hero-title heading-font text-4xl sm:text-5xl font-semibold tracking-tight text-slate-900">Методики трансформации</h1>
+                    <p class="mt-4 text-slate-600 max-w-2xl leading-relaxed">
+                        Практические способы пройти путь от Discovery до измеримого результата — с понятными входами,
+                        шагами, артефактами и проверками. Содержание размечено по whitepaper, а не придумано поверх него.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section aria-labelledby="journey-title" class="mb-8 rounded-3xl border border-slate-200 bg-white p-5 sm:p-6 shadow-sm">
+            <div class="flex items-center justify-between gap-4 mb-4">
+                <div>
+                    <h2 id="journey-title" class="heading-font text-lg font-semibold">Жизненный цикл</h2>
+                    <p class="text-sm text-slate-500 mt-1">Governance Mesh проходит через весь путь.</p>
+                </div>
+                <span class="hidden sm:inline-flex items-center gap-2 text-xs text-emerald-700 font-medium"><i class="fa-solid fa-shield-halved"></i> сквозной контроль</span>
+            </div>
+            <div id="stage-filters" class="stage-grid grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" role="group" aria-label="Фильтр по этапу">
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="all" aria-pressed="true">Все этапы</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Discovery" aria-pressed="false">Discovery</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Specification" aria-pressed="false">Specification</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Execution" aria-pressed="false">Execution</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Validation" aria-pressed="false">Validation</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Outcome" aria-pressed="false">Outcome</button>
+                <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 sm:col-span-3 lg:col-span-1" data-stage="Governance" aria-pressed="false">Governance</button>
+            </div>
+        </section>
+
+        <section aria-labelledby="catalog-title">
+            <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-4">
+                <div>
+                    <h2 id="catalog-title" class="heading-font text-2xl font-semibold">Каталог</h2>
+                    <p id="catalog-status" class="text-sm text-slate-500 mt-1" aria-live="polite">12 элементов</p>
+                </div>
+                <div id="type-filters" class="flex flex-wrap gap-2" role="group" aria-label="Фильтр по типу">
+                    <button type="button" class="filter-btn focus-ring border border-slate-300 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600" data-kind="all" aria-pressed="true">Все типы</button>
+                    <button type="button" class="filter-btn focus-ring border border-slate-300 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600" data-kind="method" aria-pressed="false">Методики</button>
+                    <button type="button" class="filter-btn focus-ring border border-slate-300 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600" data-kind="artifact" aria-pressed="false">Артефакты</button>
+                    <button type="button" class="filter-btn focus-ring border border-slate-300 rounded-full px-3 py-1.5 text-xs font-medium text-slate-600" data-kind="governance-model" aria-pressed="false">Модели управления</button>
+                </div>
+            </div>
+            <div id="methodology-catalog" class="grid gap-4" aria-live="polite"></div>
+            <p id="empty-state" class="hidden rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">По этому фильтру элементов нет.</p>
+        </section>
+
+        <section class="mt-10 rounded-3xl border border-slate-200 bg-slate-900 text-white p-6 sm:p-8">
+            <p class="text-xs uppercase tracking-[0.18em] text-emerald-300 font-semibold mb-3">Контекст</p>
+            <h2 class="heading-font text-2xl font-semibold">От диагноза к действию</h2>
+            <p class="text-slate-300 mt-3 max-w-2xl leading-relaxed">Диагностика показывает, где находится команда. Roadmap задаёт следующий переход. Методики объясняют, как работать. Антипаттерны помогают не повторить типичные ошибки.</p>
+            <div class="mt-5 flex flex-wrap gap-3 text-sm">
+                <a href="diagnosis.html" class="focus-ring inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 hover:bg-white/20">Диагностика <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="roadmap.html" class="focus-ring inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 hover:bg-white/20">Roadmap <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="antipatterns.html" class="focus-ring inline-flex items-center gap-2 rounded-xl bg-white/10 px-4 py-2.5 hover:bg-white/20">Антипаттерны <i class="fa-solid fa-arrow-right"></i></a>
+            </div>
+        </section>
+    </main>
+
+    <script id="methodologies-data" type="application/json">
+[
+  {"id":"pr-faq","titleRu":"PR/FAQ","titleEn":"PR/FAQ","kind":"artifact","stages":["Discovery"],"purpose":"Описать желаемый результат и вопросы скептиков до начала генерации.","whenToUse":"На входе Discovery для новой возможности или перепроектирования процесса.","applicabilityLimits":"Для тривиальных изменений глубина Discovery может быть сокращена по матрице применимости агента.","inputs":["Opportunity","контекст проблемы","ожидаемый результат"],"steps":["Написать пресс-релиз о желаемом результате.","Сформулировать вопросы скептиков.","Зафиксировать метрики успеха и риски."],"output":"PR/FAQ с измеримым результатом и списком вопросов.","doneCriteria":["Результат понятен без чтения реализации.","Вопросы скептиков получили ответы или владельцев."],"relatedAntipatterns":["Спецификация без Discovery","Шаблонные ответы в Discovery"],"sourceSections":["§1.8"],"sourcePages":["18–20"]},
+  {"id":"outcome-hypothesis","titleRu":"Outcome Hypothesis","titleEn":"Outcome Hypothesis","kind":"artifact","stages":["Discovery","Outcome"],"purpose":"Сформулировать проверяемое утверждение о том, какой результат даст изменение.","whenToUse":"До спецификации и до выбора способа реализации.","applicabilityLimits":"Гипотеза должна быть фальсифицируемой; лозунг «улучшить производительность» не считается гипотезой.","inputs":["изменение X","желаемый результат Y","метрика Z","период W"],"steps":["Записать X → Y → Z → W.","Определить baseline.","Заранее описать действие при опровержении."],"output":"Измеримое утверждение: X приведёт к Y, измеримому через Z за W.","doneCriteria":["Есть baseline и срок.","Указана метрика.","Гипотезу можно опровергнуть."],"relatedAntipatterns":["«Метрики без целей»","Гонка за объёмом без бизнес-эффекта"],"sourceSections":["§1.8","§1.9"],"sourcePages":["18–21"]},
+  {"id":"adaptation-redesign","titleRu":"Адаптация или перепроектирование","titleEn":"Adaptation / redesign","kind":"method","stages":["Discovery"],"purpose":"Выбрать между локальной адаптацией старого процесса и его перепроектированием под возможности агента.","whenToUse":"На стадии Discovery при оценке потенциала нелинейного эффекта.","applicabilityLimits":"Промежуточный вариант без явного владельца решения и критериев успеха описан в книге как антипаттерн.","inputs":["текущий процесс","потенциал эффекта","барьеры изменений","горизонт возврата"],"steps":["Проверить, создан ли процесс до ИИ.","Оценить потенциал нелинейного прироста.","Сопоставить стоимость и горизонт возврата.","Зафиксировать решение в SDD."],"output":"Явное решение: адаптация или перепроектирование.","doneCriteria":["Решение зафиксировано.","Назначен владелец.","Определены критерии успеха."],"relatedAntipatterns":["Адаптация без перепроектирования","Промежуточный вариант"],"sourceSections":["§1.7","§1.8"],"sourcePages":["16–18"]},
+  {"id":"agent-applicability","titleRu":"Матрица применимости агента","titleEn":"Agent applicability matrix","kind":"method","stages":["Discovery","Governance"],"purpose":"Определить подходящий класс применения агента до написания спецификации.","whenToUse":"Перед выбором паттерна и уровня автономии.","applicabilityLimits":"При высокой цене ошибки или необратимых действиях требуется человеческий контур решений.","inputs":["неопределённость","адаптивность","цена ошибки","обратимость","библиотека паттернов"],"steps":["Оценить пять критериев.","Выбрать класс: deterministic, AI-augmented, AI-Native или Agentic.","Зафиксировать плотность проверок и свободу агента."],"output":"Класс применимости агента и ограничения дальнейшей работы.","doneCriteria":["Все пять критериев рассмотрены.","Класс записан в SDD.","Проверки согласованы с риском."],"relatedAntipatterns":["Лишнее исследование тривиального","Надежда на полную автономию"],"sourceSections":["§1.8"],"sourcePages":["18–19"]},
+  {"id":"mob-elaboration","titleRu":"Mob Elaboration","titleEn":"Коллективная детализация спецификации","kind":"method","stages":["Specification"],"purpose":"Совместно детализировать спецификацию после прохождения Discovery.","whenToUse":"После PR/FAQ, Outcome Hypothesis и решения об адаптации/перепроектировании.","applicabilityLimits":"Не заменяет Discovery и не должна превращаться в формализацию ad hoc-тикетов.","inputs":["Opportunity","PR/FAQ","гипотеза результата","класс применимости","решение об изменении процесса"],"steps":["Собрать product manager, engineering lead, senior engineers и AI assistant.","Зафиксировать бизнес-контекст и критерии приёмки.","Составить карту решений с участием человека.","Связать задачу с библиотекой паттернов."],"output":"Драфт SDD с заполненными ключевыми разделами.","doneCriteria":["Discovery-артефакты присутствуют.","Критерии приёмки и human-in-the-loop map заполнены.","Есть ссылка на паттерн или зафиксировано отсутствие подходящего."],"relatedAntipatterns":["Спецификация без Discovery"],"sourceSections":["§2.3"],"sourcePages":["31"]},
+  {"id":"sdd-cycle","titleRu":"SDD-цикл","titleEn":"Specification-Driven Development cycle","kind":"method","stages":["Discovery","Specification","Execution","Validation","Outcome"],"purpose":"Сделать изменение существующей системы предсказуемым и проверяемым через спецификацию.","whenToUse":"Для доработок классических систем и существующей кодовой базы.","applicabilityLimits":"SDD является контрактом изменения классической системы; агентные продукты могут требовать дополнительные первичные артефакты.","inputs":["Discovery-артефакты","SDD","критерии приёмки","карта решений","evals"],"steps":["Discovery.","Mob Elaboration.","Генерация.","Верификация агентами и evals.","Улучшение спецификации при необходимости.","Outcome Check после развёртывания."],"output":"Изменённая система и Evidence Bundle, связанные с живой спецификацией.","doneCriteria":["Код является следствием спецификации.","Верификация выполнена.","Результат измерен после развёртывания."],"relatedAntipatterns":["SDD как wiki","SDD как ТЗ","Спецификация без Discovery"],"sourceSections":["§2.3"],"sourcePages":["32–33"]},
+  {"id":"human-in-loop-map","titleRu":"Human-in-the-loop Decision Map","titleEn":"Human-in-the-loop Decision Map","kind":"artifact","stages":["Specification","Validation","Governance"],"purpose":"Зафиксировать, кто, где и по каким критериям валидирует результат агента.","whenToUse":"Для каждого SDD и каждой критической точки принятия решения.","applicabilityLimits":"Карта участия человека и R0–R5 отвечают на разные вопросы и не заменяют друг друга.","inputs":["точки валидации","роли","критерии","блокирующие действия","маршрут эскалации"],"steps":["Назначить точку валидации.","Назначить владельца проверки.","Определить критерии.","Указать, что блокирует результат.","Задать эскалацию при разногласии."],"output":"Таблица критических точек с владельцами, критериями и эскалацией.","doneCriteria":["Для каждой критической точки указан владелец.","Критерии и блокирующее действие понятны.","Эскалация определена."],"relatedAntipatterns":["Надежда на полную автономию","«Безграничный auto-approve (усталость от согласований)»"],"sourceSections":["§2.3"],"sourcePages":["36–37"]},
+  {"id":"session-handoff","titleRu":"Session Handoff Protocol","titleEn":"Session Handoff Protocol","kind":"artifact","stages":["Execution","Governance"],"purpose":"Передать состояние долгой задачи между сессиями без потери когерентности.","whenToUse":"Для long-running агентов и перехода между контекстами.","applicabilityLimits":"Без контрольных точек длинная сессия становится высокорисковой: сбой может уничтожить накопленный прогресс.","inputs":["progress.md","feature-list.json","init.sh","указатель на Evidence Bundle"],"steps":["Сохранить состояние и выполненные подзадачи.","Зафиксировать открытые вопросы и следующие действия.","Сохранить машиночитаемый список остатка.","Дать новой сессии ссылку на проверочный пакет."],"output":"Пакет передачи: окружение, прогресс, оставшиеся подзадачи и Evidence Bundle.","doneCriteria":["Новая сессия восстанавливает окружение.","Остаток работы понятен без чтения переписки.","История проверок доступна."],"relatedAntipatterns":["Безоткатный запуск длительного агента"],"sourceSections":["§2.10"],"sourcePages":["46–47"]},
+  {"id":"eval-driven-development","titleRu":"Eval-driven development","titleEn":"Eval-driven development","kind":"method","stages":["Validation","Outcome"],"purpose":"Сделать evaluations и Evidence Bundle контрактом завершения работы агента.","whenToUse":"До и во время реализации, когда результат агента должен быть проверяемым.","applicabilityLimits":"Метрики и evals должны быть связаны с ожидаемым результатом, а не только с объёмом вывода.","inputs":["ожидаемое поведение","eval corpus","порог качества","baseline"],"steps":["Определить evals и пороги.","Запустить реализацию.","Проверить результат специализированными агентами.","Сравнить с baseline.","Сохранить evidence и вернуть результат в спецификацию."],"output":"Результаты evals и проверочный пакет завершения.","doneCriteria":["Порог качества определён до проверки.","Результат воспроизводим.","Evidence Bundle сохранён."],"relatedAntipatterns":["«Vibe coding без оценок»","Валидация не успевает за реализацией (Implementation-Validation Gap)"],"sourceSections":["§2.11"],"sourcePages":["48–49"]},
+  {"id":"evidence-bundle","titleRu":"Evidence Bundle","titleEn":"Evidence Bundle","kind":"artifact","stages":["Validation","Outcome","Governance"],"purpose":"Собрать проверяемые доказательства того, что изменение завершено и соответствует контракту.","whenToUse":"На завершении реализации и перед передачей результата человеку.","applicabilityLimits":"Успешный лог сам по себе не является Evidence Bundle.","inputs":["тесты","evals","security checks","regression evidence","review verdict","outcome evidence"],"steps":["Собрать результаты проверок.","Связать их со спецификацией.","Зафиксировать ограничения и решения.","Передать пакет на review."],"output":"Единый проверочный пакет с историей изменений, прогонов и решений.","doneCriteria":["Каждое обязательное доказательство имеет результат.","Есть ссылка на source/spec.","Ограничения явно указаны."],"relatedAntipatterns":["«Vibe coding без оценок»","Валидация не успевает за реализацией (Implementation-Validation Gap)"],"sourceSections":["§2.11"],"sourcePages":["48–49"]},
+  {"id":"r0-r5-autonomy","titleRu":"R0–R5: риск-адаптивная лестница разрешений","titleEn":"R0–R5","kind":"governance-model","stages":["Execution","Governance"],"purpose":"Определить, какие действия агенту разрешены и какой контроль требуется.","whenToUse":"При выборе класса автономии и проектировании ограничений среды.","applicabilityLimits":"R0–R5 отвечает, может ли агент выполнить действие; human-in-the-loop map отвечает, нужна ли валидация результата.","inputs":["риск домена","обратимость действий","политика подтверждений","требования к Guardian Agents"],"steps":["Определить риск и обратимость.","Выбрать класс разрешений R0–R5.","Задать подтверждения и ограничения.","Определить аудит и эскалацию."],"output":"Класс автономии и политика разрешённых действий.","doneCriteria":["Класс выбран явно.","Ограничения кодифицированы.","Аудит и эскалация определены."],"relatedAntipatterns":["Перепрыгивание уровней автономии","Статичная лестница R-уровней","Надежда на полную автономию"],"sourceSections":["§4.3"],"sourcePages":["92–96"]},
+  {"id":"governance-mesh","titleRu":"Governance Mesh","titleEn":"Governance Mesh","kind":"governance-model","stages":["Discovery","Specification","Execution","Validation","Outcome","Governance"],"purpose":"Встроить управление, риск-контроль и аудируемый след в каждый шаг PDLC.","whenToUse":"С самого Discovery и далее во всех контурах работы агента.","applicabilityLimits":"Governance не должен быть отдельным постфактум шлюзом, который впервые появляется перед релизом.","inputs":["Policy-as-Code","класс риска","точки контроля","телеметрия","аудит"],"steps":["Кодифицировать правила.","Связать правила с риском и автономией.","Встроить проверки в среду и pipeline.","Собирать аудируемый след.","Пересматривать контроли по данным эксплуатации."],"output":"Сквозной контур правил, enforcement, аудита и эскалации.","doneCriteria":["Контроли работают в реальном времени.","Есть аудит решений и действий.","Правила не отложены до финального релиза."],"relatedAntipatterns":["Управление, прикрученное сбоку","Адаптивные контроли без отучивания"],"sourceSections":["§2.13","§5.1"],"sourcePages":["51–52","103–115"]}
+]
+</script>
+
+    <script>
+        const registry = JSON.parse(document.getElementById('methodologies-data').textContent);
+    const catalog = document.getElementById('methodology-catalog');
+    const emptyState = document.getElementById('empty-state');
+    const status = document.getElementById('catalog-status');
+    let selectedStage = 'all';
+    let selectedKind = 'all';
+
+    const kindLabels = {
+        method: 'Методика',
+        artifact: 'Артефакт',
+        'governance-model': 'Модель управления'
+    };
+
+    function make(tag, className, text) {
+        const node = document.createElement(tag);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+    }
+
+    function addList(parent, items) {
+        const list = make('ul', 'mt-2 space-y-1.5 text-sm text-slate-600 list-disc pl-5');
+        items.forEach(item => list.appendChild(make('li', '', item)));
+        parent.appendChild(list);
+    }
+
+    function renderEntry(entry) {
+        const article = make('article', 'method-card rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden');
+        article.id = 'method-' + entry.id;
+        const top = make('div', 'p-5 sm:p-6');
+        const meta = make('div', 'flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider');
+        meta.appendChild(make('span', 'text-emerald-700', kindLabels[entry.kind]));
+        entry.stages.forEach(stage => meta.appendChild(make('span', 'rounded-full bg-slate-100 px-2 py-1 text-slate-500 normal-case tracking-normal', stage)));
+        top.appendChild(meta);
+        const title = make('h3', 'heading-font mt-3 text-xl font-semibold text-slate-900', entry.titleRu);
+        top.appendChild(title);
+        if (entry.titleEn && entry.titleEn !== entry.titleRu) top.appendChild(make('p', 'text-xs text-slate-400 mt-1', entry.titleEn));
+        top.appendChild(make('p', 'mt-3 text-slate-600 leading-relaxed', entry.purpose));
+        const summary = make('div', 'mt-4 grid sm:grid-cols-2 gap-3 text-sm');
+        [['Когда применять', entry.whenToUse], ['Ограничения', entry.applicabilityLimits], ['Результат', entry.output]].forEach(([label, value]) => {
+            const box = make('div', 'rounded-2xl bg-slate-50 p-3');
+            box.appendChild(make('div', 'text-xs font-semibold uppercase tracking-wide text-slate-400', label));
+            box.appendChild(make('div', 'mt-1 text-slate-700', value));
+            summary.appendChild(box);
+        });
+        top.appendChild(summary);
+        const details = document.createElement('details');
+        details.className = 'mt-5 border-t border-slate-100 pt-4';
+        const summaryButton = make('summary', 'focus-ring flex items-center justify-between gap-4 text-sm font-semibold text-emerald-700', 'Открыть шаги и критерии');
+        summaryButton.appendChild(make('i', 'details-chevron fa-solid fa-chevron-down transition-transform', ''));
+        details.appendChild(summaryButton);
+        const body = make('div', 'mt-4 grid lg:grid-cols-2 gap-5');
+        const steps = make('div');
+        steps.appendChild(make('h4', 'text-xs font-semibold uppercase tracking-wide text-slate-400', 'Шаги'));
+        addList(steps, entry.steps);
+        steps.appendChild(make('h4', 'mt-5 text-xs font-semibold uppercase tracking-wide text-slate-400', 'Входы'));
+        addList(steps, entry.inputs);
+        const checks = make('div');
+        checks.appendChild(make('h4', 'text-xs font-semibold uppercase tracking-wide text-slate-400', 'Definition of Done'));
+        addList(checks, entry.doneCriteria);
+        checks.appendChild(make('h4', 'mt-5 text-xs font-semibold uppercase tracking-wide text-slate-400', 'Связанные антипаттерны'));
+        const antiList = make('ul', 'mt-2 space-y-1.5 text-sm list-disc pl-5');
+        entry.relatedAntipatterns.forEach(name => {
+            const li = make('li');
+            const link = make('a', 'text-emerald-700 hover:text-emerald-900 underline focus-ring', name);
+            link.href = 'antipatterns.html#registry';
+            li.appendChild(link);
+            antiList.appendChild(li);
+        });
+        checks.appendChild(antiList);
+        checks.appendChild(make('h4', 'mt-5 text-xs font-semibold uppercase tracking-wide text-slate-400', 'Источник'));
+        checks.appendChild(make('p', 'mt-2 text-sm text-slate-600', entry.sourceSections.join(', ') + ' · печатные страницы ' + entry.sourcePages.join(', ')));
+        body.appendChild(steps); body.appendChild(checks); details.appendChild(body);
+        top.appendChild(details); article.appendChild(top);
+        return article;
+    }
+
+    function matches(entry) {
+        const stageMatch = selectedStage === 'all' || entry.stages.includes(selectedStage);
+        const kindMatch = selectedKind === 'all' || entry.kind === selectedKind;
+        return stageMatch && kindMatch;
+    }
+
+    function render() {
+        const visible = registry.filter(matches);
+        catalog.replaceChildren(...visible.map(renderEntry));
+        emptyState.classList.toggle('hidden', visible.length !== 0);
+        status.textContent = visible.length + ' из ' + registry.length + ' элементов';
+    }
+
+    function setPressed(selector, attribute, value) {
+        document.querySelectorAll(selector).forEach(button => {
+            button.setAttribute('aria-pressed', button.dataset[attribute] === value ? 'true' : 'false');
+        });
+    }
+
+    document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
+        selectedStage = button.dataset.stage;
+        setPressed('[data-stage]', 'stage', selectedStage);
+        render();
+    }));
+    document.querySelectorAll('[data-kind]').forEach(button => button.addEventListener('click', () => {
+        selectedKind = button.dataset.kind;
+        setPressed('[data-kind]', 'kind', selectedKind);
+        render();
+    }));
+    render();
+</script>
+</body>
+</html>
