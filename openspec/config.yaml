@@ -21,7 +21,7 @@ rules:
     - Всегда ссылаться на принципы из AI-Disrupt PDLC
     - Включать раздел Non-goals
     - Указывать измеримые критерии успеха
-  spec:
+  specs:
     - Использовать терминологию из книги (L0-L5, R0-R5, Evidence Bundle, Guardian Agents, Zero Friction и т.д.)
   tasks:
     - Разбивать на мелкие задачи (максимум 1-2 часа)
