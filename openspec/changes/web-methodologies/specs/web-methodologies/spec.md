@@ -8,7 +8,7 @@ The web application SHALL provide a static Russian-language page at `web/methodo
 - **THEN** the browser SHALL open `methodologies.html` and SHALL show the methodologies navigation item as active
 
 ### Requirement: Source-grounded MVP catalog
-The page SHALL contain exactly these 12 MVP entries: PR/FAQ, Outcome Hypothesis, Adaptation vs Redesign, Agent Applicability Matrix, Mob Elaboration, SDD Cycle, Human-in-the-loop Decision Map, Session Handoff Protocol, Eval-driven Development, Evidence Bundle, R0–R5 Autonomy Ladder, and Governance Mesh. Every entry MUST reference one or more verified whitepaper sections, and generated or internal content MUST NOT be presented as whitepaper content.
+The page SHALL contain exactly these 12 MVP entries: PR/FAQ, Outcome Hypothesis, Адаптация или перепроектирование, Матрица применимости агента, Mob Elaboration, SDD-цикл, Human-in-the-loop Decision Map, Session Handoff Protocol, Eval-driven development, Evidence Bundle, R0–R5: риск-адаптивная лестница разрешений, and Governance Mesh. Every entry MUST reference one or more verified whitepaper sections, and generated or internal content MUST NOT be presented as whitepaper content.
 
 #### Scenario: Catalog source integrity is checked
 - **WHEN** the catalog data is validated
@@ -37,11 +37,15 @@ The page SHALL provide lifecycle filters for Discovery, Specification, Execution
 - **THEN** all 12 entries SHALL be visible again
 
 ### Requirement: Actionable methodology details
-Every entry SHALL expose: purpose, when to use, when not to use, inputs, ordered steps, output artifact or decision, Definition of Done, related antipatterns, and source section. Empty mandatory fields MUST fail the content-integrity test.
+Every entry SHALL expose: purpose, when to use, applicability limits, inputs, ordered steps, output artifact or decision, Definition of Done, related antipatterns, source section, and printed source page. When the whitepaper does not define an applicability limit, the entry SHALL display «В источнике не указано» instead of an invented rule. Empty mandatory fields MUST fail the content-integrity test.
 
 #### Scenario: User expands an entry
 - **WHEN** a user opens a methodology detail panel
 - **THEN** all mandatory fields SHALL be available without navigation to another page
+
+#### Scenario: Source omits an applicability limit
+- **WHEN** the verified source passages do not define when an entry must not be used
+- **THEN** the entry SHALL display «В источнике не указано» and SHALL NOT add an unsupported limitation
 
 ### Requirement: Cross-section context
 The page SHALL explain the path Diagnosis → Roadmap → Methodologies → Antipatterns and SHALL provide working links to the Roadmap and Antipatterns sections. Related antipattern names on an entry SHALL use names present in the antipattern registry.

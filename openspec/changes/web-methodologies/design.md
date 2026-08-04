@@ -56,8 +56,8 @@
 
 ```text
 id, titleRu, titleEn, kind, stages, purpose,
-whenToUse, whenNotToUse, inputs, steps, output,
-doneCriteria, relatedAntipatterns, sourceSections
+whenToUse, applicabilityLimits, inputs, steps, output,
+doneCriteria, relatedAntipatterns, sourceSections, sourcePages
 ```
 
 Рендер карточек и фильтрация используют один registry; текст не дублируется в нескольких DOM-блоках.
@@ -68,20 +68,20 @@ doneCriteria, relatedAntipatterns, sourceSections
 
 ### 5. Зафиксированная source map MVP
 
-| Entry | Kind | Whitepaper source |
-|---|---|---|
-| PR/FAQ | artifact | §1.8 |
-| Outcome Hypothesis | artifact | §1.8–1.9 |
-| Adaptation vs Redesign | method | §1.7–1.8 |
-| Agent Applicability Matrix | method | §1.8 |
-| Mob Elaboration | method | §2.3 |
-| SDD Cycle | method | §2.3, “Процесс SDD-цикла” |
-| Human-in-the-loop Decision Map | artifact | §2.3, SDD principles/cycle |
-| Session Handoff Protocol | artifact | §2.10 |
-| Eval-driven Development | method | §2.11 |
-| Evidence Bundle | artifact | §2.11 |
-| R0–R5 Autonomy Ladder | governance-model | §4.3 |
-| Governance Mesh | governance-model | §2.13 and §5.1 |
+| Entry | Kind | Whitepaper source | Printed pages |
+|---|---|---|---:|
+| PR/FAQ | artifact | §1.8 | 18–20 |
+| Outcome Hypothesis | artifact | §1.8–1.9 | 18–21 |
+| Адаптация или перепроектирование | method | §1.7–1.8 | 16–18 |
+| Матрица применимости агента | method | §1.8 | 18–19 |
+| Mob Elaboration | method | §2.3, AWS AI-DLC comparison | 31 |
+| SDD-цикл | method | §2.3, «Процесс SDD-цикла для классических систем» | 32–33 |
+| Human-in-the-loop Decision Map | artifact | §2.3, «Принцип вовлечения человека» | 36–37 |
+| Session Handoff Protocol | artifact | §2.10 | 46–47 |
+| Eval-driven development | method | §2.11 | 48–49 |
+| Evidence Bundle | artifact | §2.11 | 48–49 |
+| R0–R5: риск-адаптивная лестница разрешений | governance-model | §4.3 | 92–96 |
+| Governance Mesh | governance-model | §2.13 and §5.1 | 51–52, 103–115 |
 
 Контент может быть короче источника, но не может добавлять непроверенные шаги как нормативную часть книги.
 
@@ -127,10 +127,12 @@ doneCriteria, relatedAntipatterns, sourceSections
 5. Опубликовать через текущий Cloudflare quick tunnel и проверить публичный URL.
 6. При регрессии удалить links на новую страницу и сам новый HTML; существующие данные и flows не мигрируются.
 
-## Open Questions for MVP Approval
+## Resolved MVP Decisions
 
-1. Подтвердить пользовательское название меню и страницы: **«Методики»** (рекомендуется) или «Практики».
-2. Подтвердить список из 12 элементов без Guardian Agents и Agent Harness в первой версии.
-3. Подтвердить раскрываемые inline-панели вместо fullscreen drawer/modal.
-4. Подтвердить отсутствие копируемых шаблонов в MVP; отдельные шаблоны предлагаются второй итерацией.
-5. Подтвердить URL `methodologies.html`.
+- Пользовательское название меню и страницы: **«Методики»**.
+- URL: `methodologies.html`.
+- Scope: зафиксированные 12 элементов; Guardian Agents и Agent Harness остаются вне MVP.
+- Detail UX: раскрываемые inline-панели вместо fullscreen drawer/modal.
+- Копируемые шаблоны не входят в MVP и могут быть предложены отдельным change после проверки каталога.
+
+Открытых продуктовых или технических вопросов, блокирующих реализацию, нет.
