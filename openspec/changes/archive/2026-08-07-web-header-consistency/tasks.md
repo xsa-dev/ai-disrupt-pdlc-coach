@@ -23,4 +23,4 @@
 ## 5. Review and Lifecycle
 
 - [x] 5.1 Run blocking implementation review and `git diff --check`. Acceptance: review verdict GO with no P0/P1 issues.
-- [ ] 5.2 Validate OpenSpec, mark only evidenced tasks complete, commit implementation, archive via `openspec archive web-header-consistency -y`, validate the store, and commit lifecycle changes. Acceptance: Git tree is clean and change is no longer active.
+- [x] 5.2 Validate OpenSpec, mark only evidenced tasks complete, commit implementation, archive via `openspec archive web-header-consistency -y`, validate the store, and commit lifecycle changes. Acceptance: Git tree is clean and change is no longer active.
