@@ -140,6 +140,21 @@ def test_inline_javascript_parses():
         assert result.returncode == 0, f"inline script {index}: {result.stderr}"
 
 
+def test_methodologies_uses_plain_page_intro_after_shared_header():
+    html, _ = parse_page()
+    intro = re.search(
+        r'<section[^>]+data-page-intro[^>]*>(.*?)</section>', html, re.S
+    )
+    assert intro, "plain data-page-intro is missing"
+    markup = intro.group(1)
+    assert "Методики трансформации" in markup
+    assert "Практические способы пройти путь" in markup
+    assert "AI-Disrupt PDLC" not in markup
+    assert "fa-compass-drafting" not in markup
+    assert "text-3xl sm:text-4xl" in markup
+    assert "sm:text-5xl" not in markup
+
+
 def test_required_static_contract():
     html, _ = parse_page()
     assert 'name="viewport"' in html
