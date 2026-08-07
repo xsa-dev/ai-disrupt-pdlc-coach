@@ -16,4 +16,4 @@
 
 ## 4. Lifecycle
 
-- [ ] 4.1 Commit implementation, mark only evidenced tasks complete, archive the change, validate the store and commit lifecycle changes.
+- [x] 4.1 Commit implementation, mark only evidenced tasks complete, archive the change, validate the store and commit lifecycle changes.
