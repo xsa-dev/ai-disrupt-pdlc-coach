@@ -36,7 +36,8 @@ jobs:
       - name: Install Google Chrome for CDP viewport tests
         run: |
           npx --yes @puppeteer/browsers install chrome@stable
-          CHROME=$(find "$HOME/.cache/puppeteer" -type f -name chrome -path '*chrome-linux*' | head -1)
+          CHROME=$(find "$GITHUB_WORKSPACE" -type f -name chrome -path '*chrome-linux64*' 2>/dev/null | head -1)
+          if [ -z "$CHROME" ]; then CHROME=$(find . -type f -name chrome -path '*chrome-linux*' 2>/dev/null | head -1); fi
           echo "Found chrome at: $CHROME"
           sudo ln -sf "$CHROME" /usr/bin/google-chrome
           google-chrome --version
