@@ -1,0 +1,79 @@
+name: Deploy GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+concurrency:
+  group: github-pages-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout triggering commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Install jsdom test dependency
+        run: npm ci --prefix tests
+      - name: Run Python structural and policy tests
+        run: python3 -m unittest discover -s tests -p 'test_*.py' -v
+      - name: Run jsdom and URL/RNG reference tests
+        run: |
+          node tests/headless_methodologies.mjs
+          node tests/quiz_v1_primitives.mjs
+          node tests/quiz_v1_url.mjs
+          node tests/quiz_v1_persistence.mjs
+      - name: Run Chrome CDP viewport acceptance tests
+        run: |
+          node tests/viewport_headers.mjs
+          node tests/viewport_methodologies.mjs
+          node tests/viewport_entrypoint.mjs
+      - name: Validate exact web artifact and retain manifest evidence
+        run: |
+          python3 scripts/artifact_manifest.py --output "$RUNNER_TEMP/artifact-manifest.json"
+          sha256sum "$RUNNER_TEMP/artifact-manifest.json" | tee "$RUNNER_TEMP/artifact-manifest.sha256"
+          {
+            echo '## Validated Pages artifact manifest'
+            echo '```json'
+            python3 -m json.tool "$RUNNER_TEMP/artifact-manifest.json"
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  deploy:
+    if: ${{ github.ref == 'refs/heads/master' }}
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout tested triggering commit
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Configure Pages
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b
+      - name: Revalidate immutable artifact
+        run: |
+          python3 scripts/artifact_manifest.py --output "$RUNNER_TEMP/artifact-manifest.json"
+          sha256sum "$RUNNER_TEMP/artifact-manifest.json" | tee "$RUNNER_TEMP/artifact-manifest.sha256"
+      - name: Upload validated web directory only
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa
+        with:
+          path: web
+      - name: Deploy Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e

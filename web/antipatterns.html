@@ -4,10 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Антипаттерны трансформации • Disrupt PDLC Coach</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2310b981'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='700'%3EA%3C/text%3E%3C/svg%3E">
     <script src="vendor/tailwind-cdn.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap');
+        @font-face{font-family:'Inter';font-display:swap;src:local('Inter'),local('Segoe UI'),local('Helvetica Neue'),local('Arial');font-weight:400 700}
+        @font-face{font-family:'Space Grotesk';font-display:swap;src:local('Space Grotesk'),local('Segoe UI'),local('Helvetica');font-weight:500 700}
 
         body { font-family: 'Inter', system-ui, sans-serif; }
         .heading-font { font-family: 'Space Grotesk', 'Inter', sans-serif; font-weight: 600; }
@@ -154,9 +156,11 @@
                     <button id="quiz-fullscreen" class="text-xs px-3 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 border border-slate-700 flex items-center gap-1.5"><i class="fa-solid fa-expand"></i><span>На весь экран</span></button>
                 </div>
             </div>
-            <p class="text-sm text-slate-400 mb-5">Закрепи знания. Два режима билетов по 10 вопросов.</p>
+            <p class="text-sm text-slate-400 mb-5">Закрепи знания. Случайный билет — 10 вопросов, фиксированные — 8–9.</p>
 
             <div id="quiz-setup" class="space-y-5">
+                <div id="quiz-link-error" role="alert" class="hidden rounded-2xl border border-rose-500 bg-rose-950/40 p-3 text-sm text-rose-200"></div>
+                <div id="quiz-store-error" class="hidden rounded-2xl border border-amber-500 bg-amber-950/40 p-3 text-sm text-amber-100">Сохранённый прогресс повреждён. Автосохранение отключено. <button id="quiz-store-reset" class="underline font-semibold">Сбросить данные v2</button></div>
                 <div>
                     <div class="text-emerald-400 text-sm font-semibold mb-2">Режим билета</div>
                     <div class="flex flex-wrap gap-3">
@@ -169,16 +173,21 @@
                     </div>
                 </div>
                 <div id="ticket-select-wrap" class="hidden">
-                    <div class="text-emerald-400 text-sm font-semibold mb-2">Номер билета</div>
+                    <label for="ticket-select" class="block text-emerald-400 text-sm font-semibold mb-2">Номер билета</label>
                     <select id="ticket-select" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm"></select>
                 </div>
+                <label id="seed-wrap" class="block">
+                    <span class="text-emerald-400 text-sm font-semibold block mb-2">Seed случайного билета</span>
+                    <input id="quiz-seed" value="8K3M" pattern="[A-Za-z0-9]{4,12}" maxlength="12" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm uppercase">
+                </label>
                 <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
                     <input type="checkbox" id="quiz-strict" class="w-4 h-4 rounded border-slate-600 bg-slate-800 text-emerald-500">
                     <span>Строгий режим: при ошибке нужно выбрать верный ответ, прежде чем идти дальше</span>
                 </label>
-                <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2">
-                    <i class="fa-solid fa-play"></i><span>Начать</span>
-                </button>
+                <div class="flex flex-wrap gap-3">
+                    <button id="quiz-start" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-3 px-6 rounded-2xl flex items-center gap-2"><i class="fa-solid fa-play"></i><span>Начать</span></button>
+                    <button id="quiz-share" class="border border-slate-600 hover:bg-slate-800 text-slate-100 font-medium py-3 px-6 rounded-2xl">Поделиться квизом</button>
+                </div>
                 <p class="text-xs text-slate-500 leading-relaxed">Клавиши: <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">1</kbd>–<kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">4</kbd> — выбрать ответ · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">Enter</kbd> — начать / далее · <kbd class="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700">R</kbd> — заново в том же режиме. В строгом режиме при ошибке сначала выбери верный вариант.</p>
                 <div id="quiz-progress-line" class="pt-1"></div>
             </div>
@@ -199,15 +208,23 @@
                 </div>
             </div>
 
-            <div id="quiz-result" class="hidden text-center py-4">
+            <div id="quiz-result" aria-describedby="quiz-result-disclosure" class="hidden text-center py-4">
                 <div class="text-5xl mb-3"><i class="fa-solid fa-trophy text-emerald-400"></i></div>
                 <div id="quiz-score" class="heading-font text-3xl font-semibold mb-2"></div>
                 <div id="quiz-score-detail" class="text-slate-400 text-sm mb-6"></div>
                 <div id="quiz-result-status" class="text-emerald-400 text-xs font-medium mb-6"></div>
-                <div class="flex justify-center gap-3">
+                <p id="quiz-result-disclosure" class="hidden text-xs text-amber-200 mb-5">Неподтверждённый результат: данные взяты из ссылки, могут быть изменены отправителем и не проверялись сервером.</p>
+                <div class="flex flex-wrap justify-center gap-3">
                     <button id="quiz-again" class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-2xl">Ещё раз</button>
                     <button id="quiz-back" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">К выбору билета</button>
+                    <button id="quiz-share-result" class="border border-slate-700 hover:bg-slate-800 text-slate-200 font-medium py-2.5 px-6 rounded-2xl">Поделиться результатом</button>
+                    <a id="quiz-result-cta" href="antipatterns.html?quiz=setup&amp;qv=1#quiz-section" class="hidden border border-emerald-600 text-emerald-300 font-medium py-2.5 px-6 rounded-2xl">Пройти этот билет</a>
                 </div>
+            </div>
+            <div id="quiz-share-feedback" aria-live="polite" class="mt-4 text-sm text-emerald-300"></div>
+            <div id="quiz-manual-wrap" class="hidden mt-3">
+                <label for="quiz-manual-copy" class="block text-xs text-slate-300 mb-1">Скопируйте ссылку вручную:</label>
+                <input id="quiz-manual-copy" readonly class="w-full bg-slate-800 border border-slate-600 rounded-xl p-2 text-sm text-white">
             </div>
         </div>
 
@@ -284,30 +301,198 @@
         { n:31, type:"base", name:"Обход через >50 подкоманд", nameEn:"Bypassing via >50 subcommands", sign:"Пользователь вносит в белый список более 50 подкоманд, фактически отключая проверку.", fix:"Ограничение частоты и событие аудита при превышении порога; эскалация к AI Security Officer." }
     ];
 
-    // ============ QUIZ GENERATION (RU text + EN terms in options) ============
-    // name-вопросы: варианты = англ. термины (nameEn). fix-вопросы: варианты = рус. формулировки fix с EN-терминами внутри.
-    // Дистракторы берутся из пула БЕЗ правильного ответа -> пул всегда из 4 уникальных вариантов.
-    const ALL_NAMES = REGISTRY.map(a => a.nameEn);
-    const ALL_FIXES = REGISTRY.map(a => a.fix);
+    // ============ QUIZ v1: stable registry, deterministic generation ============
+    const FIXED_SIZES = [9,9,9,9,9,9,8];
+    const apId = n => `ap-${String(n).padStart(2,'0')}`;
     const QUIZ = [];
-    function buildPool(correct, all){
-        const distractors = shuffle(all.filter(x => x !== correct));
-        return shuffle(distractors.slice(0,3).concat(correct));
-    }
     REGISTRY.forEach(a => {
-        // тип name: по признаку -> название (термин, EN)
-        QUIZ.push({ apId:a.n, type:'name',
-            q:`Какой антипаттерн (термин) описывает этот признак: «${a.sign}»`,
-            correct:a.nameEn, pool: buildPool(a.nameEn, ALL_NAMES),
-            explain:`«${a.nameEn}» — ${a.fix}` });
-        // тип fix: по названию -> фикс (RU текст, EN термины внутри)
-        QUIZ.push({ apId:a.n, type:'fix',
+        const id = apId(a.n);
+        QUIZ.push({ id:`${id}:definition`, sourceId:id, apId:a.n, type:'definition',
+            q:`Как проявляется антипаттерн «${a.nameEn}»?`,
+            correct:a.sign, explain:`Признак: ${a.sign} Структурный фикс: ${a.fix}` });
+        QUIZ.push({ id:`${id}:fix`, sourceId:id, apId:a.n, type:'fix',
             q:`Для антипаттерна «${a.nameEn}» выберите правильный структурный фикс.`,
-            correct:a.fix, pool: buildPool(a.fix, ALL_FIXES),
-            explain:`Верный фикс: ${a.fix}` });
+            correct:a.fix, explain:`Верный фикс: ${a.fix}` });
     });
+    const QUESTIONS_BY_ID = Object.fromEntries(QUIZ.map(q => [q.id,q]));
+    const REGISTRY_BY_ID = Object.fromEntries(REGISTRY.map(a => [apId(a.n),a]));
 
-    function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+    function fnv1a(text){
+        let h=0x811C9DC5;
+        const utf8=unescape(encodeURIComponent(text));
+        for(let i=0;i<utf8.length;i++) h=Math.imul(h^utf8.charCodeAt(i),0x01000193)>>>0;
+        return h>>>0;
+    }
+    function mulberry32(seed){
+        let state=seed>>>0;
+        return {
+            nextUint32(){
+                state=(state+0x6D2B79F5)>>>0;
+                let t=state;
+                t=Math.imul(t^(t>>>15),t|1);
+                t=t^(t+Math.imul(t^(t>>>7),t|61));
+                return (t^(t>>>14))>>>0;
+            },
+            nextFloat(){ return this.nextUint32()/4294967296; }
+        };
+    }
+    function seededShuffle(a,rng){
+        for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng.nextFloat()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+        return a;
+    }
+    function materializeQuestion(questionId,rng){
+        const base=QUESTIONS_BY_ID[questionId];
+        const distractors=REGISTRY.map(a=>apId(a.n)).filter(id=>id!==base.sourceId);
+        seededShuffle(distractors,rng);
+        const topDistractors=distractors.slice(0,3);
+        const optionSourceIds=seededShuffle([base.sourceId,...topDistractors],rng);
+        const field=base.type==='definition'?'sign':'fix';
+        return {...base,distractorSourceIds:topDistractors,optionSourceIds,pool:optionSourceIds.map(id=>REGISTRY_BY_ID[id][field])};
+    }
+    function generateChallenge(config){
+        const context=config.mode==='random'
+            ? `AI-DISRUPT-QUIZ|qv=1|random|seed=${config.seed}`
+            : `AI-DISRUPT-QUIZ|qv=1|fixed|ticket=${config.ticket}`;
+        const rng=mulberry32(fnv1a(context));
+        let ids=QUIZ.map(q=>q.id);
+        if(config.mode==='random') ids=seededShuffle(ids.slice(),rng).slice(0,10);
+        else {
+            const start=FIXED_SIZES.slice(0,config.ticket-1).reduce((a,b)=>a+b,0);
+            ids=ids.slice(start,start+FIXED_SIZES[config.ticket-1]);
+        }
+        return ids.map(id=>materializeQuestion(id,rng));
+    }
+    function serializeQuiz(config){
+        const params=new URLSearchParams();
+        params.set('quiz',config.mode); params.set('qv','1');
+        if(config.mode==='fixed') params.set('ticket',String(config.ticket));
+        if(config.mode==='random') params.set('seed',config.seed.toUpperCase());
+        if(config.strict) params.set('strict','1');
+        if(config.result){ params.set('score',String(config.result.score)); params.set('total',String(config.result.total)); }
+        if(config.autostart && !config.result) params.set('autostart','1');
+        return `antipatterns.html?${params.toString()}#quiz-section`;
+    }
+    function parseQuizUrl(url,rawHref=url.href){
+        const allowed=['quiz','qv','ticket','seed','strict','score','total','autostart'];
+        const present=allowed.filter(k=>url.searchParams.has(k));
+        const fail=error=>({valid:false,explicit:true,error});
+        if(!url.searchParams.has('quiz')) return present.length===0
+            ? {valid:true,explicit:false}
+            : fail('Ссылка на квиз не содержит режим quiz.');
+        for(const key of allowed) if(url.searchParams.getAll(key).length>1) return {valid:false,explicit:true,error:'Параметр ссылки повторяется.'};
+        const mode=url.searchParams.get('quiz');
+        if(!['setup','fixed','random'].includes(mode) || url.searchParams.get('qv')!=='1') return fail('Ссылка на квиз имеет неподдерживаемый формат.');
+        const hashAt=rawHref.indexOf('#');
+        const rawHash=hashAt<0?'':rawHref.slice(hashAt);
+        if(rawHash && rawHash!=='#' && rawHash!=='#quiz-section') return fail('Некорректный фрагмент ссылки на квиз.');
+        const config={mode,strict:false};
+        const strict=url.searchParams.get('strict');
+        if(strict!==null && strict!=='0' && strict!=='1') return fail('Некорректный строгий режим.');
+        config.strict=strict==='1';
+        const decimal=x=>/^(0|[1-9][0-9]*)$/.test(x||'');
+        if(mode==='setup'){
+            if(present.some(k=>!['quiz','qv'].includes(k))) return fail('Лишние параметры для настройки квиза.');
+        } else if(mode==='fixed'){
+            const ticket=url.searchParams.get('ticket');
+            if(!/^[1-7]$/.test(ticket||'') || url.searchParams.has('seed')) return fail('Некорректный номер билета.');
+            config.ticket=Number(ticket);
+        } else {
+            const seed=url.searchParams.get('seed');
+            if(!/^[A-Za-z0-9]{4,12}$/.test(seed||'') || url.searchParams.has('ticket')) return fail('Некорректный seed случайного билета.');
+            config.seed=seed.toUpperCase();
+        }
+        if(mode!=='setup'){
+            const hasScore=url.searchParams.has('score'),hasTotal=url.searchParams.has('total');
+            if(hasScore!==hasTotal) return fail('Результат должен содержать score и total вместе.');
+            if(hasScore){
+                const s=url.searchParams.get('score'),t=url.searchParams.get('total');
+                if(!decimal(s)||!decimal(t)) return fail('Некорректный результат.');
+                const score=Number(s),total=Number(t),expected=mode==='fixed'?FIXED_SIZES[config.ticket-1]:10;
+                if(!Number.isSafeInteger(score)||score>total||total!==expected||url.searchParams.has('autostart')) return fail('Результат не соответствует билету.');
+                config.result={score,total};
+            }
+            const auto=url.searchParams.get('autostart');
+            if(auto!==null && auto!=='1') return fail('Некорректный autostart.');
+            config.autostart=auto==='1';
+        }
+        const route=serializeQuiz(config);
+        return {valid:true,explicit:true,config,route,canonical:rawHash==='#quiz-section' && url.search===new URL(route,document.baseURI).search};
+    }
+    function absoluteUrl(route){ return new URL(route,document.baseURI).href; }
+    const STORE_V2='aipdlc.quiz.progress.v2';
+    const plainObject=x=>x!==null && typeof x==='object' && !Array.isArray(x) && Object.getPrototypeOf(x)===Object.prototype;
+    const exactKeys=(x,keys)=>plainObject(x) && Object.keys(x).sort().join('|')===keys.slice().sort().join('|');
+    function identityTotal(identity){
+        let m=/^qv1:fixed:([1-7]):strict:([01])$/.exec(identity);
+        if(m) return FIXED_SIZES[Number(m[1])-1];
+        m=/^qv1:random:([A-Z0-9]{4,12}):strict:([01])$/.exec(identity);
+        return m?10:null;
+    }
+    function validProgressData(data){
+        if(!exactKeys(data,['schema','done'])||data.schema!==2||!plainObject(data.done)) return false;
+        for(const [identity,record] of Object.entries(data.done)){
+            const total=identityTotal(identity);
+            if(total===null||!exactKeys(record,['score','total','pct','bestAt','lastAttemptAt'])) return false;
+            const values=['score','total','pct','bestAt','lastAttemptAt'].map(k=>record[k]);
+            if(values.some(v=>!Number.isSafeInteger(v)||v<0)) return false;
+            if(record.total!==total||record.score>record.total||record.pct!==Math.round(record.score/record.total*100)||record.bestAt>record.lastAttemptAt) return false;
+        }
+        return true;
+    }
+    function trimRandom(done){
+        const random=Object.keys(done).filter(k=>k.startsWith('qv1:random:'))
+            .sort((a,b)=>done[a].lastAttemptAt-done[b].lastAttemptAt||(a<b?-1:a>b?1:0));
+        while(random.length>100) delete done[random.shift()];
+    }
+    function createProgressStore(storage){
+        const empty=()=>({schema:2,done:{}});
+        let data=empty(),valid=true,raw=null;
+        try{
+            raw=storage.getItem(STORE_V2);
+            if(raw!==null){ const parsed=JSON.parse(raw); if(!validProgressData(parsed)) valid=false; else { data=parsed; trimRandom(data.done); } }
+        }catch(e){ valid=false; }
+        const store={
+            get valid(){return valid;}, get data(){return data;}, get raw(){return raw;},
+            record(identity,score,total,now=Date.now()){
+                const expected=identityTotal(identity),pct=total?Math.round(score/total*100):0;
+                if(!valid||expected!==total||!Number.isSafeInteger(score)||score<0||score>total) return {saved:false,pct};
+                const previous=data.done[identity];
+                const attemptAt=Math.max(0,Math.floor(now));
+                const effective=Math.max(previous?previous.lastAttemptAt:0,attemptAt);
+                const improved=!previous||pct>previous.pct;
+                if(improved) data.done[identity]={score,total,pct,bestAt:effective,lastAttemptAt:effective};
+                else data.done[identity]={...previous,lastAttemptAt:effective};
+                trimRandom(data.done);
+                let persisted=true;
+                try{ storage.setItem(STORE_V2,JSON.stringify(data)); }catch(e){ persisted=false; }
+                return {saved:persisted,isFirst:!previous,improved,isExcellent:pct>=80,prevBest:previous?previous.pct:-1,pct};
+            },
+            fixedExcellentCount(){
+                const tickets=new Set();
+                for(const [id,r] of Object.entries(data.done)){ const m=/^qv1:fixed:([1-7]):strict:[01]$/.exec(id); if(m&&r.pct>=80) tickets.add(m[1]); }
+                return tickets.size;
+            },
+            reset(){ data=empty(); valid=true; raw=JSON.stringify(data); storage.setItem(STORE_V2,raw); }
+        };
+        return store;
+    }
+    async function performShare({nav,url,text,ui}){
+        try{
+            const nativeShare=nav.share;
+            if(typeof nativeShare==='function'){
+                try{ await Promise.resolve(nativeShare.call(nav,{title:'AI-Disrupt PDLC Quiz',text,url})); return; }
+                catch(error){ if(error&&error.name==='AbortError') return; }
+            }
+        }catch(error){ if(error&&error.name==='AbortError') return; }
+        try{
+            const clipboard=nav.clipboard;
+            const write=clipboard&&clipboard.writeText;
+            if(typeof write!=='function') throw new Error('Clipboard unavailable');
+            await Promise.resolve(write.call(clipboard,url));
+            if(ui&&ui.success) ui.success();
+        }catch(error){ if(ui&&ui.manual) ui.manual(url); }
+    }
+    window.__QUIZ_V1__={questions:QUIZ,fnv1a,mulberry32,seededShuffle,generateChallenge,serializeQuiz,parseQuizUrl,absoluteUrl,createProgressStore,validProgressData,performShare};
 
     // ============ RENDER: FREQ ============
     const freqC = document.getElementById('freq-container');
@@ -365,187 +550,170 @@
     });
 
     // ============ QUIZ ENGINE ============
-    const setupEl = document.getElementById('quiz-setup');
-    const runEl = document.getElementById('quiz-run');
-    const resultEl = document.getElementById('quiz-result');
-    let mode = 'random';
-    let currentTicket = [];
-    let idx = 0, score = 0, answered = false;
-    let strictMode = false;
+    const setupEl=document.getElementById('quiz-setup');
+    const runEl=document.getElementById('quiz-run');
+    const resultEl=document.getElementById('quiz-result');
+    const ticketSelect=document.getElementById('ticket-select');
+    const seedInput=document.getElementById('quiz-seed');
+    const strictInput=document.getElementById('quiz-strict');
+    let mode='random',activeConfig=null,currentTicket=[],idx=0,score=0,answered=false,awaitingCorrection=false,strictMode=false,lastResult=null;
+    const progressStore=createProgressStore(localStorage);
 
+    for(let i=1;i<=7;i++){
+        const o=document.createElement('option'); o.value=String(i); o.textContent=`Билет №${i} (${FIXED_SIZES[i-1]} вопросов)`; ticketSelect.appendChild(o);
+    }
+    function setMode(next){
+        mode=next;
+        document.querySelectorAll('.quiz-mode').forEach(button=>{
+            const selected=button.id===`mode-${mode}`;
+            button.setAttribute('aria-pressed',String(selected));
+            button.classList.toggle('bg-emerald-800',selected);
+        });
+        document.getElementById('ticket-select-wrap').classList.toggle('hidden',mode!=='fixed');
+        document.getElementById('seed-wrap').classList.toggle('hidden',mode!=='random');
+    }
     document.querySelectorAll('.quiz-mode').forEach(b=>b.classList.add('border-slate-600'));
-    document.getElementById('mode-random').addEventListener('click', ()=>{ mode='random'; document.getElementById('ticket-select-wrap').classList.add('hidden'); });
-    document.getElementById('mode-fixed').addEventListener('click', ()=>{
-        mode='fixed';
-        const wrap = document.getElementById('ticket-select-wrap'); wrap.classList.remove('hidden');
-        const sel = document.getElementById('ticket-select');
-        const count = Math.ceil(QUIZ.length / TICKET_SIZE);
-        sel.innerHTML = '';
-        for(let i=1;i<=count;i++){ const o=document.createElement('option'); o.value=i; o.textContent=`Билет №${i} (вопросы ${((i-1)*TICKET_SIZE)+1}–${Math.min(i*TICKET_SIZE,QUIZ.length)})`; sel.appendChild(o); }
-    });
+    document.getElementById('mode-random').addEventListener('click',()=>setMode('random'));
+    document.getElementById('mode-fixed').addEventListener('click',()=>setMode('fixed'));
+    setMode('random');
 
-    // ============ PROGRESS (localStorage) ============
-    const STORE_KEY = 'aipdlc.quiz.progress.v1';
-    const FIXED_COUNT = Math.ceil(QUIZ.length / TICKET_SIZE); // сейчас 7
-    function loadProgress(){
-        try {
-            const raw = localStorage.getItem(STORE_KEY);
-            if(!raw) return { done:{}, excellent:[] };
-            const p = JSON.parse(raw);
-            return { done: p.done||{}, excellent: p.excellent||[] };
-        } catch(e){ return { done:{}, excellent:[] }; }
-    }
-    function saveProgress(p){
-        try { localStorage.setItem(STORE_KEY, JSON.stringify(p)); } catch(e){ /* приватный режим — mute */ }
-    }
-    // лучший pct сохраняется; excellent — те, где pct >= 80
-    function recordResult(ticketKey, score, total){
-        const p = loadProgress();
-        const pct = total ? Math.round(score/total*100) : 0;
-        const prev = p.done[ticketKey];
-        const prevBest = prev ? prev.pct : -1;
-        const improved = pct > prevBest;
-        const isFirst = !prev;
-        // храним лучший результат
-        if(prevBest < 0 || pct >= prevBest){
-            p.done[ticketKey] = { score, total, pct, at: Date.now() };
+    function configFromControls(){
+        const config={mode,strict:strictInput.checked};
+        if(mode==='fixed') config.ticket=Number(ticketSelect.value||1);
+        else {
+            const raw=seedInput.value;
+            if(!/^[A-Za-z0-9]{4,12}$/.test(raw)) return null;
+            config.seed=raw.toUpperCase(); seedInput.value=config.seed;
         }
-        // пересчитываем excellent по всем done
-        p.excellent = Object.keys(p.done).filter(k => (p.done[k].pct||0) >= 80);
-        saveProgress(p);
-        renderProgressLine();
-        return { isFirst, improved, isExcellent: pct>=80, prevBest, pct };
+        return config;
     }
-    function ticketKeyOf(){
-        if(mode==='random') return 'random';
-        const k = parseInt(document.getElementById('ticket-select').value) - 1;
-        return 'fixed:' + (k+1);
+    function applyConfig(config){
+        if(config.mode==='setup') return;
+        setMode(config.mode); strictInput.checked=!!config.strict;
+        if(config.mode==='fixed') ticketSelect.value=String(config.ticket);
+        else seedInput.value=config.seed;
+    }
+    function identityOf(config){
+        const variant=config.mode==='fixed'?`fixed:${config.ticket}`:`random:${config.seed}`;
+        return `qv1:${variant}:strict:${config.strict?1:0}`;
     }
     function renderProgressLine(){
-        const p = loadProgress();
-        const done = p.excellent.filter(k => k.indexOf('fixed:')===0).length;
-        const wrap = document.getElementById('quiz-progress-line');
-        if(!wrap) return;
-        const pct = FIXED_COUNT ? Math.round(done/FIXED_COUNT*100) : 0;
-        wrap.innerHTML = `
-            <div class="text-xs text-slate-400 mb-1">Отлично пройдено: <span class="text-emerald-400 font-semibold">${done}</span> / ${FIXED_COUNT} билетов</div>
-            <div class="h-1 w-full rounded-full bg-slate-800 overflow-hidden">
-                <div class="h-full rounded-full bg-emerald-500 transition-all duration-500" style="width:${pct}%"></div>
-            </div>`;
+        const done=progressStore.fixedExcellentCount(),pct=Math.round(done/7*100);
+        document.getElementById('quiz-progress-line').innerHTML=`<div class="text-xs text-slate-400 mb-1">Отлично пройдено: <span class="text-emerald-400 font-semibold">${done}</span> / 7 билетов</div><div class="h-1 w-full rounded-full bg-slate-800 overflow-hidden"><div class="h-full rounded-full bg-emerald-500" style="width:${pct}%"></div></div>`;
+        document.getElementById('quiz-store-error').classList.toggle('hidden',progressStore.valid);
     }
-
-    document.getElementById('quiz-start').addEventListener('click', startQuiz);
+    document.getElementById('quiz-store-reset').addEventListener('click',()=>{ progressStore.reset(); renderProgressLine(); });
 
     function startQuiz(){
-        strictMode = document.getElementById('quiz-strict').checked;
-        if(mode==='random'){
-            const seed = Math.floor(Math.random()*9000)+1000;
-            currentTicket = shuffle(QUIZ.slice()).slice(0, TICKET_SIZE);
-            runEl.dataset.label = `Случайный билет №${seed}`;
-        } else {
-            const k = parseInt(document.getElementById('ticket-select').value) - 1;
-            currentTicket = QUIZ.slice(k*TICKET_SIZE, k*TICKET_SIZE + TICKET_SIZE);
-            runEl.dataset.label = `Билет №${k+1}`;
-        }
-        idx=0; score=0; setupEl.classList.add('hidden'); resultEl.classList.add('hidden'); runEl.classList.remove('hidden');
+        const config=configFromControls();
+        if(!config){ const e=document.getElementById('quiz-link-error'); e.textContent='Seed должен содержать 4–12 латинских букв или цифр.'; e.classList.remove('hidden'); return; }
+        document.getElementById('quiz-link-error').classList.add('hidden');
+        activeConfig=config; strictMode=config.strict; currentTicket=generateChallenge(config);
+        runEl.dataset.label=config.mode==='fixed'?`Билет №${config.ticket} · ${currentTicket.length} вопросов`:`Случайный билет ${config.seed} · 10 вопросов`;
+        idx=0; score=0; answered=false; lastResult=null;
+        setupEl.classList.add('hidden'); resultEl.classList.add('hidden'); runEl.classList.remove('hidden');
+        document.getElementById('quiz-result-disclosure').classList.add('hidden');
+        document.getElementById('quiz-result-cta').classList.add('hidden');
         showQuestion();
     }
-
+    document.getElementById('quiz-start').addEventListener('click',startQuiz);
     function showQuestion(){
-        answered=false;
-        const q = currentTicket[idx];
-        document.getElementById('quiz-label').textContent = runEl.dataset.label;
-        document.getElementById('quiz-progress').textContent = `Вопрос ${idx+1} из ${currentTicket.length}`;
-        document.getElementById('quiz-progress-fill').style.width = `${(idx/currentTicket.length)*100}%`;
-        document.getElementById('quiz-question').textContent = q.q;
-        const ex = document.getElementById('quiz-explain'); ex.classList.add('hidden'); ex.textContent='';
-        const opts = document.getElementById('quiz-options'); opts.innerHTML='';
+        answered=false; awaitingCorrection=false;
+        const q=currentTicket[idx];
+        document.getElementById('quiz-label').textContent=runEl.dataset.label;
+        document.getElementById('quiz-progress').textContent=`Вопрос ${idx+1} из ${currentTicket.length}`;
+        document.getElementById('quiz-progress-fill').style.width=`${idx/currentTicket.length*100}%`;
+        document.getElementById('quiz-question').textContent=q.q;
+        const ex=document.getElementById('quiz-explain'); ex.classList.add('hidden'); ex.textContent='';
+        const opts=document.getElementById('quiz-options'); opts.innerHTML='';
         document.getElementById('quiz-next').classList.add('hidden');
-        shuffle(q.pool.slice()).forEach(opt=>{
-            const b=document.createElement('button');
-            b.className='quiz-opt w-full text-left text-sm px-4 py-3 rounded-2xl border border-slate-700 bg-slate-800';
-            b.textContent=opt;
-            b.onclick=()=>answer(b,opt,q);
-            opts.appendChild(b);
+        q.pool.forEach(opt=>{
+            const b=document.createElement('button'); b.className='quiz-opt w-full text-left text-sm px-4 py-3 rounded-2xl border border-slate-700 bg-slate-800'; b.textContent=opt; b.onclick=()=>answer(b,opt,q); opts.appendChild(b);
         });
     }
-
     function answer(btn,opt,q){
-        // уже отвечено: повторный клик по варианту, если ответ был верным, ведёт дальше
+        const next=document.getElementById('quiz-next');
         if(answered){
-            if(opt===q.correct){ goNext(); }
+            if(awaitingCorrection&&opt===q.correct){ btn.classList.add('correct'); btn.classList.remove('ring-2','ring-emerald-400'); awaitingCorrection=false; next.classList.remove('hidden'); }
+            else if(!awaitingCorrection&&opt===q.correct) goNext();
             return;
         }
         answered=true;
-        const opts = document.querySelectorAll('#quiz-options .quiz-opt');
-        const next = document.getElementById('quiz-next');
-        // отключаем все варианты, кроме верного (чтобы повторный клик по нему вёл вперёд)
-        opts.forEach(o=>{ if(o.textContent!==q.correct) o.disabled=true; });
-        if(opt===q.correct){
-            btn.classList.add('correct'); score++; next.classList.remove('hidden');
-        } else {
-            btn.classList.add('wrong');
-            const correctBtn = [...opts].find(o=>o.textContent===q.correct);
-            if(correctBtn){
-                if(strictMode){
-                    // подсветка верного НЕ показывается до клика пользователя;
-                    // оставляем кликабельным, после клика — подсветка + разблокировка
-                    correctBtn.classList.add('ring-2','ring-emerald-400');
-                    correctBtn.addEventListener('click', ()=>{
-                        correctBtn.classList.add('correct');
-                        next.classList.remove('hidden');
-                    }, { once:true });
-                } else {
-                    correctBtn.classList.add('correct');
-                    next.classList.remove('hidden');
-                }
-            } else { next.classList.remove('hidden'); }
+        const opts=[...document.querySelectorAll('#quiz-options .quiz-opt')];
+        opts.forEach(o=>{if(o.textContent!==q.correct)o.disabled=true;});
+        if(opt===q.correct){ btn.classList.add('correct'); score++; next.classList.remove('hidden'); }
+        else {
+            btn.classList.add('wrong'); const correctBtn=opts.find(o=>o.textContent===q.correct);
+            if(strictMode){ awaitingCorrection=true; correctBtn.classList.add('ring-2','ring-emerald-400'); }
+            else { correctBtn.classList.add('correct'); next.classList.remove('hidden'); }
         }
         const ex=document.getElementById('quiz-explain'); ex.textContent=q.explain; ex.classList.remove('hidden');
-        document.getElementById('quiz-progress-fill').style.width = `${((idx+1)/currentTicket.length)*100}%`;
-        next.textContent = (idx+1===currentTicket.length) ? 'Показать результат' : 'Далее';
+        document.getElementById('quiz-progress-fill').style.width=`${(idx+1)/currentTicket.length*100}%`;
+        next.textContent=idx+1===currentTicket.length?'Показать результат':'Далее';
     }
-
-    function goNext(){
-        if(idx+1>=currentTicket.length){ finishQuiz(); } else { idx++; showQuestion(); }
+    function goNext(){ if(idx+1>=currentTicket.length) finishQuiz(); else {idx++;showQuestion();} }
+    document.getElementById('quiz-next').addEventListener('click',goNext);
+    function renderResult(config,result,readOnly){
+        setupEl.classList.add('hidden'); runEl.classList.add('hidden'); resultEl.classList.remove('hidden');
+        const pct=Math.round(result.score/result.total*100);
+        const label=config.mode==='fixed'?`Билет №${config.ticket}`:`Случайный билет ${config.seed}`;
+        document.getElementById('quiz-score').textContent=`${result.score} из ${result.total}`;
+        document.getElementById('quiz-score-detail').textContent=`${pct}% верных · ${label}`;
+        const disclosure=document.getElementById('quiz-result-disclosure'); disclosure.classList.toggle('hidden',!readOnly);
+        const cta=document.getElementById('quiz-result-cta'); cta.classList.toggle('hidden',!readOnly); cta.href=serializeQuiz({...config,result:null,autostart:false});
+        document.getElementById('quiz-again').classList.toggle('hidden',readOnly);
+        document.getElementById('quiz-back').classList.toggle('hidden',readOnly);
+        lastResult={config:{...config},score:result.score,total:result.total,pct};
     }
-
-    document.getElementById('quiz-next').addEventListener('click', ()=>{ goNext(); });
-
+    function openSharedResultSetup(){
+        if(!lastResult) return;
+        const config={...lastResult.config};
+        history.replaceState(null,'',serializeQuiz({...config,result:null,autostart:false}));
+        resultEl.classList.add('hidden'); runEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+        applyConfig(config); lastResult=null; renderProgressLine();
+    }
+    document.getElementById('quiz-result-cta').addEventListener('click',event=>{
+        event.preventDefault(); openSharedResultSetup();
+    });
     function finishQuiz(){
-        runEl.classList.add('hidden'); resultEl.classList.remove('hidden');
-        document.getElementById('quiz-score').textContent = `${score} из ${currentTicket.length}`;
-        const pct = Math.round(score/currentTicket.length*100);
-        let msg = pct>=80 ? 'Отлично — ты видишь антипаттерны насквозь.' : pct>=50 ? 'Неплохо, но есть что повторить.' : 'Стоит перечитать раздел 7.4 книги.';
-        document.getElementById('quiz-score-detail').textContent = `${pct}% верных · ${runEl.dataset.label} · ${msg}`;
-        // сохраняем прогресс
-        const r = recordResult(ticketKeyOf(), score, currentTicket.length);
-        const st = document.getElementById('quiz-result-status');
-        if(r.isExcellent){
-            st.textContent = r.isFirst ? '✓ Впервые пройдено на отлично — билет зачтён!' : (r.improved ? '✓ Результат улучшен — билет зачтён!' : '✓ Билет уже на отлично — зачтён.');
-        } else {
-            st.textContent = r.isFirst ? 'Пройдено. До «отлично» нужно ≥80%.' : (r.improved ? 'Результат улучшен, но до «отлично» ещё нужно ≥80%.' : `Лучший результат пока ${r.prevBest}%. До «отлично» нужно ≥80%.`);
-        }
+        const result={score,total:currentTicket.length}; renderResult(activeConfig,result,false);
+        const r=progressStore.record(identityOf(activeConfig),score,currentTicket.length);
+        document.getElementById('quiz-result-status').textContent=!r.saved?'Результат показан; сохранение отключено.':r.isExcellent?'✓ Билет зачтён на отлично.':'До «отлично» нужно ≥80%.';
         renderProgressLine();
     }
+    document.getElementById('quiz-again').addEventListener('click',startQuiz);
+    document.getElementById('quiz-back').addEventListener('click',()=>{resultEl.classList.add('hidden');setupEl.classList.remove('hidden');renderProgressLine();});
 
-    document.getElementById('quiz-again').addEventListener('click', ()=>{
-        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden'); renderProgressLine();
-    });
-    document.getElementById('quiz-back').addEventListener('click', ()=>{
-        resultEl.classList.add('hidden'); setupEl.classList.remove('hidden'); renderProgressLine();
-    });
+    function shareUi(){
+        return {success(){document.getElementById('quiz-share-feedback').textContent='Ссылка скопирована.';},manual(url){
+            document.getElementById('quiz-share-feedback').textContent='Автокопирование недоступно. Скопируйте ссылку вручную.';
+            const wrap=document.getElementById('quiz-manual-wrap'),input=document.getElementById('quiz-manual-copy'); wrap.classList.remove('hidden'); input.value=url; input.focus(); input.select();
+        }};
+    }
+    async function shareConfig(config,result){
+        const route=serializeQuiz({...config,result:result?{score:result.score,total:result.total}:null,autostart:false});
+        const url=absoluteUrl(route); const pct=result?Math.round(result.score/result.total*100):null;
+        const text=result?`AI-Disrupt PDLC Quiz: ${result.score}/${result.total} (${pct}%).`:`AI-Disrupt PDLC Quiz, qv1: пройдите тот же билет.`;
+        await performShare({nav:navigator,url,text,ui:shareUi()});
+    }
+    document.getElementById('quiz-share').addEventListener('click',async()=>{const c=configFromControls();if(c)await shareConfig(c,null);});
+    document.getElementById('quiz-share-result').addEventListener('click',async()=>{if(lastResult)await shareConfig(lastResult.config,lastResult);});
 
-    // "Ещё раз" запускает квиз в том же режиме (как R / Enter на результате)
-    document.getElementById('quiz-again').addEventListener('click', startQuiz);
+    const parsedLink=parseQuizUrl(new URL(location.href),location.href);
+    if(parsedLink.explicit){
+        if(!parsedLink.valid){
+            const e=document.getElementById('quiz-link-error');e.textContent=parsedLink.error;e.classList.remove('hidden');
+        }else{
+            if(!parsedLink.canonical) history.replaceState(null,'',parsedLink.route);
+            applyConfig(parsedLink.config);
+            if(parsedLink.config.result) renderResult(parsedLink.config,parsedLink.config.result,true);
+            else if(parsedLink.config.autostart) startQuiz();
+        }
+    }
 
-    // registry count + smooth jump to quiz
-    const rc = document.getElementById('registry-count');
-    if(rc) rc.textContent = REGISTRY.length;
+    const rc=document.getElementById('registry-count'); if(rc)rc.textContent=REGISTRY.length;
     renderProgressLine();
-    document.getElementById('quiz-jump').addEventListener('click', ()=>{
-        document.getElementById('quiz-section').scrollIntoView({ behavior:'smooth', block:'start' });
-    });
+    document.getElementById('quiz-jump').addEventListener('click',()=>document.getElementById('quiz-section').scrollIntoView({behavior:'smooth',block:'start'}));
 
     // quiz fullscreen toggle
     const fsBtn = document.getElementById('quiz-fullscreen');
@@ -608,6 +776,9 @@
         const inResult = !resultEl.classList.contains('hidden');
 
         if(inRun){
+            if(key==='r' || key==='R'){
+                e.preventDefault(); startQuiz(); return;
+            }
             if(!answered){
                 const n = parseInt(key,10);
                 if(n>=1 && n<=10){
@@ -620,8 +791,6 @@
                     const next=document.getElementById('quiz-next');
                     if(next.classList.contains('hidden')){ e.preventDefault(); return; }
                     e.preventDefault(); next.click(); return;
-                } else if(key==='r' || key==='R'){
-                    e.preventDefault(); startQuiz(); return;
                 } else {
                     // повторное нажатие цифры: если это верный вариант -> след. вопрос
                     const n = parseInt(key,10);
@@ -635,7 +804,12 @@
         } else if(inSetup){
             if(key==='Enter'){ e.preventDefault(); startQuiz(); return; }
         } else if(inResult){
-            if(key==='Enter' || key==='r' || key==='R'){ e.preventDefault(); startQuiz(); return; }
+            if(key==='Enter' || key==='r' || key==='R'){
+                e.preventDefault();
+                const shared=!document.getElementById('quiz-result-cta').classList.contains('hidden');
+                if(shared) openSharedResultSetup(); else startQuiz();
+                return;
+            }
         }
     });
     </script>

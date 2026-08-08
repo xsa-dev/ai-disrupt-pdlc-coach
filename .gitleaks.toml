@@ -1,0 +1,26 @@
+# Reviewed Gitleaks configuration for ai-disrupt-pdlc-coach public publication gate.
+# Pinned scanner: gitleaks 8.30.1 (zricethezav/gitleaks@sha256:b109bc5f8f76a38196a3e413704fc5b9e3c32360bce4e4b603bd6f45b3721dbb)
+title = "ai-disrupt-pdlc-coach"
+
+[extend]
+useDefault = true
+
+# Allowlist non-secret project artifacts so the pre-publish scan does not
+# false-positive on intentionally public content.
+[allowlist]
+paths = [
+  '''web/.*\.html$''',
+  '''web/vendor/.*''',
+  '''tests/.*''',
+  '''scripts/.*''',
+  '''\.gitleaks\.toml$''',
+  '''publish-policy\.json$''',
+  '''README\.md$''',
+  '''PLAN\.md$''',
+  '''openspec/.*''',
+  '''\.github/workflows/.*''',
+]
+regexes = [
+  '''(?i)TELEGRAM_BOT_TOKEN\s*=\s*\*{3}''',
+  '''(?i)(credential-first|incident|push-freeze|non-retractable)''',
+]
