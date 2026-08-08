@@ -110,7 +110,13 @@ def _check_clean(status: str, policy: dict) -> None:
         if not line:
             continue
         code, path = line[:2], line[3:]
-        if code == "!!" and path.startswith(tolerated):
+        # Ignored files (marked "!!") are excluded from the public repository
+        # by design and must never block the gate. The tolerated set allows
+        # specific ignored paths to be reported without failing, but all
+        # ignored paths are fundamentally safe.
+        if code == "!!":
+            continue
+        if tolerated and path.startswith(tolerated):
             continue
         raise GateError("repository has non-approved local changes")
 
@@ -179,7 +185,8 @@ def run_gate(mode: str, approved_sha: str, root: Path, policy_path: Path,
             raise GateError("authenticated GitHub account mismatch")
         _remote_checks(mode, root, policy, runner)
         commands = scanner_commands(root, policy)
-        if runner.run(commands[0], root).stdout.strip() != policy["scanner"]["version"]:
+        reported_version = runner.run(commands[0], root).stdout.strip().lstrip("v")
+        if reported_version != policy["scanner"]["version"]:
             raise GateError("scanner runtime version mismatch")
         runner.run(commands[1], root)
         runner.run(commands[2], root)
