@@ -33,11 +33,23 @@ jobs:
           node tests/quiz_v1_primitives.mjs
           node tests/quiz_v1_url.mjs
           node tests/quiz_v1_persistence.mjs
+      - name: Install Google Chrome for CDP viewport tests
+        run: |
+          npx --yes @puppeteer/browsers install chrome@stable
+          CHROME=$(find "$HOME/.cache/puppeteer" -type f -name chrome -path '*chrome-linux*' | head -1)
+          echo "Found chrome at: $CHROME"
+          sudo ln -sf "$CHROME" /usr/bin/google-chrome
+          google-chrome --version
       - name: Run Chrome CDP viewport acceptance tests
         run: |
+          python3 -m http.server 8080 --directory web >/tmp/static8080.log 2>&1 &
+          SRV=$!
+          sleep 1
           node tests/viewport_headers.mjs
           node tests/viewport_methodologies.mjs
           node tests/viewport_entrypoint.mjs
+          node tests/viewport_quiz_v1.mjs
+          kill $SRV 2>/dev/null || true
       - name: Validate exact web artifact and retain manifest evidence
         run: |
           python3 scripts/artifact_manifest.py --output "$RUNNER_TEMP/artifact-manifest.json"
