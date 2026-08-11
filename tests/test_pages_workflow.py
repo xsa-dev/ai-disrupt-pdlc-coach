@@ -15,11 +15,13 @@ PINS = {
 class PagesWorkflowTests(unittest.TestCase):
     def setUp(self): self.text = WORKFLOW.read_text()
 
-    def test_triggers_master_and_manual_but_every_job_guards_exact_master_ref(self):
+    def test_triggers_master_manual_and_pull_request(self):
         self.assertRegex(self.text, r"push:\s*\n\s+branches:\s*\[master\]")
+        self.assertRegex(self.text, r"pull_request:\s*\n\s+branches:\s*\[master\]")
         self.assertIn("workflow_dispatch:", self.text)
+        # only the deploy job is gated to master; test runs on PR too
         jobs = re.findall(r"^  ([a-z][\w-]*):\n(?:(?:    .*|\s*)\n)*?    if: \$\{\{ github\.ref == 'refs/heads/master' \}\}", self.text, re.M)
-        self.assertEqual(set(jobs), {"test", "deploy"})
+        self.assertEqual(set(jobs), {"deploy"})
 
     def test_all_official_actions_use_only_reviewed_full_sha_pins(self):
         uses = re.findall(r"uses:\s*([^\s]+)", self.text)
@@ -54,7 +56,8 @@ class PagesWorkflowTests(unittest.TestCase):
         self.assertIn("artifact-manifest.json", block)
 
     def test_wrong_ref_and_failed_prerequisite_have_no_write_scoped_path(self):
-        self.assertEqual(self.text.count("if: ${{ github.ref == 'refs/heads/master' }}"), 2)
+        # deploy is master-only; test runs on PR too (so branch protection gets its status check)
+        self.assertEqual(self.text.count("if: ${{ github.ref == 'refs/heads/master' }}"), 1)
         self.assertEqual(self.text.count("needs: test"), 1)
         self.assertNotRegex(self.text, r"(?:if:.*always|continue-on-error:\s*true)")
 
