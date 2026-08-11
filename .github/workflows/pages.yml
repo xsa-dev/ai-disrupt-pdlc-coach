@@ -34,6 +34,8 @@ jobs:
           node tests/quiz_v1_primitives.mjs
           node tests/quiz_v1_url.mjs
           node tests/quiz_v1_persistence.mjs
+          node tests/contact_modal_dom.mjs
+          node tests/contact_webhook.mjs
       - name: Install Google Chrome for CDP viewport tests
         run: |
           npx --yes @puppeteer/browsers install chrome@stable
@@ -51,6 +53,7 @@ jobs:
           node tests/viewport_methodologies.mjs
           node tests/viewport_entrypoint.mjs
           node tests/viewport_quiz_v1.mjs
+          node tests/viewport_contact_modal.mjs
           kill $SRV 2>/dev/null || true
       - name: Validate exact web artifact and retain manifest evidence
         run: |

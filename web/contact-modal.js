@@ -67,8 +67,13 @@
 
     function lockScroll(on) {
       document.documentElement.style.overflow = on ? 'hidden' : '';
-      var main = document.querySelector('main') || document.body;
-      if (on) main.setAttribute('inert', ''); else main.removeAttribute('inert');
+      // Inert every direct child of <body> EXCEPT the modal nodes, so the
+      // modal itself stays interactive even on pages without a <main> wrapper.
+      Array.prototype.forEach.call(document.body.children, function (child) {
+        if (child === fab || child === overlay) return;
+        if (on) child.setAttribute('inert', '');
+        else child.removeAttribute('inert');
+      });
     }
 
     function open() {
