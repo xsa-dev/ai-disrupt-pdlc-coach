@@ -40,6 +40,10 @@
     var sendBtn = el('button', { type: 'button', class: 'contact-send' }, [document.createTextNode('Отправить')]);
     var status = el('div', { class: 'contact-status', 'aria-live': 'polite', role: 'status' });
 
+    var newsletter = el('input', { type: 'checkbox', id: 'contact-newsletter', class: 'contact-checkbox' });
+    var newsletterLabel = el('label', { class: 'contact-checkbox-label', for: 'contact-newsletter' }, [document.createTextNode(' Хочу получать рассылку')]);
+    var newsletterWrap = el('div', { class: 'contact-newsletter-row' }, [newsletter, newsletterLabel]);
+
     var form = el('div', { class: 'body' }, [
       el('ul', { class: 'contact-contacts' }, [
         el('li', {}, [el('a', { href: 'https://t.me/alxy_tg', target: '_blank', rel: 'noopener', text: 'Telegram: @alxy_tg' })]),
@@ -48,6 +52,7 @@
       ]),
       el('label', { class: 'contact-label', for: 'contact-msg', text: 'Сообщение' }),
       msg,
+      newsletterWrap,
       sendBtn,
       status
     ]);
@@ -63,7 +68,7 @@
     root.appendChild(overlay);
 
     var lastFocus = null;
-    var focusables = [closeBtn, msg, sendBtn];
+    var focusables = [closeBtn, msg, newsletter, sendBtn];
 
     function lockScroll(on) {
       document.documentElement.style.overflow = on ? 'hidden' : '';
@@ -129,7 +134,7 @@
       fetch(ep, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ email: email, message: text, _subject: 'Связь с автором — AI Disrupt PDLC' }),
+        body: JSON.stringify({ email: email, message: text, newsletter: newsletter.checked ? 'yes' : 'no', _subject: 'Связь с автором — AI Disrupt PDLC' }),
         credentials: 'omit'
       }).then(function (r) {
         if (r.ok) {

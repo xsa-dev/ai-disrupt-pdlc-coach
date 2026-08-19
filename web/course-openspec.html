@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     <script src="vendor/tailwind-cdn.js"></script>
     <link rel="stylesheet" href="course-openspec/styles.css">
+    <link rel="stylesheet" href="contact-modal.css">
     <style>
         /* Re-skin the course to match the main site (emerald + slate palette, system fonts) */
         :root {
@@ -73,6 +74,11 @@
         .hero .kicker { font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: var(--space-3); }
         .back-link { display: inline-block; margin-top: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-secondary); text-decoration: none; border-bottom: 1px solid var(--color-border); }
         .back-link:hover { color: var(--color-accent); }
+        .newsletter-cta { margin-top: var(--space-8); padding: var(--space-6); border-radius: var(--radius-md); background: var(--color-accent-light); border: 1px solid var(--color-accent); text-align: center; }
+        .newsletter-cta h3 { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--color-text); margin: 0 0 var(--space-2); }
+        .newsletter-cta p { color: var(--color-text-secondary); margin: 0 0 var(--space-4); }
+        .newsletter-cta button { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; color: #fff; background: var(--color-accent); border: none; border-radius: var(--radius-sm); padding: var(--space-3) var(--space-5); cursor: pointer; }
+        .newsletter-cta button:hover { background: var(--color-accent-hover); }
         .module { padding: calc(var(--space-14)) 0; }
         .module:nth-child(even) { background: var(--color-bg-warm); }
         .module-number { font-family: var(--font-display); font-weight: 800; font-size: var(--text-6xl); color: var(--color-accent); opacity: 0.15; line-height: 1; margin-bottom: var(--space-2); }
@@ -420,6 +426,11 @@
             </div>
 
             <p class="prose">Этот самый сайт (AI-Disrupt PDLC Coach) разрабатывался через OpenSpec: каждое добавление — публикация, модалка контактов, этот курс — прошло цикл propose → review → apply → archive.</p>
+            <div class="newsletter-cta">
+                <h3>Понравился курс?</h3>
+                <p>Подпишись на рассылку — новые разборы OpenSpec и AI-инструментов для разработчиков.</p>
+                <button type="button" id="course-newsletter-btn">Подписаться на рассылку</button>
+            </div>
             <a class="back-link" href="openspec.html">← Вернуться к разделу OpenSpec</a>
         </div>
     </section>
@@ -540,5 +551,21 @@
     </section>
 
     <script src="course-openspec/main.js"></script>
+    <script src="contact-modal.js" defer></script>
+    <script>
+      (function () {
+        var btn = document.getElementById('course-newsletter-btn');
+        if (!btn) return;
+        btn.addEventListener('click', function () {
+          var fab = document.querySelector('.contact-fab');
+          if (fab) fab.click();
+          // pre-check the newsletter opt-in once the modal is open
+          setTimeout(function () {
+            var cb = document.getElementById('contact-newsletter');
+            if (cb) cb.checked = true;
+          }, 50);
+        });
+      })();
+    </script>
 </body>
 </html>

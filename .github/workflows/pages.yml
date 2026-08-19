@@ -54,6 +54,7 @@ jobs:
           node tests/viewport_entrypoint.mjs
           node tests/viewport_quiz_v1.mjs
           node tests/viewport_contact_modal.mjs
+          node tests/course_openspec_cdp.mjs
           kill $SRV 2>/dev/null || true
       - name: Validate exact web artifact and retain manifest evidence
         run: |
