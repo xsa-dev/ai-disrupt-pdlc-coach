@@ -27,8 +27,6 @@ try{
   const send=(method,params={})=>new Promise((res,rej)=>{const c=++id;idmap.set(c,{resolve:res,reject:rej});ws.send(JSON.stringify({id:c,method,params}));});
   const ev=(expr)=>send("Runtime.evaluate",{expression:expr,returnByValue:true,awaitPromise:true}).then(r=>{if(r.exceptionDetails)throw new Error(r.exceptionDetails.text);return r.result.value;});
   await send("Page.enable"); await send("Runtime.enable");
-  // capture fetch payload via in-page wrapper installed before any script runs
-  await send("Page.addScriptToEvaluateOnNewDocument",{source:"window.__cap=null; const _f=window.fetch.bind(window); window.fetch=function(u,o){ if(o&&o.body&&o.body.indexOf('newsletter')>=0){ window.__cap=o.body; } return _f(u,o); };"});
   await send("Page.navigate",{url:`http://127.0.0.1:${port}/course-openspec.html`});
   for(let i=0;i<60;i++){await sleep(50); if(await ev("document.readyState")==="complete")break;}
   // wait for contact-modal.js (defer) to build the modal (checkbox appears)
@@ -42,6 +40,8 @@ try{
   check("CTA opens contact modal", modalOpen);
   const prechecked = await ev("document.getElementById('contact-newsletter').checked === true");
   check("CTA pre-checks newsletter", prechecked);
+  // install fetch wrapper in page context (after load) to capture payload
+  await ev("window.__cap=null; const _f=window.fetch.bind(window); window.fetch=function(u,o){ if(o&&o.body&&o.body.indexOf('newsletter')>=0){ window.__cap=o.body; } return _f(u,o); };");
   // 3. fill message + send -> payload has newsletter:yes
   await ev("document.getElementById('contact-msg').value = 'тест'");
   await ev("document.querySelector('.contact-send').click()");
