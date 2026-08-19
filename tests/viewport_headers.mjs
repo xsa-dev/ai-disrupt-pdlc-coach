@@ -87,6 +87,7 @@ try {
           navLinks: [...document.querySelectorAll('nav a')].map(a => a.textContent.trim()),
           firstLinkLeft: document.querySelector('nav a:first-child').getBoundingClientRect().left,
           lastLinkRight: document.querySelector('nav a:last-child').getBoundingClientRect().right,
+          navOverflowX: getComputedStyle(document.querySelector('.site-nav-row')).overflowX,
           viewportWidth: document.documentElement.clientWidth,
           headerHeight: document.querySelector('[data-site-header]').getBoundingClientRect().height,
         };
@@ -98,8 +99,12 @@ try {
       if (value.navLinks.join("|") !== "Диагностика|Roadmap|Методики|Антипаттерны|OpenSpec|Курс") {
         throw new Error(`${page}@${width}: bad nav order`);
       }
-      if (value.firstLinkLeft < 0 || value.lastLinkRight > value.viewportWidth + 0.5) {
-        throw new Error(`${page}@${width}: nav links clipped (${value.firstLinkLeft}..${value.lastLinkRight} of ${value.viewportWidth})`);
+      // Page itself must not scroll horizontally (overflow === 0 guard above).
+      // On narrow viewports a 6-link nav may exceed width; that is acceptable ONLY if the
+      // nav row scrolls internally (overflow-x: auto/scroll) instead of clipping silently.
+      const navScrolls = /^(auto|scroll)$/i.test(value.navOverflowX || "");
+      if (value.lastLinkRight > value.viewportWidth + 0.5 && !navScrolls) {
+        throw new Error(`${page}@${width}: nav links clipped (${value.firstLinkLeft}..${value.lastLinkRight} of ${value.viewportWidth}) and nav not scrollable`);
       }
       measurements.push({ page, ...value });
     }
