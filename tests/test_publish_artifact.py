@@ -20,7 +20,7 @@ class PathPolicyTests(unittest.TestCase):
     def test_policy_names_exact_web_allowlist_and_all_generated_families(self):
         self.assertEqual(self.policy["allowed_web_files"], [
             "web/antipatterns.html", "web/diagnosis.html", "web/index.html",
-            "web/methodologies.html", "web/roadmap.html", "web/vendor/tailwind-cdn.js",
+            "web/methodologies.html", "web/roadmap.html", "web/openspec.html", "web/course-openspec.html", "web/course-openspec/styles.css", "web/course-openspec/main.js", "web/vendor/tailwind-cdn.js",
             "web/vendor/fontawesome/css/all.min.css",
             "web/vendor/fontawesome/webfonts/fa-brands-400.ttf",
             "web/vendor/fontawesome/webfonts/fa-brands-400.woff2",

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disrupt PDLC Coach — Разработка через OpenSpec</title>
+    <script src="vendor/tailwind-cdn.js"></script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <style>
+        .heading-font {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+    </style>
+</head>
+<body class="bg-slate-50" data-contact-endpoint="https://formspree.io/f/xgawanjd">
+    <header data-site-header class="site-header font-sans bg-white border-b border-slate-200">
+        <div class="site-nav-shell border-b border-slate-200">
+            <div class="site-nav-row max-w-5xl mx-auto px-4 sm:px-6 py-2.5 min-h-[42px] flex items-center justify-between gap-4 text-[13px] sm:text-sm">
+                <nav aria-label="Основная навигация" class="flex items-center gap-x-2 sm:gap-x-5 overflow-x-auto whitespace-nowrap">
+                    <a href="diagnosis.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Диагностика</a>
+                    <a href="roadmap.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Roadmap</a>
+                    <a href="methodologies.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Методики</a>
+                    <a href="antipatterns.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Антипаттерны</a>
+                    <a href="openspec.html" aria-current="page" class="site-nav-link font-semibold text-emerald-700 border-b-2 border-emerald-600 pb-1">OpenSpec</a>
+                    <a href="course-openspec.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Курс</a>
+                </nav>
+                <div class="hidden sm:block text-xs text-slate-400 font-medium whitespace-nowrap">Disrupt PDLC Coach</div>
+            </div>
+        </div>
+        <div class="site-brand-shell bg-white">
+            <div class="site-brand-row max-w-5xl mx-auto px-4 sm:px-6 py-5 min-h-[76px] flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-x-3">
+                    <div data-site-icon class="w-9 h-9 shrink-0 bg-emerald-600 rounded-2xl flex items-center justify-center" aria-hidden="true"><svg viewBox="0 0 24 24" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"></path><path d="m5.6 5.6 12.8 12.8m0-12.8L5.6 18.4"></path></svg></div>
+                    <div class="min-w-0">
+                        <div data-site-title class="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 truncate">Disrupt PDLC Coach</div>
+                        <div data-site-subtitle class="text-xs text-slate-500 truncate">Разработка сайта через OpenSpec</div>
+                    </div>
+                </div>
+                <div data-site-actions class="flex shrink-0 items-center gap-x-2"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <h1 class="heading-font text-2xl sm:text-3xl font-semibold text-slate-900 mb-3">Разработка через OpenSpec</h1>
+        <p class="text-slate-600 mb-8">OpenSpec — это подход к управлению изменениями в коде через спецификации. Вместо «просто напиши код» каждое изменение сначала описывается как предложение, проходит валидацию, реализуется и архивируется. Ниже — теоретические выжимки метода.</p>
+
+        <section class="space-y-8">
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Что такое OpenSpec</h2>
+                <p class="text-slate-600">OpenSpec — это рабочий процесс (и набор конвенций), при котором изменения живут в директории <code class="px-1 bg-slate-100 rounded text-[13px]">openspec/changes/</code> до тех пор, пока не будут реализованы и слиты. Каждое изменение — это набор документов: зачем, что меняем, как проверяем. Это превращает «историю коммитов» в читаемый трекер решений.</p>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Зачем это нужно</h2>
+                <ul class="list-disc pl-5 space-y-1.5 text-slate-600">
+                    <li><strong>Явность намерений.</strong> Прежде чем писать код, формулируется проблема и решение — спекуляция снижается.</li>
+                    <li><strong>Независимый review.</strong> Спеку можно проверить до кода (GO/NO-GO), не читая реализацию.</li>
+                    <li><strong>Воспроизводимость.</strong> Архив changes — это документация «почему мы так сделали», живущая рядом с кодом.</li>
+                    <li><strong>Безопасные мелкие шаги.</strong> Большие фичи дробятся на проверяемые изменения с чёткими критериями приёмки.</li>
+                </ul>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-3">Жизненный цикл изменения</h2>
+                <ol class="space-y-3 text-slate-600">
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">1</span><div><strong>Propose.</strong> Создаётся change с <code class="px-1 bg-slate-100 rounded text-[13px]">proposal.md</code> (зачем/что/влияние).</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">2</span><div><strong>Design &amp; Spec.</strong> Пишутся <code class="px-1 bg-slate-100 rounded text-[13px]">design.md</code> и спецификация требований (ADDED Requirements + Scenarios) в <code class="px-1 bg-slate-100 rounded text-[13px]">specs/</code>.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">3</span><div><strong>Tasks.</strong> Реализация дробится на чек-лист в <code class="px-1 bg-slate-100 rounded text-[13px]">tasks.md</code>.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">4</span><div><strong>Validate.</strong> <code class="px-1 bg-slate-100 rounded text-[13px]">openspec validate</code> проверяет формат и внутреннюю непротиворечивость.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">5</span><div><strong>Implement &amp; Review.</strong> Код пишется под задачи; независимый GO/NO-GO review до merge в защищённую ветку.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">6</span><div><strong>Archive.</strong> После слияния change архивируется, спецификации продвигаются в <code class="px-1 bg-slate-100 rounded text-[13px]">openspec/specs/</code> как актуальные.</div></li>
+                </ol>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Структура change</h2>
+                <pre class="text-[13px] leading-relaxed text-slate-700 bg-slate-50 rounded-lg p-4 overflow-x-auto"><code>openspec/changes/&lt;change-id&gt;/
+├── proposal.md      # зачем и что меняем
+├── design.md        # как решаем (архитектура)
+├── tasks.md         # чек-лист реализации
+└── specs/&lt;capability&gt;/
+    └── spec.md      # требования + сценарии (ADDED/MODIFIED)</code></pre>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Ключевые принципы</h2>
+                <ul class="list-disc pl-5 space-y-1.5 text-slate-600">
+                    <li><strong>Delta-формат.</strong> Спецификация описывает изменение (<code class="px-1 bg-slate-100 rounded text-[13px]">## ADDED Requirements</code>), а не полный снимок системы.</li>
+                    <li><strong>Scenarios &gt; абстракции.</strong> Каждое требование подкрепляется конкретным сценарием приёмки.</li>
+                    <li><strong>Fail-closed gates.</strong> Непрошедшая валидация или тесты блокируют деплой, а не предупреждают.</li>
+                    <li><strong>Review до кода.</strong> Спека получает GO/NO-GO независимым ревьюером раньше, чем написан код.</li>
+                </ul>
+            </article>
+        </section>
+
+        <p class="mt-10 text-sm text-slate-400">Этот сайт сам разрабатывается через OpenSpec — каждое добавление (публикация, модалка контактов, этот раздел) прошло описанный выше цикл.</p>
+        <div class="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5">
+            <div class="text-sm font-semibold text-emerald-800 mb-1">Хочешь понять OpenSpec на практике?</div>
+            <p class="text-sm text-emerald-700">Прошли интерактивный курс по OpenSpec (на русском): <a href="course-openspec.html" class="underline font-medium">Открыть курс →</a></p>
+        </div>
+    </main>
+
+    <link rel="stylesheet" href="contact-modal.css">
+    <script src="contact-modal.js" defer></script>
+</body>
+</html>
