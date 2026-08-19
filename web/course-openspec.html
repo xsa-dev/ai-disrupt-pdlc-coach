@@ -47,6 +47,18 @@
         .code-comment { color: var(--darcula-com); font-style: italic; }
         .code-num     { color: var(--darcula-num); }
         .code-punc    { color: var(--darcula-text); }
+        /* inline code (inside prose/callout/cards) must stay inline, not block — fixes
+           mobile breakage where commands like /opsx:explore stacked vertically */
+        code:not(pre code):not(.bug-line code):not(.code-line) {
+          display: inline !important;
+          white-space: normal !important;
+          width: auto !important;
+          overflow-x: visible !important;
+          min-width: 0 !important;
+        }
+        /* .callout is display:flex in the skill CSS; on narrow screens the flex child
+           <code> collapses to ~10px and wraps commands letter-by-letter. Make it block. */
+        .callout { display: block !important; }
         html, body { overflow-x: hidden; }
         * { box-sizing: border-box; }
         /* keep wide interactive blocks (code, chat, flow, tree) from widening the page on mobile */
