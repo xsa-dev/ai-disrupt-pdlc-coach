@@ -9,12 +9,16 @@ PAGES = {
     "roadmap.html": "Roadmap",
     "methodologies.html": "Методики",
     "antipatterns.html": "Антипаттерны",
+    "openspec.html": "OpenSpec",
+    "course-openspec.html": "Курс",
 }
 NAV_ITEMS = [
     ("diagnosis.html", "Диагностика"),
     ("roadmap.html", "Roadmap"),
     ("methodologies.html", "Методики"),
     ("antipatterns.html", "Антипаттерны"),
+    ("openspec.html", "OpenSpec"),
+    ("course-openspec.html", "Курс"),
 ]
 NAV_ROW_CLASSES = {
     "site-nav-row", "max-w-5xl", "mx-auto", "px-4", "sm:px-6",
