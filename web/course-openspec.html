@@ -79,6 +79,15 @@
         .newsletter-cta p { color: var(--color-text-secondary); margin: 0 0 var(--space-4); }
         .newsletter-cta button { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; color: #fff; background: var(--color-accent); border: none; border-radius: var(--radius-sm); padding: var(--space-3) var(--space-5); cursor: pointer; }
         .newsletter-cta button:hover { background: var(--color-accent-hover); }
+        .course-footer { margin-top: var(--space-12); padding: var(--space-8) 0; border-top: 1px solid var(--color-border); text-align: center; background: var(--color-bg-warm); }
+        .course-footer h3 { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 700; color: var(--color-text); margin: 0 0 var(--space-2); }
+        .course-footer p { color: var(--color-text-secondary); margin: 0 0 var(--space-4); }
+        .course-footer .footer-subscribe { font-family: var(--font-mono); font-size: var(--text-sm); font-weight: 600; color: #fff; background: var(--color-accent); border: none; border-radius: var(--radius-sm); padding: var(--space-3) var(--space-5); cursor: pointer; margin-bottom: var(--space-6); }
+        .course-footer .footer-subscribe:hover { background: var(--color-accent-hover); }
+        .course-footer .footer-links { display: flex; flex-wrap: wrap; gap: var(--space-4); justify-content: center; margin-bottom: var(--space-4); }
+        .course-footer .footer-links a { color: var(--color-accent); text-decoration: none; font-size: var(--text-sm); border-bottom: 1px solid var(--color-accent-muted); }
+        .course-footer .footer-links a:hover { color: var(--color-accent-hover); }
+        .course-footer .back-link { display: inline-block; margin-top: var(--space-2); }
         .module { padding: calc(var(--space-14)) 0; }
         .module:nth-child(even) { background: var(--color-bg-warm); }
         .module-number { font-family: var(--font-display); font-weight: 800; font-size: var(--text-6xl); color: var(--color-accent); opacity: 0.15; line-height: 1; margin-bottom: var(--space-2); }
@@ -431,7 +440,6 @@
                 <p>Подпишись на рассылку — новые разборы OpenSpec и AI-инструментов для разработчиков.</p>
                 <button type="button" id="course-newsletter-btn">Подписаться на рассылку</button>
             </div>
-            <a class="back-link" href="openspec.html">← Вернуться к разделу OpenSpec</a>
         </div>
     </section>
 
@@ -550,21 +558,33 @@
         </div>
     </section>
 
+    <footer class="course-footer">
+        <h3>Готов внедрить OpenSpec?</h3>
+        <p>Подпишись на рассылку — разборы спецификаций, AI-инструментов и практик разработки.</p>
+        <button type="button" id="course-footer-subscribe-btn" class="footer-subscribe">Подписаться на рассылку</button>
+        <div class="footer-links">
+            <a href="https://github.com/Fission-AI/openspec" target="_blank" rel="noopener">Официальный репозиторий OpenSpec ↗</a>
+            <a href="https://github.com/xsa-dev/ai-disrupt-pdlc-coach" target="_blank" rel="noopener">Репозиторий этого сайта ↗</a>
+        </div>
+        <a class="back-link" href="openspec.html">← Вернуться к разделу OpenSpec</a>
+    </footer>
+
     <script src="course-openspec/main.js"></script>
     <script src="contact-modal.js" defer></script>
     <script>
       (function () {
-        var btn = document.getElementById('course-newsletter-btn');
-        if (!btn) return;
-        btn.addEventListener('click', function () {
+        function openNewsletter() {
           var fab = document.querySelector('.contact-fab');
           if (fab) fab.click();
-          // pre-check the newsletter opt-in once the modal is open
           setTimeout(function () {
             var cb = document.getElementById('contact-newsletter');
             if (cb) cb.checked = true;
           }, 50);
-        });
+        }
+        var btn = document.getElementById('course-newsletter-btn');
+        if (btn) btn.addEventListener('click', openNewsletter);
+        var fbtn = document.getElementById('course-footer-subscribe-btn');
+        if (fbtn) fbtn.addEventListener('click', openNewsletter);
       })();
     </script>
 </body>
