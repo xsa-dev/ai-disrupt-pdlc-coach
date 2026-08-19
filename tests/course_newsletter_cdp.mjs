@@ -31,7 +31,8 @@ try{
   await send("Page.addScriptToEvaluateOnNewDocument",{source:"window.__cap=null; const _f=window.fetch.bind(window); window.fetch=function(u,o){ if(o&&o.body&&o.body.indexOf('newsletter')>=0){ window.__cap=o.body; } return _f(u,o); };"});
   await send("Page.navigate",{url:`http://127.0.0.1:${port}/course-openspec.html`});
   for(let i=0;i<60;i++){await sleep(50); if(await ev("document.readyState")==="complete")break;}
-  await sleep(500);
+  // wait for contact-modal.js (defer) to build the modal (checkbox appears)
+  for(let i=0;i<60;i++){await sleep(100); if(await ev("document.getElementById('contact-newsletter') !== null"))break;}
   // 1. checkbox present in modal
   check("newsletter checkbox present", await ev("document.getElementById('contact-newsletter') !== null"));
   // 2. course-end CTA opens modal + pre-checks
