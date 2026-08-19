@@ -87,7 +87,7 @@ try {
           navLinks: [...document.querySelectorAll('nav a')].map(a => a.textContent.trim()),
           firstLinkLeft: document.querySelector('nav a:first-child').getBoundingClientRect().left,
           lastLinkRight: document.querySelector('nav a:last-child').getBoundingClientRect().right,
-          navOverflowX: getComputedStyle(document.querySelector('.site-nav-row')).overflowX,
+          navOverflowX: getComputedStyle(document.querySelector('nav[aria-label="Основная навигация"]')).overflowX,
           viewportWidth: document.documentElement.clientWidth,
           headerHeight: document.querySelector('[data-site-header]').getBoundingClientRect().height,
         };
