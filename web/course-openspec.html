@@ -33,7 +33,21 @@
           --font-display: system-ui, -apple-system, "Segoe UI", sans-serif;
           --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
           --font-mono:    'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+          /* Darcula code palette */
+          --color-bg-code: #282a36;
+          --darcula-text:  #A9B7C6;
+          --darcula-kw:     #CC7832;
+          --darcula-str:    #6A8759;
+          --darcula-com:    #808080;
+          --darcula-num:    #6897BB;
         }
+        /* Darcula syntax highlighting for course code blocks */
+        .translation-code pre, pre { color: var(--darcula-text); background: var(--color-bg-code); }
+        .code-keyword { color: var(--darcula-kw); }
+        .code-string  { color: var(--darcula-str); }
+        .code-comment { color: var(--darcula-com); font-style: italic; }
+        .code-num     { color: var(--darcula-num); }
+        .code-punc    { color: var(--darcula-text); }
         html, body { overflow-x: hidden; }
         * { box-sizing: border-box; }
         /* keep wide interactive blocks (code, chat, flow, tree) from widening the page on mobile */
@@ -112,13 +126,13 @@
                 <div class="translation-code">
                     <span class="translation-label">COMMAND</span>
                     <pre><code><span class="code-line"><span class="code-comment"># ты говоришь ассистенту:</span></span>
-<span class="code-line">/opsx:propose add-dark-mode</span>
+<span class="code-line"><span class="code-keyword">/opsx:propose</span> add-dark-mode</span>
 <span class="code-line"> </span>
 <span class="code-line"><span class="code-comment"># ИИ создаёт в openspec/changes/add-dark-mode/</span></span>
-<span class="code-line">proposal.md   # зачем и что</span>
-<span class="code-line">specs/        # что меняется (delta)</span>
-<span class="code-line">design.md     # как технически</span>
-<span class="code-line">tasks.md      # чек-лист шагов</span></code></pre>
+<span class="code-line"><span class="code-string">proposal.md</span>   <span class="code-comment"># зачем и что</span></span>
+<span class="code-line"><span class="code-string">specs/</span>        <span class="code-comment"># что меняется (delta)</span></span>
+<span class="code-line"><span class="code-string">design.md</span>     <span class="code-comment"># как технически</span></span>
+<span class="code-line"><span class="code-string">tasks.md</span>      <span class="code-comment"># чек-лист шагов</span></span></code></pre>
                 </div>
                 <div class="translation-english">
                     <span class="translation-label">ПО-РУССКИ</span>
@@ -181,18 +195,18 @@
             <div class="translation-block animate-in">
                 <div class="translation-code">
                     <span class="translation-label">DELTA SPEC</span>
-                    <pre><code><span class="code-line"><span class="code-comment">## ADDED Requirements</span></span>
-<span class="code-line">### Requirement: Dark Mode Toggle</span>
-<span class="code-line">The system SHALL provide a UI toggle</span>
+                    <pre><code><span class="code-line"><span class="code-comment">## <span class="code-keyword">ADDED</span> Requirements</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Dark Mode Toggle</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> provide a UI toggle</span>
 <span class="code-line">that switches between light and dark themes.</span>
 <span class="code-line"> </span>
-<span class="code-line"><span class="code-comment">## MODIFIED Requirements</span></span>
-<span class="code-line">### Requirement: Default Theme</span>
-<span class="code-line">The system SHALL default to the OS preference</span>
+<span class="code-line"><span class="code-comment">## <span class="code-keyword">MODIFIED</span> Requirements</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Default Theme</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> default to the OS preference</span>
 <span class="code-line">instead of always light. (was: always light)</span>
 <span class="code-line"> </span>
-<span class="code-line"><span class="code-comment">## REMOVED Requirements</span></span>
-<span class="code-line">### Requirement: Hardcoded Light BG</span>
+<span class="code-line"><span class="code-comment">## <span class="code-keyword">REMOVED</span> Requirements</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Hardcoded Light BG</span>
 <span class="code-line">Removed: theme is now configurable.</span></code></pre>
                 </div>
                 <div class="translation-english">
@@ -222,6 +236,23 @@
                 </div>
                 <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Проверить</button>
                 <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Сбросить</button>
+            </div>
+
+            <div class="quiz-container animate-in" id="quiz-module3b">
+                <div class="quiz-question-block"
+                     data-correct="option-b"
+                     data-explanation-right="Верно. MODIFIED меняет уже существующее требование — на архиве оно заменяет старую версию. REMOVED же полностью убирает поведение."
+                     data-explanation-wrong="Один меняет старое, другой убирает его совсем. Что из этого 'меняет'?" >
+                    <h3 class="quiz-question">Поведение «система всегда светлая» нужно заменить на «следует за ОС». Какую секцию дельты выбрать?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>ADDED</span></button>
+                        <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>MODIFIED</span></button>
+                        <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>REMOVED</span></button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3b')">Проверить</button>
+                <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3b')">Сбросить</button>
             </div>
         </div>
     </section>
@@ -379,6 +410,121 @@
 
             <p class="prose">Этот самый сайт (AI-Disrupt PDLC Coach) разрабатывался через OpenSpec: каждое добавление — публикация, модалка контактов, этот курс — прошло цикл propose → review → apply → archive.</p>
             <a class="back-link" href="openspec.html">← Вернуться к разделу OpenSpec</a>
+        </div>
+    </section>
+
+    <!-- MODULE 7: archive in practice -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">07</div>
+            <h2 class="module-title">Архив на практике: что реально происходит</h2>
+            <p class="module-subtitle">Команда /opsx:archive — это «закрытие цикла». Разберём по шагам, что она делает с твоими файлами.</p>
+            <div class="prose">
+                <p>Пока изменение живёт в <code>openspec/changes/&lt;имя&gt;/</code>, его дельта — это только <em>предложение</em>. Спеки в <code>openspec/specs/</code> ещё не знают о новом поведении. Когда ты архивируешь:</p>
+                <ul>
+                    <li><strong>ADDED</strong> требования дописываются в конец соответствующей спецки в <code>openspec/specs/&lt;capability&gt;/spec.md</code>.</li>
+                    <li><strong>MODIFIED</strong> требования заменяют старую версию в спецке один-в-один.</li>
+                    <li><strong>REMOVED</strong> требования выкидываются — если это было последнее требование способности, папка спецки удаляется (способность «уходит на пенсию»).</li>
+                    <li>Сама папка изменения переезжает в <code>openspec/changes/archive/2026-08-19-&lt;имя&gt;/</code> — с датой, чтобы история была читаемой.</li>
+                </ul>
+                <p>После архива <code>openspec/specs/</code> описывает <em>новую реальность</em>, а ты готов к следующему изменению. Цикл замкнулся.</p>
+            </div>
+
+            <div class="translation-block animate-in">
+                <div class="translation-code">
+                    <span class="translation-label">BEFORE ARCHIVE</span>
+                    <pre><code><span class="code-line"><span class="code-comment"># openspec/specs/ui/spec.md (источник правды)</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Default Theme</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> always render light theme.</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment"># openspec/changes/persist-theme/ (предложение)</span></span>
+<span class="code-line">## <span class="code-keyword">MODIFIED</span> Requirements</span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Default Theme</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> follow OS preference.</span></code></pre>
+                </div>
+                <div class="translation-english">
+                    <span class="translation-label">ПОСЛЕ ARCHIVE</span>
+                    <div class="translation-lines">
+                        <p class="tl">Папка changes/persist-theme/ уехала в archive/2026-08-19-persist-theme/.</p>
+                        <p class="tl">В specs/ui/spec.md старая строка «always light» заменена на «follow OS preference».</p>
+                        <p class="tl">Источник правды теперь отражает то, что реально работает.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container animate-in" id="quiz-module7">
+                <div class="quiz-question-block"
+                     data-correct="option-b"
+                     data-explanation-right="Точно. На архиве MODIFIED заменяет старую версию требования в specs/ один-в-один."
+                     data-explanation-wrong="Что происходит со старой версией требования при MODIFIED?">
+                    <h3 class="quiz-question">Изменение с MODIFIED-требованием «Default Theme» архивировано. Что с этим требованием в openspec/specs/?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Оно добавится вторым разом (дубль)</span></button>
+                        <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Старая версия заменится новой</span></button>
+                        <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>Спека удалится целиком</span></button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-check-btn" onclick="checkQuiz('quiz-module7')">Проверить</button>
+                <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module7')">Сбросить</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULE 8: writing good scenarios -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">08</div>
+            <h2 class="module-title">Пиши хорошие сценарии, а не «обработай аккуратно»</h2>
+            <p class="module-subtitle">Самая частая ошибка спецификации — туманное требование. Хороший сценарий конкретен и проверяем посторонним.</p>
+            <div class="prose">
+                <p>Плохое требование: <em>«Система должна аккуратно обрабатывать большие загрузки»</em>. Что значит «аккуратно»? Как проверить? Посторонний не поймёт, прошло ли оно.</p>
+                <p>Хорошее требование со словом <strong>SHALL</strong> + сценарий в GIVEN/WHEN/THEN, из которого можно собрать автотест:</p>
+            </div>
+
+            <div class="translation-block animate-in">
+                <div class="translation-code">
+                    <span class="translation-label">BAD vs GOOD</span>
+                    <pre><code><span class="code-line"><span class="code-comment"># ПЛОХО</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Large uploads</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> handle large uploads gracefully.</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment"># ХОРОШО</span></span>
+<span class="code-line"><span class="code-keyword">### Requirement:</span> Upload size limit</span>
+<span class="code-line">The system <span class="code-keyword">SHALL</span> show an error banner</span>
+<span class="code-line">when an upload exceeds 10 MB.</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment">#### Scenario: Oversized file rejected</span></span>
+<span class="code-line"><span class="code-keyword">GIVEN</span> an authenticated user</span>
+<span class="code-line"><span class="code-keyword">WHEN</span> they upload a 25 MB file</span>
+<span class="code-line"><span class="code-keyword">THEN</span> an error banner appears, upload blocked</span></code></pre>
+                </div>
+                <div class="translation-english">
+                    <span class="translation-label">ПО-РУССКИ</span>
+                    <div class="translation-lines">
+                        <p class="tl">«Gracefully» — не проверяемо. Замени на измеримое: лимит 10 МБ + баннер ошибки.</p>
+                        <p class="tl">Сценарий назван конкретно («Oversized file rejected»), а не «Test 2».</p>
+                        <p class="tl">GIVEN/WHEN/THEN можно прямо переложить в автотест.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container animate-in" id="quiz-module8">
+                <div class="quiz-question-block"
+                     data-correct="option-c"
+                     data-explanation-right="Верно. Хороший сценарий конкретен и проверяем — из GIVEN/WHEN/THEN можно собрать автотест."
+                     data-explanation-wrong="Какой вариант посторонний сможет проверить без догадок?">
+                    <h3 class="quiz-question">Какое требование лучше — его легче всего проверить независимому ревьюеру?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>«Система SHALL удобно работать с файлами»</span></button>
+                        <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>«Система SHALL обрабатывать ошибки грамотно»</span></button>
+                        <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>«Система SHALL показать баннер при загрузке &gt;10 МБ»</span></button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-check-btn" onclick="checkQuiz('quiz-module8')">Проверить</button>
+                <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module8')">Сбросить</button>
+            </div>
         </div>
     </section>
 

@@ -51,7 +51,7 @@ try {
   for (let i = 0; i < 60; i++) { await sleep(50); if (await evalJs("document.readyState") === "complete") break; }
   await sleep(300);
 
-  check("page + modules rendered", await evalJs("document.querySelectorAll('.module').length === 6"));
+  check("page + modules rendered", await evalJs("document.querySelectorAll('.module').length === 8"));
   check("styles.css loaded (tokens)", await evalJs("getComputedStyle(document.documentElement).getPropertyValue('--color-accent').trim().length > 0"));
   check("main.js loaded (quiz globals)", await evalJs("typeof window.selectOption === 'function' && typeof window.checkQuiz === 'function'"));
 
@@ -82,6 +82,14 @@ try {
   await evalJs("document.querySelector('.bug-target').click()");
   await sleep(150);
   check("spot-bug marks correct", await evalJs("document.querySelector('.bug-target').classList.contains('correct')"));
+
+  // Darcula theme on code blocks + new modules/quizzes
+  check("darcula code bg (#282a36)", await evalJs("getComputedStyle(document.querySelector('.translation-code pre')).backgroundColor.replace(/\\s/g,'') === 'rgb(40,42,54)'"));
+  check("darcula keyword color (orange #CC7832)", await evalJs("(()=>{const el=document.querySelector('.code-keyword'); return el ? getComputedStyle(el).color.replace(/\\s/g,'')==='rgb(204,120,50)' : false;})()"));
+  check("module 7 (archive) present", await evalJs("document.querySelector('.module-title')?.textContent.includes('Архив на практике') || [...document.querySelectorAll('.module-title')].some(h=>h.textContent.includes('Архив на практике'))"));
+  check("module 8 (scenarios) present", await evalJs("[...document.querySelectorAll('.module-title')].some(h=>h.textContent.includes('Пиши хорошие сценарии'))"));
+  check("extra quiz module3b present", await evalJs("document.getElementById('quiz-module3b') !== null"));
+  check("new quizzes module7/8 present", await evalJs("document.getElementById('quiz-module7') !== null && document.getElementById('quiz-module8') !== null"));
 
   console.log(`\n${checks.length - failed}/${checks.length} passed`);
 } catch (e) {
