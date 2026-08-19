@@ -10,11 +10,12 @@
     <script src="vendor/tailwind-cdn.js"></script>
     <link rel="stylesheet" href="course-openspec/styles.css">
     <style>
-        body { font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); margin: 0; overflow-x: hidden; }
+        html, body { overflow-x: hidden; }
         * { box-sizing: border-box; }
         /* keep wide interactive blocks (code, chat, flow, tree) from widening the page on mobile */
         .translation-block, .file-tree, .chat-window, .flow-animation, .pattern-cards, .bug-challenge { max-width: 100%; }
         .translation-code, .file-tree, .chat-window, .flow-animation { overflow-x: auto; }
+        .translation-code pre, pre { white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere; }
         .course-wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--space-5); }
         .hero { background: var(--color-bg-warm); padding: calc(var(--space-16) + var(--space-8)) 0 var(--space-16); }
         .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 var(--space-5); }
