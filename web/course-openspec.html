@@ -10,6 +10,30 @@
     <script src="vendor/tailwind-cdn.js"></script>
     <link rel="stylesheet" href="course-openspec/styles.css">
     <style>
+        /* Re-skin the course to match the main site (emerald + slate palette, system fonts) */
+        :root {
+          --color-bg:             #FFFFFF;
+          --color-bg-warm:        #F0FDF4;
+          --color-bg-code:        #0F172A;
+          --color-text:           #0F172A;
+          --color-text-secondary: #475569;
+          --color-text-muted:     #94A3B8;
+          --color-border:         #E2E8F0;
+          --color-border-light:   #F1F5F9;
+          --color-accent:         #059669;
+          --color-accent-hover:   #047857;
+          --color-accent-light:   #ECFDF5;
+          --color-accent-muted:   #6EE7B7;
+          --color-success:        #059669;
+          --color-success-light:  #ECFDF5;
+          --color-error:          #E11D48;
+          --color-error-light:    #FFF1F2;
+          --color-info:           #0E7490;
+          --color-info-light:     #ECFEFF;
+          --font-display: system-ui, -apple-system, "Segoe UI", sans-serif;
+          --font-body:    system-ui, -apple-system, "Segoe UI", sans-serif;
+          --font-mono:    'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+        }
         html, body { overflow-x: hidden; }
         * { box-sizing: border-box; }
         /* keep wide interactive blocks (code, chat, flow, tree) from widening the page on mobile */
