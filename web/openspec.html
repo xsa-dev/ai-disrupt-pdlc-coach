@@ -44,20 +44,58 @@
 
     <main class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
         <h1 class="heading-font text-2xl sm:text-3xl font-semibold text-slate-900 mb-3">Разработка через OpenSpec</h1>
-        <p class="text-slate-600 mb-8">Публичный журнал того, как этот сайт сам себя строит: предложения, спецификации и архив реализованных изменений.</p>
+        <p class="text-slate-600 mb-8">OpenSpec — это подход к управлению изменениями в коде через спецификации. Вместо «просто напиши код» каждое изменение сначала описывается как предложение, проходит валидацию, реализуется и архивируется. Ниже — теоретические выжимки метода.</p>
 
-        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
-            <div class="text-4xl mb-3" aria-hidden="true">🛠️</div>
-            <p class="text-slate-500">Раздел в разработке. Здесь появится архив OpenSpec-изменений (changes) и процесс их реализации.</p>
-        </div>
+        <section class="space-y-8">
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Что такое OpenSpec</h2>
+                <p class="text-slate-600">OpenSpec — это рабочий процесс (и набор конвенций), при котором изменения живут в директории <code class="px-1 bg-slate-100 rounded text-[13px]">openspec/changes/</code> до тех пор, пока не будут реализованы и слиты. Каждое изменение — это набор документов: зачем, что меняем, как проверяем. Это превращает «историю коммитов» в читаемый трекер решений.</p>
+            </article>
 
-        <section class="mt-10" aria-labelledby="planned-title">
-            <h2 id="planned-title" class="text-lg font-semibold text-slate-900 mb-3">Реализованные изменения</h2>
-            <ul class="space-y-2 text-slate-600">
-                <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5" aria-hidden="true">✓</span><span><strong>github-pages-quiz-sharing</strong> — публикация сайта на GitHub Pages + шаринг квизов.</span></li>
-                <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5" aria-hidden="true">✓</span><span><strong>contact-author-modal</strong> — всплывающее окно «Связь с автором» (mailto + опц. webhook).</span></li>
-            </ul>
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Зачем это нужно</h2>
+                <ul class="list-disc pl-5 space-y-1.5 text-slate-600">
+                    <li><strong>Явность намерений.</strong> Прежде чем писать код, формулируется проблема и решение — спекуляция снижается.</li>
+                    <li><strong>Независимый review.</strong> Спеку можно проверить до кода (GO/NO-GO), не читая реализацию.</li>
+                    <li><strong>Воспроизводимость.</strong> Архив changes — это документация «почему мы так сделали», живущая рядом с кодом.</li>
+                    <li><strong>Безопасные мелкие шаги.</strong> Большие фичи дробятся на проверяемые изменения с чёткими критериями приёмки.</li>
+                </ul>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-3">Жизненный цикл изменения</h2>
+                <ol class="space-y-3 text-slate-600">
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">1</span><div><strong>Propose.</strong> Создаётся change с <code class="px-1 bg-slate-100 rounded text-[13px]">proposal.md</code> (зачем/что/влияние).</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">2</span><div><strong>Design &amp; Spec.</strong> Пишутся <code class="px-1 bg-slate-100 rounded text-[13px]">design.md</code> и спецификация требований (ADDED Requirements + Scenarios) в <code class="px-1 bg-slate-100 rounded text-[13px]">specs/</code>.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">3</span><div><strong>Tasks.</strong> Реализация дробится на чек-лист в <code class="px-1 bg-slate-100 rounded text-[13px]">tasks.md</code>.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">4</span><div><strong>Validate.</strong> <code class="px-1 bg-slate-100 rounded text-[13px]">openspec validate</code> проверяет формат и внутреннюю непротиворечивость.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">5</span><div><strong>Implement &amp; Review.</strong> Код пишется под задачи; независимый GO/NO-GO review до merge в защищённую ветку.</div></li>
+                    <li class="flex gap-3"><span class="shrink-0 w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 text-sm font-semibold flex items-center justify-center">6</span><div><strong>Archive.</strong> После слияния change архивируется, спецификации продвигаются в <code class="px-1 bg-slate-100 rounded text-[13px]">openspec/specs/</code> как актуальные.</div></li>
+                </ol>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Структура change</h2>
+                <pre class="text-[13px] leading-relaxed text-slate-700 bg-slate-50 rounded-lg p-4 overflow-x-auto"><code>openspec/changes/&lt;change-id&gt;/
+├── proposal.md      # зачем и что меняем
+├── design.md        # как решаем (архитектура)
+├── tasks.md         # чек-лист реализации
+└── specs/&lt;capability&gt;/
+    └── spec.md      # требования + сценарии (ADDED/MODIFIED)</code></pre>
+            </article>
+
+            <article class="rounded-2xl border border-slate-200 bg-white p-6">
+                <h2 class="text-lg font-semibold text-slate-900 mb-2">Ключевые принципы</h2>
+                <ul class="list-disc pl-5 space-y-1.5 text-slate-600">
+                    <li><strong>Delta-формат.</strong> Спецификация описывает изменение (<code class="px-1 bg-slate-100 rounded text-[13px]">## ADDED Requirements</code>), а не полный снимок системы.</li>
+                    <li><strong>Scenarios &gt; абстракции.</strong> Каждое требование подкрепляется конкретным сценарием приёмки.</li>
+                    <li><strong>Fail-closed gates.</strong> Непрошедшая валидация или тесты блокируют деплой, а не предупреждают.</li>
+                    <li><strong>Review до кода.</strong> Спека получает GO/NO-GO независимым ревьюером раньше, чем написан код.</li>
+                </ul>
+            </article>
         </section>
+
+        <p class="mt-10 text-sm text-slate-400">Этот сайт сам разрабатывается через OpenSpec — каждое добавление (публикация, модалка контактов, этот раздел) прошло описанный выше цикл.</p>
     </main>
 
     <link rel="stylesheet" href="contact-modal.css">
