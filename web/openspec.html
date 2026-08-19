@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disrupt PDLC Coach — Разработка через OpenSpec</title>
+    <script src="vendor/tailwind-cdn.js"></script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <style>
+        .heading-font {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+    </style>
+</head>
+<body class="bg-slate-50" data-contact-endpoint="https://formspree.io/f/xgawanjd">
+    <header data-site-header class="site-header font-sans bg-white border-b border-slate-200">
+        <div class="site-nav-shell border-b border-slate-200">
+            <div class="site-nav-row max-w-5xl mx-auto px-4 sm:px-6 py-2.5 min-h-[42px] flex items-center justify-between gap-4 text-[13px] sm:text-sm">
+                <nav aria-label="Основная навигация" class="flex items-center gap-x-2 sm:gap-x-5 overflow-x-auto whitespace-nowrap">
+                    <a href="diagnosis.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Диагностика</a>
+                    <a href="roadmap.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Roadmap</a>
+                    <a href="methodologies.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Методики</a>
+                    <a href="antipatterns.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Антипаттерны</a>
+                    <a href="openspec.html" aria-current="page" class="site-nav-link font-semibold text-emerald-700 border-b-2 border-emerald-600 pb-1">OpenSpec</a>
+                </nav>
+                <div class="hidden sm:block text-xs text-slate-400 font-medium whitespace-nowrap">Disrupt PDLC Coach</div>
+            </div>
+        </div>
+        <div class="site-brand-shell bg-white">
+            <div class="site-brand-row max-w-5xl mx-auto px-4 sm:px-6 py-5 min-h-[76px] flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-x-3">
+                    <div data-site-icon class="w-9 h-9 shrink-0 bg-emerald-600 rounded-2xl flex items-center justify-center" aria-hidden="true"><svg viewBox="0 0 24 24" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"></path><path d="m5.6 5.6 12.8 12.8m0-12.8L5.6 18.4"></path></svg></div>
+                    <div class="min-w-0">
+                        <div data-site-title class="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 truncate">Disrupt PDLC Coach</div>
+                        <div data-site-subtitle class="text-xs text-slate-500 truncate">Разработка сайта через OpenSpec</div>
+                    </div>
+                </div>
+                <div data-site-actions class="flex shrink-0 items-center gap-x-2"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto px-4 sm:px-6 py-10">
+        <h1 class="heading-font text-2xl sm:text-3xl font-semibold text-slate-900 mb-3">Разработка через OpenSpec</h1>
+        <p class="text-slate-600 mb-8">Публичный журнал того, как этот сайт сам себя строит: предложения, спецификации и архив реализованных изменений.</p>
+
+        <div class="rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+            <div class="text-4xl mb-3" aria-hidden="true">🛠️</div>
+            <p class="text-slate-500">Раздел в разработке. Здесь появится архив OpenSpec-изменений (changes) и процесс их реализации.</p>
+        </div>
+
+        <section class="mt-10" aria-labelledby="planned-title">
+            <h2 id="planned-title" class="text-lg font-semibold text-slate-900 mb-3">Реализованные изменения</h2>
+            <ul class="space-y-2 text-slate-600">
+                <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5" aria-hidden="true">✓</span><span><strong>github-pages-quiz-sharing</strong> — публикация сайта на GitHub Pages + шаринг квизов.</span></li>
+                <li class="flex items-start gap-2"><span class="text-emerald-600 mt-0.5" aria-hidden="true">✓</span><span><strong>contact-author-modal</strong> — всплывающее окно «Связь с автором» (mailto + опц. webhook).</span></li>
+            </ul>
+        </section>
+    </main>
+
+    <link rel="stylesheet" href="contact-modal.css">
+    <script src="contact-modal.js" defer></script>
+</body>
+</html>

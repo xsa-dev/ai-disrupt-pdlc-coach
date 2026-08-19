@@ -26,6 +26,7 @@
     "web/index.html",
     "web/methodologies.html",
     "web/roadmap.html",
+    "web/openspec.html",
     "web/vendor/tailwind-cdn.js",
     "web/vendor/fontawesome/css/all.min.css",
     "web/vendor/fontawesome/webfonts/fa-brands-400.ttf",
