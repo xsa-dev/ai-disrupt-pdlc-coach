@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Курс: OpenSpec — как договариваться с ИИ о коде</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400;1,9..40,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="course-openspec/styles.css">
+    <style>
+        body { font-family: var(--font-body); color: var(--color-text); background: var(--color-bg); margin: 0; }
+        .course-wrap { max-width: 860px; margin: 0 auto; padding: 0 var(--space-5); }
+        .hero { background: var(--color-bg-warm); padding: calc(var(--space-16) + var(--space-8)) 0 var(--space-16); }
+        .hero-inner { max-width: 860px; margin: 0 auto; padding: 0 var(--space-5); }
+        .hero h1 { font-family: var(--font-display); font-weight: 800; font-size: var(--text-5xl); line-height: var(--leading-tight); margin: 0 0 var(--space-4); color: var(--color-text); }
+        .hero p.lead { font-size: var(--text-lg); line-height: var(--leading-normal); color: var(--color-text-secondary); max-width: 60ch; }
+        .hero .kicker { font-family: var(--font-mono); font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.1em; color: var(--color-accent); margin-bottom: var(--space-3); }
+        .back-link { display: inline-block; margin-top: var(--space-6); font-family: var(--font-mono); font-size: var(--text-sm); color: var(--color-text-secondary); text-decoration: none; border-bottom: 1px solid var(--color-border); }
+        .back-link:hover { color: var(--color-accent); }
+        .module { padding: calc(var(--space-14)) 0; }
+        .module:nth-child(even) { background: var(--color-bg-warm); }
+        .module-number { font-family: var(--font-display); font-weight: 800; font-size: var(--text-6xl); color: var(--color-accent); opacity: 0.15; line-height: 1; margin-bottom: var(--space-2); }
+        .module-title { font-family: var(--font-display); font-weight: 700; font-size: var(--text-4xl); line-height: var(--leading-tight); margin: 0 0 var(--space-3); }
+        .module-subtitle { font-size: var(--text-lg); color: var(--color-text-secondary); max-width: 62ch; margin: 0 0 var(--space-8); }
+        .prose p { font-size: var(--text-base); line-height: var(--leading-normal); color: var(--color-text); margin: 0 0 var(--space-4); max-width: 64ch; }
+    </style>
+</head>
+<body data-contact-endpoint="https://formspree.io/f/xgawanjd">
+
+    <!-- HERO -->
+    <header class="hero">
+        <div class="hero-inner">
+            <div class="kicker">Интерактивный курс · OpenSpec</div>
+            <h1>Договорись с ИИ о коде<br>до того, как он его напишет</h1>
+            <p class="lead">OpenSpec — это лёгкий слой соглашений между тобой и твоим ИИ-ассистентом. Ты записываешь, что должно делать изменение, ИИ расписывает детали, вы смотрите на один и тот же план — и только потом пишется код. Вся идея в пяти словах: <strong>договорись сначала, потом строй уверенно.</strong></p>
+            <a class="back-link" href="openspec.html">← К разделу OpenSpec на сайте</a>
+        </div>
+    </header>
+
+    <!-- MODULE 1 -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">01</div>
+            <h2 class="module-title">Что вообще происходит</h2>
+            <p class="module-subtitle">Представь знакомую ситуацию: ты говоришь ИИ «добавь тёмную тему», а получаешь непонятно что. OpenSpec лечит именно это.</p>
+            <div class="prose">
+                <p>Ты строишь софт, объясняя ИИ-инструментам, чего хочешь, на человеческом языке. Часто ты сам не смотрел в код — и это нормально. Проблема: ИИ догадывается, и догадка бывает не той.</p>
+                <p>OpenSpec переворачивает подход. Вместо «напиши код» ты сначала описываешь <span class="term" data-definition="Change (изменение) — одна единица работы, упакованная в папку под openspec/changes/&lt;имя&gt;/. Держит proposal, design, tasks и правки спек. Одно изменение = одна папка = одна фича или фикс.">изменение</span> словами: зачем, что меняем, как проверим. ИИ превращает это в структурированный план. Ты читаешь план, поправляешь — и только потом код пишется по плану, который вы оба видели.</p>
+            </div>
+
+            <div class="translation-block animate-in">
+                <div class="translation-code">
+                    <span class="translation-label">COMMAND</span>
+                    <pre><code><span class="code-line"><span class="code-comment"># ты говоришь ассистенту:</span></span>
+<span class="code-line">/opsx:propose add-dark-mode</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment"># ИИ создаёт в openspec/changes/add-dark-mode/</span></span>
+<span class="code-line">proposal.md   # зачем и что</span>
+<span class="code-line">specs/        # что меняется (delta)</span>
+<span class="code-line">design.md     # как технически</span>
+<span class="code-line">tasks.md      # чек-лист шагов</span></code></pre>
+                </div>
+                <div class="translation-english">
+                    <span class="translation-label">ПО-РУССКИ</span>
+                    <div class="translation-lines">
+                        <p class="tl">Ты просишь не «сделай тёмную тему», а «оформи предложение добавить тёмную тему».</p>
+                        <p class="tl">ИИ не лезет сразу в код. Он создаёт папку с планом из четырёх документов.</p>
+                        <p class="tl">«Зачем и что» — одно предложение о намерении изменения, без кода.</p>
+                        <p class="tl">«Что меняется» — кусочек спецификации, описывающий только разницу.</p>
+                        <p class="tl">«Как технически» — архитектурное решение и файлы, которые тронем.</p>
+                        <p class="tl">«Чек-лист шагов» — по нему ИИ будет строить и отмечать сделанное.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="callout callout-info animate-in">
+                <strong>Почему это тебе поможет:</strong> ты получаешь словарный запас ПО. Зная точные термины, ты яснее описываешь требования ИИ и ловишь его ошибки до того, как они попадут в код.
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULE 2 -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">02</div>
+            <h2 class="module-title">Два чемодана: что правда и что предлагают</h2>
+            <p class="module-subtitle">Весь OpenSpec живёт в двух папках. Одна — что работает прямо сейчас. Другая — что ты предлагаешь изменить.</p>
+            <div class="prose">
+                <p><span class="term" data-definition="Spec (спека) — документ, как часть системы ведёт себя. В openspec/specs/, по доменам. Ответ на вопрос «что делает софт?». Сделан из требований и сценариев.">Спеки</span> (specs) — это источник правды. Они описывают, как система ведёт себя сейчас, разложены по доменам (<code>auth/</code>, <code>payments/</code>, <code>ui/</code>). Спеку можно проверить: «делает ли система то, что в ней написано?»</p>
+                <p><span class="term" data-definition="Change (изменение) — одна единица работы = папка в openspec/changes/&lt;имя&gt;/. Внутри: proposal, design, tasks, delta spec. Одно изменение, одна фича или фикс.">Изменение</span> (change) — это предложенное изменение. Одна папка в <code>openspec/changes/</code> = одна фича или фикс. В ней лежат все документы про эту работу в одном месте.</p>
+            </div>
+
+            <div class="file-tree animate-in">
+                <div class="file-tree-title">openspec/</div>
+                <ul class="file-tree-list">
+                    <li><span class="ft-folder">specs/</span> <span class="ft-note">— источник правды (как работает сейчас)</span></li>
+                    <li class="ft-indent"><span class="ft-file">auth/spec.md</span></li>
+                    <li class="ft-indent"><span class="ft-file">ui/spec.md</span></li>
+                    <li><span class="ft-folder">changes/</span> <span class="ft-note">— предложенные изменения</span></li>
+                    <li class="ft-indent"><span class="ft-folder">add-dark-mode/</span> <span class="ft-note">← одна фича, одна папка</span></li>
+                    <li class="ft-indent ft-indent"><span class="ft-file">proposal.md</span></li>
+                    <li class="ft-indent ft-indent"><span class="ft-file">design.md</span></li>
+                    <li class="ft-indent ft-indent"><span class="ft-file">tasks.md</span></li>
+                </ul>
+            </div>
+
+            <p class="prose">Разделение — ключевое. Можно вести несколько изменений параллельно без конфликтов. Можно пересмотреть изменение, пока оно не коснулось основных спек. А когда архивируешь — его дельта чисто сливается в источник правды.</p>
+        </div>
+    </section>
+
+    <!-- MODULE 3: delta -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">03</div>
+            <h2 class="module-title">Дельта-спеки: описываем разницу, не весь мир</h2>
+            <p class="module-subtitle">Внутри изменения ты не переписываешь всю спеку. Ты пишешь крошечную дельту: ADDED это, MODIFIED то, REMOVED другое.</p>
+            <div class="prose">
+                <p>Это фокус, который делает OpenSpec удобным для доработки существующих систем, а не только для проектов с нуля. Ты описываешь diff, а не пункт назначения.</p>
+            </div>
+
+            <div class="translation-block animate-in">
+                <div class="translation-code">
+                    <span class="translation-label">DELTA SPEC</span>
+                    <pre><code><span class="code-line"><span class="code-comment">## ADDED Requirements</span></span>
+<span class="code-line">### Requirement: Dark Mode Toggle</span>
+<span class="code-line">The system SHALL provide a UI toggle</span>
+<span class="code-line">that switches between light and dark themes.</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment">## MODIFIED Requirements</span></span>
+<span class="code-line">### Requirement: Default Theme</span>
+<span class="code-line">The system SHALL default to the OS preference</span>
+<span class="code-line">instead of always light. (was: always light)</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment">## REMOVED Requirements</span></span>
+<span class="code-line">### Requirement: Hardcoded Light BG</span>
+<span class="code-line">Removed: theme is now configurable.</span></code></pre>
+                </div>
+                <div class="translation-english">
+                    <span class="translation-label">ПО-РУССКИ</span>
+                    <div class="translation-lines">
+                        <p class="tl"><strong>ADDED</strong> — новое поведение, которого раньше не было (переключатель тем).</p>
+                        <p class="tl"><strong>MODIFIED</strong> — поведение, что уже было и меняется. Пишешь полную новую версию + пометку, что изменилось.</p>
+                        <p class="tl">На архиве ADDED добавится в основную спеку, MODIFIED заменит старую версию.</p>
+                        <p class="tl"><strong>REMOVED</strong> — поведение уходит. На архиве выкинется из спеку.</p>
+                        <p class="tl">Ты описываешь только разницу, а не переписываешь всю систему заново.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="quiz-container animate-in" id="quiz-module3">
+                <div class="quiz-question-block"
+                     data-correct="option-b"
+                     data-explanation-right="Точно. ADDED описывает поведение, которого не было — его допишут в спеку при архиве."
+                     data-explanation-wrong="Подумай: какая секция означает «нового не было, появится»?">
+                    <h3 class="quiz-question">Ты добавляешь в проект переключатель избранного, которого раньше не существовало. Какую секцию дельты использовать?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>MODIFIED</span></button>
+                        <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>ADDED</span></button>
+                        <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>REMOVED</span></button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-check-btn" onclick="checkQuiz('quiz-module3')">Проверить</button>
+                <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module3')">Сбросить</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULE 4: lifecycle -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">04</div>
+            <h2 class="module-title">Жизненный цикл: от идеи до архива</h2>
+            <p class="module-subtitle">В типичной настройке твой день выглядит так: подумал → предложил → применил → заархивировал.</p>
+            <div class="prose">
+                <p>Команды начинаются с <code>/opsx:</code> и вводятся в чат с ассистентом (это не терминальные команды). По желанию сначала думаешь вслух с ИИ, потом одна команда черновикует план, ты его читаешь, следующая строит, последняя убирает в архив.</p>
+            </div>
+
+            <div class="chat-window" id="chat-module4">
+                <div class="chat-messages">
+                    <div class="chat-message" data-msg="0" data-sender="actor-a" style="display:none">
+                        <div class="chat-avatar" style="background:var(--color-actor-1)">ТЫ</div>
+                        <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-1)">Ты</span><p>Хочу, чтобы сайт запоминал тёмную тему между перезагрузками.</p></div>
+                    </div>
+                    <div class="chat-message" data-msg="1" data-sender="actor-b" style="display:none">
+                        <div class="chat-avatar" style="background:var(--color-actor-2)">ИИ</div>
+                        <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-2)">ИИ</span><p>/opsx:explore — гляну код. Варианты: localStorage, cookie, серверная сессия. Рекомендую localStorage — проще и без бэкенда.</p></div>
+                    </div>
+                    <div class="chat-message" data-msg="2" data-sender="actor-a" style="display:none">
+                        <div class="chat-avatar" style="background:var(--color-actor-1)">ТЫ</div>
+                        <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-1)">Ты</span><p>Давай localStorage. /opsx:propose persist-theme</p></div>
+                    </div>
+                    <div class="chat-message" data-msg="3" data-sender="actor-c" style="display:none">
+                        <div class="chat-avatar" style="background:var(--color-actor-3)">OS</div>
+                        <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-3)">OpenSpec</span><p>Создал changes/persist-theme/ с proposal, delta spec, design, tasks. Жду твоего взгляда.</p></div>
+                    </div>
+                    <div class="chat-message" data-msg="4" data-sender="actor-b" style="display:none">
+                        <div class="chat-avatar" style="background:var(--color-actor-2)">ИИ</div>
+                        <div class="chat-bubble"><span class="chat-sender" style="color:var(--color-actor-2)">ИИ</span><p>/opsx:apply — собрал, отметил задачи. /opsx:archive — дельта ушла в specs/ui, папка в archive/.</p></div>
+                    </div>
+                </div>
+                <div class="chat-typing" id="chat-module4-typing" style="display:none">
+                    <div class="chat-avatar" id="chat-module4-typing-avatar">…</div>
+                    <div class="chat-typing-dots"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>
+                </div>
+                <div class="chat-controls">
+                    <button class="btn chat-next-btn">Следующий шаг ▸</button>
+                    <button class="btn chat-all-btn">Показать всё</button>
+                    <button class="btn chat-reset-btn">Сбросить</button>
+                    <span class="chat-progress"></span>
+                </div>
+            </div>
+
+            <div class="flow-animation animate-in" data-steps='[
+              {"highlight":"flow-actor-1","label":"explore — подумать с ИИ"},
+              {"highlight":"flow-actor-2","label":"propose — ИИ черновикует план","packet":true,"from":"actor-1","to":"actor-2"},
+              {"highlight":"flow-actor-3","label":"apply — ИИ строит по чек-листу","packet":true,"from":"actor-2","to":"actor-3"},
+              {"highlight":"flow-actor-4","label":"archive — дельта уходит в specs","packet":true,"from":"actor-3","to":"actor-4"}
+            ]'>
+                <div class="flow-actors">
+                    <div class="flow-actor" id="flow-actor-1"><div class="flow-actor-icon">1</div><span>explore</span></div>
+                    <div class="flow-actor" id="flow-actor-2"><div class="flow-actor-icon">2</div><span>propose</span></div>
+                    <div class="flow-actor" id="flow-actor-3"><div class="flow-actor-icon">3</div><span>apply</span></div>
+                    <div class="flow-actor" id="flow-actor-4"><div class="flow-actor-icon">4</div><span>archive</span></div>
+                </div>
+                <div class="flow-packet" id="flow-packet"></div>
+                <div class="flow-step-label" id="flow-label">Нажми «Далее»</div>
+                <div class="flow-controls">
+                    <button class="btn flow-next-btn">Далее</button>
+                    <button class="btn flow-reset-btn">Сначала</button>
+                    <span class="flow-progress"></span>
+                </div>
+            </div>
+
+            <div class="quiz-container animate-in" id="quiz-module4">
+                <div class="quiz-question-block"
+                     data-correct="option-c"
+                     data-explanation-right="Верно. /opsx:archive сливает дельту в основные specs и убирает папку изменения в archive/."
+                     data-explanation-wrong="Вспомни: какая команда «закрывает цикл» и складывает план в источник правды?">
+                    <h3 class="quiz-question">Какая команда завершает изменение — сливает дельту в спеку и прячет папку в archive/?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-value="option-a" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>/opsx:explore</span></button>
+                        <button class="quiz-option" data-value="option-b" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>/opsx:apply</span></button>
+                        <button class="quiz-option" data-value="option-c" onclick="selectOption(this)"><div class="quiz-option-radio"></div><span>/opsx:archive</span></button>
+                    </div>
+                    <div class="quiz-feedback"></div>
+                </div>
+                <button class="quiz-check-btn" onclick="checkQuiz('quiz-module4')">Проверить</button>
+                <button class="quiz-reset-btn" onclick="resetQuiz('quiz-module4')">Сбросить</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULE 5: how to read a spec -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">05</div>
+            <h2 class="module-title">Как читать спеку: требование + сценарий</h2>
+            <p class="module-subtitle">Спека — это поведение, не код. Она сделана из требований (что система ДОЛЖНА) и сценариев (конкретных примеров).</p>
+            <div class="prose">
+                <p>Требование пишут со словом <strong>SHALL</strong> (или MUST) — это жёстко, без вариантов. Хорошее требование — одно поведение, сформулированное так, что посторонний сможет проверить. Сценарий — это дано/когда/тогда, из которого можно собрать автотест.</p>
+            </div>
+
+            <div class="translation-block animate-in">
+                <div class="translation-code">
+                    <span class="translation-label">SPEC</span>
+                    <pre><code><span class="code-line"><span class="code-comment">### Requirement: Session Timeout</span></span>
+<span class="code-line">The system SHALL expire a session after</span>
+<span class="code-line">30 minutes of inactivity.</span>
+<span class="code-line"> </span>
+<span class="code-line"><span class="code-comment">#### Scenario: Idle timeout</span></span>
+<span class="code-line">- GIVEN an authenticated session</span>
+<span class="code-line">- WHEN 30 minutes pass with no activity</span>
+<span class="code-line">- THEN session invalidated, re-auth needed</span></code></pre>
+                </div>
+                <div class="translation-english">
+                    <span class="translation-label">ПО-РУССКИ</span>
+                    <div class="translation-lines">
+                        <p class="tl">Требование названо понятно: «тайм-аут сессии».</p>
+                        <p class="tl">SHALL = жёсткое правило. «После 30 минут бездействия сессия истекает».</p>
+                        <p class="tl">Сценарий — конкретный случай, а не пересказ требования.</p>
+                        <p class="tl">GIVEN — исходное состояние (залогинен).</p>
+                        <p class="tl">WHEN — триггер (прошло 30 мин тишины).</p>
+                        <p class="tl">THEN — результат (сессия сброшена, просят залогиниться снова).</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bug-challenge animate-in">
+                <h3>Найди слабое место: какое требование хуже — и почему?</h3>
+                <div class="bug-code">
+                    <div class="bug-line" data-line="1" onclick="checkBugLine(this, false)"><span class="line-num">A</span><code>The system SHALL handle large uploads gracefully.</code></div>
+                    <div class="bug-line bug-target" data-line="2" onclick="checkBugLine(this, true)"><span class="line-num">B</span><code>The system SHALL show an error banner when the upload exceeds 10 MB.</code></div>
+                </div>
+                <div class="bug-feedback" id="bug-feedback"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODULE 6: glossary + apply -->
+    <section class="module">
+        <div class="course-wrap">
+            <div class="module-number">06</div>
+            <h2 class="module-title">Словарик и как применить к своему проекту</h2>
+            <p class="module-subtitle">Несколько терминов, чтобы дальше читать доки быстрее. А потом — как это запустить у себя.</p>
+
+            <div class="pattern-cards">
+                <div class="pattern-card animate-in"><h4>Spec</h4><p>Документ, как часть системы ведёт себя. В <code>openspec/specs/</code>, по доменам. Ответ на вопрос «что делает софт?»</p></div>
+                <div class="pattern-card animate-in"><h4>Change</h4><p>Одна единица работы = папка в <code>openspec/changes/</code>. Внутри: proposal, design, tasks, delta spec.</p></div>
+                <div class="pattern-card animate-in"><h4>Delta spec</h4><p>Спека внутри изменения: только ADDED / MODIFIED / REMOVED. Описывает разницу, не весь мир.</p></div>
+                <div class="pattern-card animate-in"><h4>Artifact</h4><p>Документ внутри изменения (proposal, delta spec, design, tasks). Создаются в порядке зависимости.</p></div>
+                <div class="pattern-card animate-in"><h4>Archive</h4><p>Завершение изменения: дельта сливается в specs, папка уходит в <code>changes/archive/ДАТА-имя/</code>.</p></div>
+                <div class="pattern-card animate-in"><h4>OPSX</h4><p>Стандартный воркфлоу OpenSpec. Команды со слэшем: <code>/opsx:explore</code>, <code>propose</code>, <code>apply</code>, <code>archive</code>.</p></div>
+            </div>
+
+            <div class="callout callout-success animate-in">
+                <strong>Как начать:</strong> инициализируй OpenSpec в проекте (<code>openspec init</code> через CLI), скажи ассистенту «преврати это в предложение» — и используй <code>/opsx:explore</code>, когда идея туманна, а <code>/opsx:propose</code>, когда уже понятно.
+            </div>
+
+            <p class="prose">Этот самый сайт (AI-Disrupt PDLC Coach) разрабатывался через OpenSpec: каждое добавление — публикация, модалка контактов, этот курс — прошло цикл propose → review → apply → archive.</p>
+            <a class="back-link" href="openspec.html">← Вернуться к разделу OpenSpec</a>
+        </div>
+    </section>
+
+    <script src="course-openspec/main.js"></script>
+</body>
+</html>
