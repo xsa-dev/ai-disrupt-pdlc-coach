@@ -9,6 +9,8 @@ const pages = {
   "roadmap.html": "Roadmap",
   "methodologies.html": "Методики",
   "antipatterns.html": "Антипаттерны",
+  "openspec.html": "OpenSpec",
+  "course-openspec.html": "Курс",
 };
 const widths = [390, 744];
 const port = 9231;
@@ -93,7 +95,7 @@ try {
       if (!value) throw new Error(`${page}: no CDP measurement`);
       if (value.overflow !== 0) throw new Error(`${page}@${width}: overflow=${value.overflow}`);
       if (value.active !== expectedActive) throw new Error(`${page}@${width}: active=${value.active}`);
-      if (value.navLinks.join("|") !== "Диагностика|Roadmap|Методики|Антипаттерны") {
+      if (value.navLinks.join("|") !== "Диагностика|Roadmap|Методики|Антипаттерны|OpenSpec|Курс") {
         throw new Error(`${page}@${width}: bad nav order`);
       }
       if (value.firstLinkLeft < 0 || value.lastLinkRight > value.viewportWidth + 0.5) {
