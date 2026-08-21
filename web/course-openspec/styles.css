@@ -163,7 +163,7 @@ pre::-webkit-scrollbar { display: none; }
 /* ── NAV ────────────────────────────────────────────────────── */
 .nav {
   position: fixed;
-  top: 0; left: 0; right: 0;
+  top: env(safe-area-inset-top, 0px); left: 0; right: 0;
   height: var(--nav-height);
   z-index: 1000;
   background: rgba(250,247,242,0.92);
@@ -247,8 +247,8 @@ pre::-webkit-scrollbar { display: none; }
 
 /* ── MODULE STRUCTURE ───────────────────────────────────────── */
 .module {
-  min-height: 100dvh;
   min-height: 100vh;
+  min-height: 100dvh;
   scroll-snap-align: start;
   padding: var(--space-16) var(--space-6);
   padding-top: calc(var(--nav-height) + var(--space-12));

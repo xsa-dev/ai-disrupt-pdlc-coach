@@ -43,7 +43,8 @@
     "web/vendor/js/jspdf.umd.min.js",
     "web/vendor/js/html2pdf.bundle.min.js",
     "web/contact-modal.css",
-    "web/contact-modal.js"
+    "web/contact-modal.js",
+    "web/web-mobile.css"
   ],
   "forbidden_prefixes": [
     ".agent/",
