@@ -1,0 +1,74 @@
+/* web-mobile.css — адаптация под in-app браузеры (Threads, Telegram WebView)
+   Подключается после Tailwind/fonts на всех страницах.
+   Только layout/meta-совместимость, без изменения контента. */
+
+:root {
+  /* Безопасные отступы под системные бары in-app браузеров */
+  --sat: env(safe-area-inset-top, 0px);
+  --sar: env(safe-area-inset-right, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+  --sal: env(safe-area-inset-left, 0px);
+}
+
+/* Корневые контейнеры не упираются в тулбары */
+body {
+  padding-left: max(0px, var(--sal));
+  padding-right: max(0px, var(--sar));
+}
+
+/* Динамическая высота: сначала vh (fallback), затем dvh */
+.h-screen,
+.min-h-screen,
+[data-fullheight] {
+  height: 100vh;
+  height: 100dvh;
+}
+
+/* Фиксированные элементы не перекрываются home-indicator / тулбаром */
+.fixed,
+[class*="fixed"] {
+  /* осторожно: Tailwind utility .fixed уже position:fixed; добавляем отступы */
+}
+
+.contact-fab,
+#contact-fab {
+  bottom: calc(1rem + var(--sab));
+  right: calc(1rem + var(--sar));
+}
+
+/* Модалка контакта: surface внутри видимой зоны */
+.contact-modal__overlay {
+  padding-top: max(1rem, var(--sat));
+  padding-bottom: max(1rem, var(--sab));
+  padding-left: max(1rem, var(--sal));
+  padding-right: max(1rem, var(--sar));
+}
+
+.contact-modal__dialog {
+  max-height: calc(100dvh - 2rem);
+  max-height: calc(100vh - 2rem);
+}
+
+/* Минимум 44px tap-targets на узких экранах */
+@media (max-width: 480px) {
+  .site-nav-link,
+  nav a,
+  .btn,
+  button,
+  .contact-fab,
+  a.btn {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Убираем hover-only зависимости: явный active-стиль */
+  .site-nav-link:active,
+  nav a:active,
+  .btn:active,
+  button:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}

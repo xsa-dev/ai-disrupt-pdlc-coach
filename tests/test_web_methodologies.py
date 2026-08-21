@@ -158,7 +158,7 @@ def test_methodologies_uses_plain_page_intro_after_shared_header():
 def test_required_static_contract():
     html, _ = parse_page()
     assert 'name="viewport"' in html
-    assert 'content="width=device-width, initial-scale=1.0"' in html
+    assert 'viewport-fit=cover' in html
     assert "Tailwind" not in html or "cdn.tailwindcss.com" in html
     assert "antipatterns.html" in html
     assert "roadmap.html" in html
