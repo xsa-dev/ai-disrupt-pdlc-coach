@@ -437,11 +437,6 @@
             </div>
 
             <p class="prose">Этот самый сайт (AI-Disrupt PDLC Coach) разрабатывался через OpenSpec: каждое добавление — публикация, модалка контактов, этот курс — прошло цикл propose → review → apply → archive.</p>
-            <div class="newsletter-cta">
-                <h3>Понравился курс?</h3>
-                <p>Подпишись на рассылку — новые разборы OpenSpec и AI-инструментов для разработчиков.</p>
-                <button type="button" id="course-newsletter-btn">Подписаться на рассылку</button>
-            </div>
         </div>
     </section>
 
@@ -562,9 +557,10 @@
 
     <footer class="course-footer">
         <h3>Готов внедрить OpenSpec?</h3>
-        <p>Подпишись на рассылку — разборы спецификаций, AI-инструментов и практик разработки.</p>
-        <button type="button" id="course-footer-subscribe-btn" class="footer-subscribe">Подписаться на рассылку</button>
+        <p>Свяжись с автором удобным способом — почта, GitHub или Telegram.</p>
         <div class="footer-links">
+            <a href="mailto:saleksey67@gmail.com">Email автора ✉</a>
+            <a href="https://t.me/alxy_tg?text=Привет, хочу узнать про OpenSpec" target="_blank" rel="noopener">Telegram ↗</a>
             <a href="https://github.com/Fission-AI/openspec" target="_blank" rel="noopener">Официальный репозиторий OpenSpec ↗</a>
             <a href="https://github.com/xsa-dev/ai-disrupt-pdlc-coach" target="_blank" rel="noopener">Репозиторий этого сайта ↗</a>
         </div>
@@ -574,21 +570,5 @@
     <script src="course-openspec/main.js"></script>
     <script src="contact-modal.js" defer></script>
   <script src="course-gate.js" defer></script>
-    <script>
-      (function () {
-        function openNewsletter() {
-          var fab = document.querySelector('.contact-fab');
-          if (fab) fab.click();
-          setTimeout(function () {
-            var cb = document.getElementById('contact-newsletter');
-            if (cb) cb.checked = true;
-          }, 50);
-        }
-        var btn = document.getElementById('course-newsletter-btn');
-        if (btn) btn.addEventListener('click', openNewsletter);
-        var fbtn = document.getElementById('course-footer-subscribe-btn');
-        if (fbtn) fbtn.addEventListener('click', openNewsletter);
-      })();
-    </script>
 </body>
 </html>
