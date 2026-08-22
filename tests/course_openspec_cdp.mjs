@@ -46,6 +46,9 @@ try {
   const send = (method, params = {}) => new Promise((res, rej) => { const c = ++id; pending.set(c, { resolve: res, reject: rej }); ws.send(JSON.stringify({ id: c, method, params })); });
   const evalJs = async expr => { const r = await send("Runtime.evaluate", { expression: expr, returnByValue: true, awaitPromise: true }); if (r.exceptionDetails) throw new Error(r.exceptionDetails.text); return r.result.value; };
   await send("Page.enable"); await send("Runtime.enable");
+  // course-gate hides the course behind a behavioral gate; unlock it for this
+  // verification so we test the actual course content, not the locked overlay.
+  await send("Page.addScriptToEvaluateOnNewDocument", { source: "try{localStorage.setItem('courseAccess','unlocked')}catch(e){}" });
 
   await send("Page.navigate", { url: `http://127.0.0.1:${port}/course-openspec.html` });
   for (let i = 0; i < 60; i++) { await sleep(50); if (await evalJs("document.readyState") === "complete") break; }
