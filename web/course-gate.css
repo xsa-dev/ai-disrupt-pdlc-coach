@@ -1,0 +1,111 @@
+/* web/course-gate.css — стили behavioral gate курса */
+
+/* --- openspec.html: подсказка + locked-ссылки --- */
+[data-course-hint] {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted, #6b7280);
+  font-family: var(--font-mono, monospace);
+}
+[data-course-hint].course-hint--warn {
+  color: #b45309;
+}
+a.course-link--locked {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: auto; /* клик перехватывается JS */
+}
+
+/* кнопка «Мне интересно» */
+[data-course-interest] {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid var(--color-accent, #059669);
+  background: var(--color-accent, #059669);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+[data-course-interest]:active { transform: scale(0.97); }
+
+/* --- course-openspec.html: locked-экран --- */
+body.course-locked { overflow: hidden; }
+[data-course-locked-screen] {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(160deg, #ecfdf5 0%, #f0fdfa 100%);
+}
+.course-locked__card {
+  max-width: 420px;
+  text-align: center;
+  background: #fff;
+  border-radius: 1.25rem;
+  padding: 2.25rem 1.75rem;
+  box-shadow: 0 12px 40px rgba(5, 150, 105, 0.15);
+}
+.course-locked__icon { font-size: 3rem; margin-bottom: 0.5rem; }
+.course-locked__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #065f46;
+  margin-bottom: 0.75rem;
+}
+.course-locked__text {
+  color: #374151;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+.course-locked__cta {
+  display: inline-block;
+  padding: 0.7rem 1.4rem;
+  border-radius: 9999px;
+  background: var(--color-accent, #059669);
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+.course-locked__cta:active { transform: scale(0.97); }
+
+/* --- анимация разблокировки --- */
+[data-unlock-anim] {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 150, 105, 0.92);
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+  pointer-events: none;
+}
+[data-unlock-anim].unlock-anim--show {
+  opacity: 1;
+  transform: scale(1);
+}
+[data-unlock-anim].unlock-anim--done {
+  opacity: 0;
+  transform: scale(1.1);
+}
+[data-unlock-anim] .unlock-seal { font-size: 4rem; }
+[data-unlock-anim] .unlock-text {
+  margin-top: 0.75rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
