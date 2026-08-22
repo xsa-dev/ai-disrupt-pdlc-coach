@@ -72,3 +72,19 @@ body {
     transform: scale(0.98);
   }
 }
+
+/* Багфикс: явные отступы между пунктами nav (Tailwind gap-x может не
+   сработать в in-app WebView) */
+.site-nav-link {
+  padding-right: 0.75rem;
+  flex-shrink: 0;
+}
+
+/* Багфикс: текст кнопок не переносится и не сжимается */
+.btn,
+.chat-next-btn,
+.chat-all-btn,
+.chat-reset-btn {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
