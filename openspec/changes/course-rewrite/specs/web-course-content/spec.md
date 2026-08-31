@@ -23,9 +23,9 @@ Between modules the course SHALL include visual diagrams (inline SVG or CSS, no 
 - **WHEN** the reader reaches the boundary between two modules
 - **THEN** a self-contained inline diagram SHALL be shown (no external network dependency)
 
-### Requirement: Examples are concrete, not abstract
-Each conceptual module SHALL include at least one concrete, realistic example (a command, a spec snippet, or a scenario) rather than only abstract description.
+### Requirement: Test anchors preserved
+The rewrite SHALL preserve the existing module markup hooks so automated checks keep passing: every module title SHALL keep the `class="module-title"` element, and modules 7 and 8 SHALL keep their current heading text exactly — "Архив на практике" (module 7) and "Пиши хорошие сценарии" (module 8) — as anchors used by `course_openspec_cdp.mjs` and `course_ui_polish_cdp.mjs`.
 
-#### Scenario: Concrete example present
-- **WHEN** a module introduces a concept (e.g. delta-spec)
-- **THEN** it SHALL show a concrete example snippet or command
+#### Scenario: Module 7/8 anchors intact
+- **WHEN** the rewritten course is rendered
+- **THEN** `.module-title` elements SHALL exist for all 8 modules, and modules 7/8 titles SHALL read "Архив на практике" / "Пиши хорошие сценарии"
