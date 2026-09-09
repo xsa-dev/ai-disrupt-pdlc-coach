@@ -81,6 +81,12 @@
                 <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600" data-stage="Outcome" aria-pressed="false">Outcome</button>
                 <button type="button" class="stage-btn focus-ring border border-slate-200 rounded-xl px-3 py-3 text-sm font-medium text-slate-600 sm:col-span-3 lg:col-span-1" data-stage="Governance" aria-pressed="false">Governance</button>
             </div>
+            <div class="mt-3 flex items-center gap-3 flex-wrap">
+                <button type="button" id="share-stage-btn" class="focus-ring inline-flex items-center gap-2 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-800 min-h-[44px]">
+                    <i class="fa-solid fa-share-nodes" aria-hidden="true"></i> Поделиться этапом
+                </button>
+                <span id="share-feedback" class="text-sm text-emerald-700" role="status" aria-live="polite"></span>
+            </div>
         </section>
 
         <section aria-labelledby="catalog-title">
@@ -134,7 +140,12 @@
     const catalog = document.getElementById('methodology-catalog');
     const emptyState = document.getElementById('empty-state');
     const status = document.getElementById('catalog-status');
-    let selectedStage = 'all';
+    const VALID_STAGES = ['all', 'Discovery', 'Specification', 'Execution', 'Validation', 'Outcome', 'Governance'];
+    function stageFromUrl() {
+        const s = new URLSearchParams(location.search).get('stage');
+        return VALID_STAGES.includes(s) ? s : 'all';
+    }
+    let selectedStage = stageFromUrl();
     let selectedKind = 'all';
 
     const kindLabels = {
@@ -226,9 +237,17 @@
         });
     }
 
+    function updateStageUrl() {
+        const url = new URL(location.href);
+        if (selectedStage === 'all') url.searchParams.delete('stage');
+        else url.searchParams.set('stage', selectedStage);
+        history.replaceState(null, '', url);
+    }
+
     document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
         selectedStage = button.dataset.stage;
         setPressed('[data-stage]', 'stage', selectedStage);
+        updateStageUrl();
         render();
     }));
     document.querySelectorAll('[data-kind]').forEach(button => button.addEventListener('click', () => {
@@ -236,6 +255,63 @@
         setPressed('[data-kind]', 'kind', selectedKind);
         render();
     }));
+
+    // Build the share payload (deep-link + stage name + steps checklist of all its methodologies)
+    function buildSharePayload() {
+        const url = new URL(location.href);
+        if (selectedStage === 'all') url.searchParams.delete('stage');
+        else url.searchParams.set('stage', selectedStage);
+        const link = url.href;
+        if (selectedStage === 'all') {
+            return {
+                title: 'Методики OpenSpec',
+                text: 'Каталог методик по этапам жизненного цикла OpenSpec.\nВыбери конкретный этап, чтобы получить чек-лист шагов.\n' + link,
+                url: link
+            };
+        }
+        const items = registry.filter(e => e.stages.includes(selectedStage));
+        let text = 'Этап OpenSpec: ' + selectedStage + '\nСсылка: ' + link + '\n\nНеобходимые шаги:';
+        items.forEach(e => {
+            text += '\n\n• ' + e.titleRu;
+            (e.steps || []).forEach((s, i) => { text += '\n  ' + (i + 1) + '. ' + s; });
+        });
+        return { title: 'Этап OpenSpec: ' + selectedStage, text: text, url: link };
+    }
+
+    function showShareFeedback(msg) {
+        const fb = document.getElementById('share-feedback');
+        if (!fb) return;
+        fb.textContent = msg;
+        setTimeout(() => { fb.textContent = ''; }, 4000);
+    }
+
+    const shareBtn = document.getElementById('share-stage-btn');
+    if (shareBtn) shareBtn.addEventListener('click', async () => {
+        const payload = buildSharePayload();
+        if (navigator.share) {
+            try { await navigator.share(payload); return; }
+            catch (err) { if (err && (err.name === 'AbortError' || err.name === 'NotAllowedError')) return; /* fall through to clipboard */ }
+        }
+        const clip = payload.text;
+        try {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(clip);
+                showShareFeedback('Скопировано в буфер обмена');
+            } else {
+                const ta = document.createElement('textarea');
+                ta.value = clip; ta.setAttribute('readonly', '');
+                ta.style.position = 'absolute'; ta.style.left = '-9999px';
+                document.body.appendChild(ta); ta.select();
+                document.execCommand('copy'); document.body.removeChild(ta);
+                showShareFeedback('Скопировано в буфер обмена');
+            }
+        } catch (e) {
+            showShareFeedback('Не удалось скопировать — скопируйте ссылку из адресной строки');
+        }
+    });
+
+    // restore filter state from URL on load
+    setPressed('[data-stage]', 'stage', selectedStage);
     render();
 </script>
   <link rel="stylesheet" href="contact-modal.css">
