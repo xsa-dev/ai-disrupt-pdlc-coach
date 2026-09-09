@@ -238,10 +238,12 @@
     }
 
     function updateStageUrl() {
-        const url = new URL(location.href);
-        if (selectedStage === 'all') url.searchParams.delete('stage');
-        else url.searchParams.set('stage', selectedStage);
-        history.replaceState(null, '', url);
+        try {
+            const url = new URL(location.href);
+            if (selectedStage === 'all') url.searchParams.delete('stage');
+            else url.searchParams.set('stage', selectedStage);
+            history.replaceState(null, '', url.pathname + url.search + url.hash);
+        } catch (e) { /* non-browser env (jsdom/about:blank) — URL sync is non-critical */ }
     }
 
     document.querySelectorAll('[data-stage]').forEach(button => button.addEventListener('click', () => {
