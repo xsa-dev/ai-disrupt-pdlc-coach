@@ -1,4 +1,4 @@
-/* Contact Author Modal — self-contained, no Tailwind dependency */
+/* Contact Author — Apple Wallet–style flip business card. Self-contained, no Tailwind. */
 .contact-fab {
   position: fixed;
   right: calc(18px + env(safe-area-inset-right, 0px));
@@ -10,13 +10,13 @@
   padding: 12px 16px;
   border: none;
   border-radius: 999px;
-  background: #6d28d9;
+  background: linear-gradient(135deg, #059669, #047857);
   color: #fff;
   font: 600 14px/1 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   cursor: pointer;
-  box-shadow: 0 6px 18px rgba(0,0,0,.28);
+  box-shadow: 0 8px 22px rgba(4, 120, 87, .38);
 }
-.contact-fab:hover, .contact-fab:focus-visible { background: #5b21b6; outline: 3px solid #c4b5fd; }
+.contact-fab:hover, .contact-fab:focus-visible { filter: brightness(1.06); outline: 3px solid #6ee7b7; }
 
 .contact-overlay {
   position: fixed;
@@ -25,50 +25,212 @@
   display: none;
   align-items: center;
   justify-content: center;
-  background: rgba(15, 23, 42, .55);
+  background: rgba(2, 6, 23, .62);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   padding: 16px;
 }
 .contact-overlay.open { display: flex; }
 
-.contact-modal {
-  width: min(420px, 100%);
-  max-height: 90vh;
-  max-height: 90dvh;
-  overflow: auto;
-  background: #fff;
-  color: #0f172a;
-  border-radius: 14px;
-  box-shadow: 0 20px 50px rgba(0,0,0,.35);
+/* ---- flip card (opacity/display toggle, works without preserve-3d) ---- */
+.flip-card {
+  position: relative;
+  width: min(360px, 92vw);
+  height: 452px;
+  max-height: 88dvh;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  animation: card-in .28s cubic-bezier(.2,.7,.3,1);
+}
+@keyframes card-in { from { opacity: 0; transform: translateY(14px) scale(.97); } to { opacity: 1; transform: none; } }
+.flip-card:focus-visible { outline: 3px solid #6ee7b7; border-radius: 22px; }
+
+.flip-card-inner { position: relative; width: 100%; height: 100%; }
+
+.flip-front, .flip-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 22px;
+  box-shadow: 0 24px 60px rgba(2, 6, 23, .55), 0 2px 0 rgba(255,255,255,.06) inset;
+  display: flex;
+  flex-direction: column;
+  padding: 26px 24px;
+  box-sizing: border-box;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* decorative top sheen (glass highlight) */
+.card-sheen {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 46%;
+  background: linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,0));
+  pointer-events: none;
+  z-index: 0;
+}
+.flip-front > *, .flip-back > * { position: relative; z-index: 1; }
+
+/* ---------- FRONT: dark premium card ---------- */
+.flip-front {
+  background: #06130e;
+  color: #e6edf3;
   font: 400 15px/1.5 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 }
-.contact-modal header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 18px;
-  border-bottom: 1px solid #e2e8f0;
+/* blurred bokeh of the dome pattern — fills the whole card */
+.flip-front::before {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 22px;
+  background: url("contact-card-bg.svg") center center / cover no-repeat;
+  filter: blur(14px) saturate(1.3) brightness(1.1);
+  transform: scale(1.25);
+  opacity: .82;
+  z-index: 0;
 }
-.contact-modal header h2 { margin: 0; font-size: 17px; }
+/* light, transparent veil (rounded with the card) so the pattern shows through */
+.flip-front::after {
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: 22px;
+  background: linear-gradient(180deg, rgba(6,19,14,.22) 0%, rgba(6,19,14,.34) 55%, rgba(4,25,18,.5) 100%);
+  z-index: 0;
+}
+.front-id h2, .card-role, .flip-front .flip-hint { text-shadow: 0 1px 6px rgba(0,0,0,.7); }
+.front-header { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.avatar-ring {
+  width: 60px; height: 60px; flex: 0 0 60px;
+  border-radius: 50%;
+  padding: 2px;
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 4px 14px rgba(4,120,87,.5);
+}
+.card-avatar {
+  width: 100%; height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  background: #0b3b2e;
+}
+.avatar-ring.avatar-fallback { display: flex; align-items: center; justify-content: center; }
+.avatar-ring.avatar-fallback::after { content: "AS"; font-weight: 700; color: #ecfdf5; font-size: 20px; }
+.front-id h2 { margin: 0; font-size: 19px; font-weight: 700; letter-spacing: .2px; }
+.card-role { margin: 3px 0 0; font-size: 12.5px; color: #9fb4ad; letter-spacing: .3px; }
+
+.contact-contacts { display: grid; gap: 10px; margin: 4px 0 0; padding: 0; list-style: none; }
+.contact-contacts li a {
+  display: flex; align-items: center; gap: 13px;
+  padding: 11px 13px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.09);
+  color: #e6edf3;
+  text-decoration: none;
+  transition: background .15s ease, border-color .15s ease, transform .1s ease;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.contact-contacts li a:hover,
+.contact-contacts li a:focus-visible {
+  background: rgba(52,211,153,.14);
+  border-color: rgba(52,211,153,.4);
+  outline: none;
+}
+.contact-contacts li a:active { transform: scale(.985); }
+.c-badge {
+  flex: 0 0 34px; width: 34px; height: 34px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #34d399, #059669);
+  color: #04231a; font-size: 16px; font-weight: 700;
+}
+.c-label { display: flex; flex-direction: column; line-height: 1.25; min-width: 0; }
+.c-kind { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: #8fa8a0; }
+.c-value { font-size: 14.5px; font-weight: 600; color: #f1f5f9; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+.flip-hint {
+  margin-top: auto; padding-top: 16px;
+  font-size: 12.5px; color: #7f978f; text-align: center; letter-spacing: .2px;
+}
+
+/* close button shared */
 .contact-close {
-  border: none; background: transparent; font-size: 22px; line-height: 1;
-  cursor: pointer; color: #475569; border-radius: 8px; padding: 2px 8px;
+  position: absolute;
+  top: 12px; right: 14px;
+  z-index: 3;
+  width: 32px; height: 32px;
+  border: none;
+  background: rgba(255,255,255,.12);
+  font-size: 20px; line-height: 1;
+  cursor: pointer; color: #e6edf3; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
 }
-.contact-close:hover, .contact-close:focus-visible { background: #f1f5f9; outline: 2px solid #94a3b8; }
-.contact-modal .body { padding: 16px 18px 18px; }
-.contact-contacts { display: grid; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; }
-.contact-contacts li a { color: #6d28d9; text-decoration: none; }
-.contact-contacts li a:hover { text-decoration: underline; }
-.contact-field { display: block; width: 100%; box-sizing: border-box; margin: 6px 0 12px;
-  padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; resize: vertical; }
-.contact-label { font-weight: 600; }
-.contact-send {
-  width: 100%; padding: 11px 14px; border: none; border-radius: 8px;
-  background: #6d28d9; color: #fff; font: 600 15px/1 system-ui, sans-serif; cursor: pointer;
+.contact-close:hover, .contact-close:focus-visible {
+  background: rgba(255,255,255,.24); outline: 2px solid #6ee7b7;
 }
-.contact-send:hover, .contact-send:focus-visible { background: #5b21b6; outline: 3px solid #c4b5fd; }
-.contact-status { margin-top: 10px; font-size: 14px; min-height: 1.2em; }
-.contact-status.ok { color: #15803d; }
-.contact-status.err { color: #b91c1c; }
+
+/* flip toggle */
+.flip-card.flipped .flip-front { display: none; }
+.flip-card:not(.flipped) .flip-back { display: none; }
+
+/* ---------- BACK: reference dome-of-arrows pattern ---------- */
+.flip-back {
+  background: #000;
+  background-image: url("contact-card-bg.svg");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  color: #ecfdf5;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: center;
+  padding-top: 0;
+}
+.flip-back .back-frame { margin-top: 0; }
+.flip-back .card-sheen { display: none; }
+.flip-card.flipped .flip-back { }
+.flip-back > .back-frame,
+.flip-back > .back-name,
+.flip-back > .flip-hint { transform: translateY(-44px); }
+.back-frame {
+  width: 132px; height: 132px;
+  border-radius: 22px;
+  padding: 5px;
+  background: linear-gradient(135deg, #34d399, #059669);
+  box-shadow: 0 12px 34px rgba(0, 0, 0, .6), 0 0 0 6px rgba(0,0,0,.45);
+  overflow: hidden;
+}
+.back-avatar {
+  width: 100%; height: 100%;
+  border-radius: 17px;
+  object-fit: cover;
+  display: block;
+  background: #04120d;
+}
+.back-frame.avatar-fallback { display: flex; align-items: center; justify-content: center; background: #04120d; }
+.back-frame.avatar-fallback::after { content: "AS"; font-weight: 800; font-size: 44px; color: #6ee7b7; }
+.back-name {
+  margin: 26px 0 0;
+  font-size: 17px; font-weight: 800; letter-spacing: .4px;
+  color: #fff;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgba(0,0,0,.62);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+.flip-back .flip-hint {
+  color: #d1fae5;
+  background: rgba(0,0,0,.55);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-top: 10px;
+}
+
 @media (max-width: 480px) {
   .contact-fab { right: 12px; bottom: 12px; padding: 11px 14px; }
+  .flip-card { height: 428px; }
+  .flip-front, .flip-back { padding: 22px 20px; }
 }
