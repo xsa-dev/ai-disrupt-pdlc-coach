@@ -67,11 +67,18 @@ try {
   check("FAB present", await evalJs("!!document.querySelector('.contact-fab')"));
   await evalJs("document.querySelector('.contact-fab').click()");
   await sleep(150);
-  check("modal open", await evalJs("document.querySelector('.contact-overlay').classList.contains('open')"));
-  // P0: modal + its input must NOT be inert when open (even without <main>)
+  check("overlay open", await evalJs("document.querySelector('.contact-overlay').classList.contains('open')"));
+  check("flip-card is dialog", await evalJs("(()=>{const d=document.querySelector('.flip-card');return !!d&&d.getAttribute('role')==='dialog'&&d.getAttribute('aria-modal')==='true';})()"));
+  check("front + back faces", await evalJs("!!document.querySelector('.flip-front')&&!!document.querySelector('.flip-back')"));
+  check("three contacts", await evalJs("document.querySelectorAll('.contact-contacts a').length===3"));
+  // no message form remains (form was removed with this change)
+  check("no message textarea", await evalJs("!document.getElementById('contact-msg')&&!document.querySelector('textarea')"));
+  check("no send button", await evalJs("!document.querySelector('.contact-send')"));
+  // overlay + card must NOT be inert when open (even without <main>)
   check("overlay not inert when open", await evalJs("!document.querySelector('.contact-overlay').hasAttribute('inert')"));
-  check("input not inert when open", await evalJs("!document.getElementById('contact-msg').hasAttribute('inert')"));
-  check("input focusable & typeable (P0 core)", await evalJs(`(()=>{const i=document.getElementById('contact-msg');i.focus();const ok=document.activeElement===i;i.value='x';return ok && i.value==='x';})()`));
+  check("card not inert when open", await evalJs("!document.querySelector('.flip-card').hasAttribute('inert')"));
+  // tap-to-flip toggles .flipped
+  check("tap flips card", await evalJs(`(()=>{const c=document.querySelector('.flip-card');c.dispatchEvent(new PointerEvent('pointerdown',{bubbles:true,clientX:5,clientY:5}));c.dispatchEvent(new PointerEvent('pointerup',{bubbles:true,clientX:5,clientY:5}));return c.classList.contains('flipped');})()`));
   // background content (first body child that is not the modal) should be inert
   check("background content inert when open", await evalJs(`(()=>{const kids=[...document.body.children];const bg=kids.find(c=>!c.classList.contains('contact-overlay')&&!c.classList.contains('contact-fab'));return bg?bg.hasAttribute('inert'):false;})()`));
   // close -> inert removed
