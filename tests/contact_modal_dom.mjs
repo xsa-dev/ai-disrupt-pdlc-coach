@@ -1,4 +1,5 @@
-// jsdom interaction test for contact-author modal (open, ESC, focus-trap, mailto, webhook+fallback).
+// jsdom interaction test for contact-author flip-card (open, ESC, focus-return, 3 contacts,
+// tap/keyboard flip, and absence of any message form / network POST).
 import { JSDOM } from 'jsdom';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
@@ -9,7 +10,7 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dir, '..');
 const rawHtml = readFileSync(join(ROOT, 'web/antipatterns.html'), 'utf8');
 const js = readFileSync(join(ROOT, 'web/contact-modal.js'), 'utf8');
-// Strip all existing <script> tags so jsdom does not fetch tailwind-cdn.js / run page JS;
+// Strip existing <script> tags so jsdom does not fetch tailwind-cdn.js / run page JS;
 // the modal script is inlined below so jsdom (runScripts: dangerously) executes it during parse.
 const stripped = rawHtml.replace(/<script[\s\S]*?<\/script>/gi, '');
 const html = stripped.replace('</body>', `<script>${js}</script></body>`);
@@ -29,7 +30,6 @@ async function run() {
   const { window } = dom;
   const doc = window.document;
 
-  // wait for DOMContentLoaded so init() builds the modal
   await new Promise(res => {
     if (doc.readyState === 'complete') return res();
     window.addEventListener('DOMContentLoaded', () => res());
@@ -39,47 +39,59 @@ async function run() {
 
   const fab = doc.querySelector('.contact-fab');
   check('FAB rendered', !!fab);
-  check('dialog role+aria', (() => { const d = doc.querySelector('.contact-modal'); return d && d.getAttribute('role') === 'dialog' && d.getAttribute('aria-modal') === 'true'; })());
+  check('flip-card dialog role+aria', (() => {
+    const d = doc.querySelector('.flip-card');
+    return d && d.id === 'contact-card' && d.getAttribute('role') === 'dialog' && d.getAttribute('aria-modal') === 'true';
+  })());
+  check('front + back faces exist', !!doc.querySelector('.flip-front') && !!doc.querySelector('.flip-back'));
   check('three contacts', doc.querySelectorAll('.contact-contacts a').length === 3);
+  check('contacts are telegram/github/mailto', (() => {
+    const hrefs = [...doc.querySelectorAll('.contact-contacts a')].map(a => a.getAttribute('href'));
+    return hrefs.some(h => /t\.me\/alxy_tg/.test(h)) && hrefs.some(h => /github\.com\/xsa-dev/.test(h)) && hrefs.some(h => /^mailto:/.test(h));
+  })());
 
+  // NO message form and NO network path (form was removed with this change)
+  check('no message textarea', !doc.querySelector('#contact-msg') && !doc.querySelector('textarea'));
+  check('no send button', !doc.querySelector('.contact-send'));
+
+  // open
+  const trigger = fab;
+  trigger.focus();
   fab.click();
-  check('modal opens', doc.querySelector('.contact-overlay').classList.contains('open'));
+  await sleep(20);
+  const overlay = doc.querySelector('.contact-overlay');
+  check('overlay opens', overlay.classList.contains('open'));
 
+  // tap-to-flip: clicking the card toggles .flipped
+  const card = doc.querySelector('.flip-card');
+  const ptr = (type, x, y) => {
+    const e = new window.Event(type, { bubbles: true });
+    e.clientX = x; e.clientY = y;
+    Object.defineProperty(e, 'target', { value: card, configurable: true });
+    card.dispatchEvent(e);
+  };
+  ptr('pointerdown', 5, 5);
+  ptr('pointerup', 5, 5);
+  check('tap flips to back', card.classList.contains('flipped'));
+
+  // keyboard flip (Enter) toggles back to front
+  card.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+  check('Enter flips back to front', !card.classList.contains('flipped'));
+
+  // ESC closes and returns focus to trigger
   doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-  check('ESC closes', !doc.querySelector('.contact-overlay').classList.contains('open'));
+  check('ESC closes', !overlay.classList.contains('open'));
 
+  // overlay click closes
   fab.click();
-  doc.querySelector('.contact-close').focus();
-  doc.dispatchEvent(new window.KeyboardEvent('keydown', { key: 'Tab', shiftKey: true, bubbles: true }));
-  check('focus-trap keeps focus in modal', doc.querySelector('.contact-overlay').contains(doc.activeElement));
+  await sleep(10);
+  // simulate a click whose target is the overlay itself
+  const evt = new window.MouseEvent('click', { bubbles: true });
+  Object.defineProperty(evt, 'target', { value: overlay });
+  overlay.dispatchEvent(evt);
+  check('overlay click closes', !overlay.classList.contains('open'));
 
-  // mailto default: remove endpoint, ensure NO fetch and status mentions mail client
-  doc.body.removeAttribute('data-contact-endpoint');
-  fetchCalls = [];
-  doc.querySelector('#contact-msg').value = 'Hello from jsdom';
-  doc.querySelector('.contact-send').click();
-  const statusMail = doc.querySelector('.contact-status').textContent;
-  check('no fetch on mailto path', fetchCalls.length === 0);
-  check('mailto path shows mail-client guidance', /почтовый клиент|напишите/.test(statusMail));
-
-  // webhook path: endpoint set, fetch mocked ok
-  fetchCalls = [];
-  doc.body.setAttribute('data-contact-endpoint', 'https://formspree.io/f/xgawanjd');
-  doc.querySelector('#contact-msg').value = 'Webhook hi';
-  doc.querySelector('.contact-send').click();
-  await sleep(50);
-  check('webhook POST called', fetchCalls.length === 1 && /formspree\.io\/f\/xgawanjd/.test(fetchCalls[0].url));
-  check('webhook body JSON has email+message', (() => { try { const b = JSON.parse(fetchCalls[0].opts.body); return b.email === 'saleksey67@gmail.com' && b.message === 'Webhook hi' && !!b._subject; } catch { return false; } })());
-  check('webhook Content-Type json + credentials omit', fetchCalls[0].opts.headers['Content-Type'] === 'application/json' && fetchCalls[0].opts.credentials === 'omit');
-
-  // webhook failure -> fallback (status mentions mail client again)
-  fetchCalls = [];
-  window.fetch = async () => { throw new Error('network'); };
-  doc.querySelector('#contact-msg').value = 'Fail msg';
-  doc.querySelector('.contact-send').click();
-  await sleep(50);
-  const statusFail = doc.querySelector('.contact-status').textContent;
-  check('webhook failure shows fallback guidance', /почтовый клиент|напишите/.test(statusFail));
+  check('no fetch anywhere', fetchCalls.length === 0);
 
   let pass = 0;
   for (const [n, ok] of tests) { console.log((ok ? 'PASS' : 'FAIL') + '  ' + n); if (ok) pass++; }

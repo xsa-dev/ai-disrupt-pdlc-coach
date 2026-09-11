@@ -34,6 +34,7 @@ class PathPolicyTests(unittest.TestCase):
             "web/vendor/js/html2pdf.bundle.min.js",
             "web/contact-modal.css",
             "web/contact-modal.js",
+            "web/contact-card-bg.svg",
             "web/web-mobile.css",
             "web/course-gate.css",
             "web/course-gate.js",
