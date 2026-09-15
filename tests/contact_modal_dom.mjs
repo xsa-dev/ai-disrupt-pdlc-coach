@@ -10,6 +10,7 @@ const __dir = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dir, '..');
 const rawHtml = readFileSync(join(ROOT, 'web/antipatterns.html'), 'utf8');
 const js = readFileSync(join(ROOT, 'web/contact-modal.js'), 'utf8');
+const css = readFileSync(join(ROOT, 'web/contact-modal.css'), 'utf8');
 // Strip existing <script> tags so jsdom does not fetch tailwind-cdn.js / run page JS;
 // the modal script is inlined below so jsdom (runScripts: dangerously) executes it during parse.
 const stripped = rawHtml.replace(/<script[\s\S]*?<\/script>/gi, '');
@@ -44,6 +45,19 @@ async function run() {
     return d && d.id === 'contact-card' && d.getAttribute('role') === 'dialog' && d.getAttribute('aria-modal') === 'true';
   })());
   check('front + back faces exist', !!doc.querySelector('.flip-front') && !!doc.querySelector('.flip-back'));
+  check('front backdrop layers inherit rounded corners', (() => {
+    const before = css.match(/\.flip-front::before\s*\{([\s\S]*?)\}/);
+    const after = css.match(/\.flip-front::after\s*\{([\s\S]*?)\}/);
+    return before && after && /border-radius:\s*inherit/.test(before[1]) && /border-radius:\s*inherit/.test(after[1]);
+  })());
+  check('top sheen follows the rounded card corners', (() => {
+    const sheen = css.match(/\.card-sheen\s*\{([\s\S]*?)\}/);
+    return sheen && /border-radius:\s*22px\s+22px\s+0\s+0/.test(sheen[1]);
+  })());
+  check('back arrow pattern runs beyond top and bottom edges', (() => {
+    const back = css.match(/(?:^|\n)\.flip-back\s*\{([\s\S]*?)\}/);
+    return back && /background-size:\s*auto\s+116%/.test(back[1]) && /background-position:\s*center\s+center/.test(back[1]);
+  })());
   check('three contacts', doc.querySelectorAll('.contact-contacts a').length === 3);
   check('contacts are telegram/github/mailto', (() => {
     const hrefs = [...doc.querySelectorAll('.contact-contacts a')].map(a => a.getAttribute('href'));
