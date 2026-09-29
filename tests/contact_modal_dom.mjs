@@ -58,10 +58,25 @@ async function run() {
     const back = css.match(/(?:^|\n)\.flip-back\s*\{([\s\S]*?)\}/);
     return back && /background-size:\s*auto\s+116%/.test(back[1]) && /background-position:\s*center\s+center/.test(back[1]);
   })());
-  check('three contacts', doc.querySelectorAll('.contact-contacts a').length === 3);
-  check('contacts are telegram/github/mailto', (() => {
+  check('four contacts including whitepaper guide', doc.querySelectorAll('.contact-contacts a').length === 4);
+  check('first contact is whitepaper guide', (() => {
+    const first = doc.querySelector('.contact-contacts li:first-child a');
+    return first && /whitepaper_full_ru\.pdf/.test(first.getAttribute('href'));
+  })());
+  check('contacts are telegram/github/mailto/whitepaper', (() => {
     const hrefs = [...doc.querySelectorAll('.contact-contacts a')].map(a => a.getAttribute('href'));
-    return hrefs.some(h => /t\.me\/alxy_tg/.test(h)) && hrefs.some(h => /github\.com\/xsa-dev/.test(h)) && hrefs.some(h => /^mailto:/.test(h));
+    return hrefs.some(h => /t\.me\/alxy_tg/.test(h)) &&
+      hrefs.some(h => /github\.com\/xsa-dev/.test(h)) &&
+      hrefs.some(h => /^mailto:/.test(h)) &&
+      hrefs.some(h => /whitepaper_full_ru\.pdf/.test(h));
+  })());
+  check('back shows methodology author and disclaimer', (() => {
+    const back = doc.querySelector('.flip-back');
+    if (!back) return false;
+    const txt = back.textContent;
+    return txt.includes('Алексей Альвианский') &&
+      txt.includes('xsa-dev') &&
+      txt.includes('Отказ от ответственности');
   })());
 
   // NO message form and NO network path (form was removed with this change)

@@ -70,7 +70,8 @@ try {
   check("overlay open", await evalJs("document.querySelector('.contact-overlay').classList.contains('open')"));
   check("flip-card is dialog", await evalJs("(()=>{const d=document.querySelector('.flip-card');return !!d&&d.getAttribute('role')==='dialog'&&d.getAttribute('aria-modal')==='true';})()"));
   check("front + back faces", await evalJs("!!document.querySelector('.flip-front')&&!!document.querySelector('.flip-back')"));
-  check("three contacts", await evalJs("document.querySelectorAll('.contact-contacts a').length===3"));
+  check("four contacts", await evalJs("document.querySelectorAll('.contact-contacts a').length===4"));
+  check("contacts include whitepaper", await evalJs(`[...document.querySelectorAll('.contact-contacts a')].some(a=>/whitepaper_full_ru\\.pdf/.test(a.href))`));
   // no message form remains (form was removed with this change)
   check("no message textarea", await evalJs("!document.getElementById('contact-msg')&&!document.querySelector('textarea')"));
   check("no send button", await evalJs("!document.querySelector('.contact-send')"));

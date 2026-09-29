@@ -27,7 +27,7 @@ jobs:
       - name: Run Python structural and policy tests (unittest)
         run: python3 -m unittest tests.test_publish_artifact tests.test_publish_gate tests.test_publication_wrapper tests.test_pages_workflow tests.test_web_index -v
       - name: Run pytest-based web content tests
-        run: python3 -m pytest tests/test_web_header_consistency.py tests/test_web_methodologies.py -q
+        run: python3 -m pytest tests/test_web_header_consistency.py tests/test_web_methodologies.py tests/test_web_footer_consistency.py -q
       - name: Run jsdom and URL/RNG reference tests
         run: |
           node tests/headless_methodologies.mjs
