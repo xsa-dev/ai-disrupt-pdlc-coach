@@ -88,3 +88,60 @@ body {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
+/* Общий семантический футер для всех страниц сайта */
+.site-footer {
+  margin-top: 3.5rem;
+  padding: 2.25rem 1rem calc(2.5rem + var(--sab));
+  border-top: 1px solid #e2e8f0;
+  background-color: #ffffff;
+  color: #64748b;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+}
+.site-footer a {
+  color: #059669;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.site-footer a:hover {
+  color: #047857;
+}
+.site-footer__inner {
+  max-width: 56rem;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: center;
+}
+.site-footer__guide a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  padding: 0.45rem 1rem;
+  border-radius: 9999px;
+  background-color: #ecfdf5;
+  color: #047857;
+  text-decoration: none;
+  border: 1px solid #a7f3d0;
+  transition: background-color 0.15s ease;
+}
+.site-footer__guide a:hover {
+  background-color: #d1fae5;
+}
+.site-footer__attribution {
+  font-size: 0.8125rem;
+  color: #475569;
+}
+.site-footer__disclaimer {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  max-width: 48rem;
+  line-height: 1.45;
+}

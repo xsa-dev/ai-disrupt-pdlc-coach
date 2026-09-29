@@ -47,6 +47,13 @@
         ])
       ]),
       el('ul', { class: 'contact-contacts' }, [
+        el('li', {}, [el('a', { href: 'https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf', target: '_blank', rel: 'noopener' }, [
+          el('span', { class: 'c-badge c-badge--guide', 'aria-hidden': 'true', text: '📖' }),
+          el('span', { class: 'c-label' }, [
+            el('span', { class: 'c-kind', text: 'Руководство' }),
+            el('span', { class: 'c-value', text: 'Whitepaper PDLC (PDF)' })
+          ])
+        ])]),
         el('li', {}, [el('a', { href: 'https://t.me/alxy_tg', target: '_blank', rel: 'noopener' }, [
           el('span', { class: 'c-badge', 'aria-hidden': 'true', text: '✈' }),
           el('span', { class: 'c-label' }, [
@@ -72,7 +79,7 @@
       el('p', { class: 'flip-hint', text: 'Нажмите, чтобы перевернуть' })
     ]);
 
-    // Back face: emerald pass back with framed avatar + wordmark
+    // Back face: emerald pass back with framed avatar, attribution, and disclaimer
     var backAvatar = el('img', {
       class: 'back-avatar', src: 'https://github.com/xsa-dev.png',
       alt: 'Аватар автора',
@@ -81,7 +88,12 @@
     var back = el('div', { class: 'flip-back' }, [
       el('div', { class: 'card-sheen' }, []),
       el('div', { class: 'back-frame' }, [backAvatar]),
-      el('p', { class: 'back-name', text: 'AI Disrupt PDLC' }),
+      el('p', { class: 'back-name', text: 'AI Disrupt PDLC Coach' }),
+      el('div', { class: 'back-attribution' }, [
+        el('div', { class: 'back-attr-line', text: 'Методология: Алексей Альвианский (aipdlc.ru)' }),
+        el('div', { class: 'back-attr-line', text: 'Разработка сайта: xsa-dev' })
+      ]),
+      el('p', { class: 'back-disclaimer', text: 'Отказ от ответственности: независимый образовательный инструмент. Оценки носят ознакомительный характер.' }),
       el('p', { class: 'flip-hint', text: 'Спасибо, что заглянули' })
     ]);
 
