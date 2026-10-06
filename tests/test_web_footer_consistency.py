@@ -14,7 +14,8 @@ PAGES = [
 ]
 
 GUIDE_URL = "https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf"
-METHODOLOGY_AUTHOR = "Алексей Альвианский"
+METHODOLOGY_ATTRIBUTION = "aipdlc.ru"
+METHODOLOGY_ORG = "Сбербанк"
 DEVELOPER_NICK = "xsa-dev"
 
 
@@ -77,7 +78,8 @@ def test_page_renders_shared_semantic_footer(page):
 
     # Check attribution
     text = " ".join(parsed.footer_text.split())
-    assert METHODOLOGY_AUTHOR in text, f"{page} missing methodology author attribution '{METHODOLOGY_AUTHOR}'"
+    assert METHODOLOGY_ATTRIBUTION in text, f"{page} missing methodology attribution '{METHODOLOGY_ATTRIBUTION}'"
+    assert METHODOLOGY_ORG in text, f"{page} missing methodology org '{METHODOLOGY_ORG}'"
     assert DEVELOPER_NICK in text, f"{page} missing developer attribution '{DEVELOPER_NICK}'"
 
     # Check attribution links (aipdlc.ru and github.com/xsa-dev)

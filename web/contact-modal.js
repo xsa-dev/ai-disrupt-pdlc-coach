@@ -90,7 +90,7 @@
       el('div', { class: 'back-frame' }, [backAvatar]),
       el('p', { class: 'back-name', text: 'AI Disrupt PDLC Coach' }),
       el('div', { class: 'back-attribution' }, [
-        el('div', { class: 'back-attr-line', text: 'Методология: Алексей Альвианский (aipdlc.ru)' }),
+        el('div', { class: 'back-attr-line', text: 'Методология: aipdlc.ru (Сбербанк)' }),
         el('div', { class: 'back-attr-line', text: 'Разработка сайта: xsa-dev' })
       ]),
       el('p', { class: 'back-disclaimer', text: 'Отказ от ответственности: независимый образовательный инструмент. Оценки носят ознакомительный характер.' }),
