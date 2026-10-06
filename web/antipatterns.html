@@ -178,10 +178,21 @@
                     <label for="ticket-select" class="block text-emerald-400 text-sm font-semibold mb-2">Номер билета</label>
                     <select id="ticket-select" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm"></select>
                 </div>
-                <label id="seed-wrap" class="block">
-                    <span class="text-emerald-400 text-sm font-semibold block mb-2">Seed случайного билета</span>
-                    <input id="quiz-seed" value="8K3M" pattern="[A-Za-z0-9]{4,12}" maxlength="12" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm uppercase">
-                </label>
+                <div id="seed-wrap" class="block">
+                    <div class="flex items-center justify-between mb-2">
+                        <label for="quiz-seed" class="text-emerald-400 text-sm font-semibold">Seed случайного билета</label>
+                        <button type="button" id="quiz-seed-refresh" class="text-xs text-slate-400 hover:text-emerald-400 transition-colors flex items-center gap-1.5 py-1 px-2.5 rounded-lg hover:bg-slate-800 border border-slate-700">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                            <span>Новый seed</span>
+                        </button>
+                    </div>
+                    <div class="flex gap-2">
+                        <input id="quiz-seed" value="8K3M" pattern="[A-Za-z0-9]{4,12}" maxlength="12" class="bg-slate-800 text-slate-100 px-4 py-3 rounded-2xl border border-slate-700 text-sm uppercase flex-1">
+                        <button type="button" id="quiz-seed-btn" class="px-4 py-3 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-2xl border border-slate-700 text-sm flex items-center justify-center" title="Сгенерировать случайный seed" aria-label="Сгенерировать случайный seed">
+                            <i class="fa-solid fa-shuffle"></i>
+                        </button>
+                    </div>
+                </div>
                 <label class="flex items-center gap-2 text-sm text-slate-300 cursor-pointer select-none">
                     <input type="checkbox" id="quiz-strict" class="w-4 h-4 rounded border-slate-600 bg-slate-800 text-emerald-500">
                     <span>Строгий режим: при ошибке нужно выбрать верный ответ, прежде чем идти дальше</span>
@@ -354,6 +365,22 @@
             nextFloat(){ return this.nextUint32()/4294967296; }
         };
     }
+    function generateRandomSeed(len=4){
+        const chars='23456789ABCDEFGHJKLMNPQRSTUVWXYZ';
+        let res='';
+        if(typeof crypto!=='undefined'&&crypto.getRandomValues){
+            const buf=new Uint8Array(len);
+            crypto.getRandomValues(buf);
+            for(let i=0;i<len;i++) res+=chars.charAt(buf[i]%chars.length);
+        } else {
+            let t=(Date.now()^(typeof performance!=='undefined'?performance.now()*1000:0))>>>0;
+            for(let i=0;i<len;i++){
+                t=(t+0x6D2B79F5)>>>0;
+                res+=chars.charAt(t%chars.length);
+            }
+        }
+        return res;
+    }
     function seededShuffle(a,rng){
         for(let i=a.length-1;i>0;i--){ const j=Math.floor(rng.nextFloat()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
         return a;
@@ -510,7 +537,7 @@
             if(ui&&ui.success) ui.success();
         }catch(error){ if(ui&&ui.manual) ui.manual(url); }
     }
-    window.__QUIZ_V1__={questions:QUIZ,fnv1a,mulberry32,seededShuffle,generateChallenge,serializeQuiz,parseQuizUrl,absoluteUrl,createProgressStore,validProgressData,performShare};
+    window.__QUIZ_V1__={questions:QUIZ,fnv1a,mulberry32,seededShuffle,generateRandomSeed,generateChallenge,serializeQuiz,parseQuizUrl,absoluteUrl,createProgressStore,validProgressData,performShare};
 
     // ============ RENDER: FREQ ============
     const freqC = document.getElementById('freq-container');
@@ -591,8 +618,16 @@
         document.getElementById('seed-wrap').classList.toggle('hidden',mode!=='random');
     }
     document.querySelectorAll('.quiz-mode').forEach(b=>b.classList.add('border-slate-600'));
-    document.getElementById('mode-random').addEventListener('click',()=>setMode('random'));
+    const refreshSeed=()=>{ seedInput.value=generateRandomSeed(); };
+    document.getElementById('mode-random').addEventListener('click',()=>{
+        setMode('random');
+        refreshSeed();
+    });
     document.getElementById('mode-fixed').addEventListener('click',()=>setMode('fixed'));
+    const seedRefreshBtn=document.getElementById('quiz-seed-refresh');
+    if(seedRefreshBtn) seedRefreshBtn.addEventListener('click',refreshSeed);
+    const seedBtn=document.getElementById('quiz-seed-btn');
+    if(seedBtn) seedBtn.addEventListener('click',refreshSeed);
     setMode('random');
 
     function configFromControls(){
