@@ -10,7 +10,7 @@ const pages = {
   "methodologies.html": "Методики",
   "antipatterns.html": "Антипаттерны",
   "openspec.html": "OpenSpec",
-  "course-openspec.html": "Курс",
+  "glossary.html": "Глоссарий",
 };
 const widths = [390, 744];
 const port = 9231;
@@ -52,6 +52,12 @@ try {
     };
     ws.on("message", onMessage);
     ws.send(JSON.stringify({ id, method, params }));
+  });
+
+  await command("Page.enable");
+  await command("Runtime.enable");
+  await command("Page.addScriptToEvaluateOnNewDocument", {
+    source: "try{localStorage.setItem('courseAccess','unlocked')}catch(e){}"
   });
 
   for (const width of widths) {
@@ -96,7 +102,7 @@ try {
       if (!value) throw new Error(`${page}: no CDP measurement`);
       if (value.overflow !== 0) throw new Error(`${page}@${width}: overflow=${value.overflow}`);
       if (value.active !== expectedActive) throw new Error(`${page}@${width}: active=${value.active}`);
-      if (value.navLinks.join("|") !== "Диагностика|Roadmap|Методики|Антипаттерны|OpenSpec|Курс") {
+      if (value.navLinks.join("|") !== "Диагностика|Roadmap|Методики|Антипаттерны|OpenSpec|Курс|Глоссарий") {
         throw new Error(`${page}@${width}: bad nav order`);
       }
       // Page itself must not scroll horizontally (overflow === 0 guard above).
@@ -120,7 +126,7 @@ try {
       }
       if (Math.abs(item.headerHeight - baseline.headerHeight) > 0.5) throw new Error(`${item.page}@${width}: header height drift`);
     }
-    console.log(`HEADER_VIEWPORT_PASS width=${width} pages=4 overflow=0 nav=${rounded(baseline.nav.width)}x${rounded(baseline.nav.height)} brand=${rounded(baseline.brand.width)}x${rounded(baseline.brand.height)} header=${rounded(baseline.headerHeight)}`);
+    console.log(`HEADER_VIEWPORT_PASS width=${width} pages=${measurements.length} overflow=0 nav=${rounded(baseline.nav.width)}x${rounded(baseline.nav.height)} brand=${rounded(baseline.brand.width)}x${rounded(baseline.brand.height)} header=${rounded(baseline.headerHeight)}`);
   }
 } finally {
   if (ws) ws.close();

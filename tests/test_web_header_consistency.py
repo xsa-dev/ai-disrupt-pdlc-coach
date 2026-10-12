@@ -11,6 +11,7 @@ PAGES = {
     "antipatterns.html": "Антипаттерны",
     "openspec.html": "OpenSpec",
     "course-openspec.html": "Курс",
+    "glossary.html": "Глоссарий",
 }
 NAV_ITEMS = [
     ("diagnosis.html", "Диагностика"),
@@ -19,6 +20,7 @@ NAV_ITEMS = [
     ("antipatterns.html", "Антипаттерны"),
     ("openspec.html", "OpenSpec"),
     ("course-openspec.html", "Курс"),
+    ("glossary.html", "Глоссарий"),
 ]
 NAV_ROW_CLASSES = {
     "site-nav-row", "max-w-5xl", "mx-auto", "px-4", "sm:px-6",
