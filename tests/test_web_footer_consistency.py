@@ -11,6 +11,7 @@ PAGES = [
     "antipatterns.html",
     "openspec.html",
     "course-openspec.html",
+    "glossary.html",
 ]
 
 GUIDE_URL = "https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf"

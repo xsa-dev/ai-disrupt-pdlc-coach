@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Disrupt PDLC Coach — Глоссарий терминов AI-Disrupt PDLC</title>
+    <script src="vendor/tailwind-cdn.js"></script>
+    <link rel="stylesheet" href="vendor/fontawesome/css/all.min.css">
+    <style>
+        .heading-font {
+            font-family: system-ui, -apple-system, sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.025em;
+        }
+        mark {
+            background-color: rgba(16, 185, 129, 0.25);
+            color: inherit;
+            padding: 0 2px;
+            border-radius: 4px;
+        }
+        .term-card {
+            transition: all 0.2s ease;
+        }
+        .term-card:target, .term-card.highlight-target {
+            ring-width: 2px;
+            --tw-ring-color: rgb(16 185 129);
+            box-shadow: 0 0 0 2px rgb(16 185 129);
+        }
+        .bookmark-btn.active {
+            color: #d97706; /* amber-600 */
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800" data-contact-endpoint="https://formspree.io/f/xgawanjd">
+    <header data-site-header class="site-header font-sans bg-white border-b border-slate-200">
+        <div class="site-nav-shell border-b border-slate-200">
+            <div class="site-nav-row max-w-5xl mx-auto px-4 sm:px-6 py-2.5 min-h-[42px] flex items-center justify-between gap-4 text-[13px] sm:text-sm">
+                <nav aria-label="Основная навигация" class="flex items-center gap-x-2 sm:gap-x-5 overflow-x-auto whitespace-nowrap">
+                    <a href="diagnosis.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Диагностика</a>
+                    <a href="roadmap.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Roadmap</a>
+                    <a href="methodologies.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Методики</a>
+                    <a href="antipatterns.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Антипаттерны</a>
+                    <a href="openspec.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">OpenSpec</a>
+                    <a href="course-openspec.html" class="site-nav-link font-medium text-slate-600 hover:text-emerald-700 transition-colors pb-1 border-b-2 border-transparent">Курс</a>
+                    <a href="glossary.html" aria-current="page" class="site-nav-link font-semibold text-emerald-700 border-b-2 border-emerald-600 pb-1">Глоссарий</a>
+                </nav>
+                <div class="hidden sm:block text-xs text-slate-400 font-medium whitespace-nowrap">Disrupt PDLC Coach</div>
+            </div>
+        </div>
+        <div class="site-brand-shell bg-white">
+            <div class="site-brand-row max-w-5xl mx-auto px-4 sm:px-6 py-5 min-h-[76px] flex items-center justify-between gap-4">
+                <div class="flex min-w-0 items-center gap-x-3">
+                    <div data-site-icon class="w-9 h-9 shrink-0 bg-emerald-600 rounded-2xl flex items-center justify-center text-white" aria-hidden="true"><svg viewBox="0 0 24 24" class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v18M3 12h18"></path><path d="m5.6 5.6 12.8 12.8m0-12.8L5.6 18.4"></path></svg></div>
+                    <div class="min-w-0">
+                        <div data-site-title class="text-xl sm:text-2xl font-semibold tracking-tight text-slate-900 truncate">Disrupt PDLC Coach</div>
+                        <div data-site-subtitle class="text-xs text-slate-500 truncate">Глоссарий понятий AI-Disrupt PDLC</div>
+                    </div>
+                </div>
+                <div data-site-actions class="flex shrink-0 items-center gap-x-2"></div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 py-8">
+        <!-- Intro & Search Controls -->
+        <section class="mb-8">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight heading-font mb-2">Глоссарий понятий</h1>
+                    <p class="text-sm text-slate-600" id="glossary-desc">
+                        Ключевые понятия, стандарты и дисциплины методологии генеративной разработки ПО.
+                    </p>
+                </div>
+                <!-- Action Controls: Language Toggle & Bookmarks -->
+                <div class="flex items-center gap-2 self-start sm:self-auto">
+                    <!-- Language switch buttons -->
+                    <div class="inline-flex rounded-xl bg-white p-1 border border-slate-300 text-xs font-semibold shadow-sm" role="group" aria-label="Язык интерфейса">
+                        <button type="button" id="lang-btn-ru" class="px-3 py-1.5 rounded-lg bg-emerald-600 text-white shadow-sm transition-all" aria-pressed="true">RU</button>
+                        <button type="button" id="lang-btn-en" class="px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 transition-all" aria-pressed="false">EN</button>
+                    </div>
+                    <!-- Bookmarks Toggle -->
+                    <button type="button" id="toggle-bookmarks-btn" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold shadow-sm transition-all">
+                        <i class="fa-solid fa-bookmark text-amber-500"></i>
+                        <span>Закладки</span>
+                        <span id="bookmarks-badge" class="px-2 py-0.5 text-[11px] font-bold bg-amber-100 text-amber-800 rounded-full">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search input bar -->
+            <div class="relative mb-4">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <input type="text" id="glossary-search" placeholder="Поиск по терминам, определениям или аббревиатурам (RU / EN)..." class="w-full pl-11 pr-10 py-3.5 bg-white border border-slate-300 rounded-2xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 text-sm shadow-sm transition-all" autocomplete="off">
+                <button type="button" id="search-clear-btn" class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600" aria-label="Очистить поиск">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Category & Tag Filters -->
+            <div class="flex flex-wrap items-center gap-2 pt-1">
+                <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider mr-1">Категории:</span>
+                <button type="button" class="category-filter-btn active px-3 py-1.5 rounded-xl text-xs font-semibold bg-emerald-600 text-white shadow-sm transition-all" data-category="all">Все</button>
+                <button type="button" class="category-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all" data-category="core">Основы (Core)</button>
+                <button type="button" class="category-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all" data-category="architecture">Архитектура</button>
+                <button type="button" class="category-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all" data-category="process">Процессы</button>
+                <button type="button" class="category-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all" data-category="testing">Тестирование и гейты</button>
+                <button type="button" class="category-filter-btn px-3 py-1.5 rounded-xl text-xs font-medium bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition-all" data-category="culture">Методология</button>
+            </div>
+        </section>
+
+        <!-- Terms Count & Active Filters Indicator -->
+        <div class="flex items-center justify-between text-xs text-slate-500 mb-4 pb-2 border-b border-slate-200">
+            <div id="results-count">Показано терминов: <span class="font-bold text-slate-800" id="terms-total">0</span></div>
+            <div id="active-filter-label" class="hidden text-emerald-700 font-medium">Фильтр: только закладки</div>
+        </div>
+
+        <!-- Terms Grid Container -->
+        <div id="terms-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Rendered dynamically from glossary-data.js -->
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="hidden text-center py-16 px-4 bg-white rounded-3xl border border-slate-200 shadow-sm mt-4">
+            <div class="w-12 h-12 mx-auto mb-3 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-400">
+                <i class="fa-solid fa-magnifying-glass text-xl"></i>
+            </div>
+            <h3 class="text-base font-semibold text-slate-900 mb-1" id="empty-title">Ничего не найдено</h3>
+            <p class="text-sm text-slate-500 max-w-sm mx-auto" id="empty-desc">Попробуйте изменить поисковый запрос или сбросить фильтры.</p>
+            <button type="button" id="reset-filters-btn" class="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-xl text-xs font-semibold hover:bg-emerald-700 transition-colors">Сбросить поиск</button>
+        </div>
+    </main>
+
+    <!-- Shared Footer -->
+    <footer data-site-footer class="site-footer">
+        <div class="site-footer__container">
+            <div class="site-footer__guide">
+                <a href="https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf" target="_blank" rel="noopener" class="site-footer__guide-link">
+                    <span class="site-footer__guide-icon">📖</span>
+                    <span>Руководство по генеративной разработке ПО (Белая книга v2.0, PDF) →</span>
+                </a>
+            </div>
+            <div class="site-footer__attribution">
+                Методология AI-Disrupt PDLC: <a href="https://aipdlc.ru" target="_blank" rel="noopener"><strong>aipdlc.ru</strong></a> (Сбербанк) • Разработка сайта: <a href="https://github.com/xsa-dev" target="_blank" rel="noopener"><strong>xsa-dev</strong></a>
+            </div>
+            <div class="site-footer__disclaimer">
+                <strong>Отказ от ответственности:</strong> Сайт является независимым образовательным и прикладным инструментом. Материалы, оценки зрелости, roadmap и рекомендации носят исключительно информационно-ознакомительный характер. Решения по трансформации процессов принимаются с учётом индивидуального контекста команды и организации.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts & Logic -->
+    <link rel="stylesheet" href="contact-modal.css">
+    <link rel="stylesheet" href="web-mobile.css">
+    <script src="contact-modal.js" defer></script>
+    <script src="glossary-data.js"></script>
+    <script>
+    (function () {
+        const STORAGE_KEY_LANG = 'aipdlc.glossary.lang.v1';
+        const STORAGE_KEY_BOOKMARKS = 'aipdlc.glossary.bookmarks.v1';
+
+        const data = window.__GLOSSARY_DATA__ || [];
+        const state = {
+            lang: localStorage.getItem(STORAGE_KEY_LANG) || 'ru',
+            query: '',
+            category: 'all',
+            onlyBookmarks: false,
+            bookmarks: new Set(loadBookmarks())
+        };
+
+        function loadBookmarks() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY_BOOKMARKS);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveBookmarks() {
+            try {
+                localStorage.setItem(STORAGE_KEY_BOOKMARKS, JSON.stringify([...state.bookmarks]));
+            } catch (e) {}
+        }
+
+        function escapeRegExp(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function highlightMatch(text, query) {
+            if (!query || !query.trim()) return escapeHtml(text);
+            const safeText = escapeHtml(text);
+            const words = query.trim().split(/\s+/).filter(Boolean).map(escapeRegExp);
+            if (!words.length) return safeText;
+            const regex = new RegExp(`(${words.join('|')})`, 'gi');
+            return safeText.replace(regex, '<mark>$1</mark>');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        // DOM elements
+        const termsGrid = document.getElementById('terms-grid');
+        const emptyState = document.getElementById('empty-state');
+        const searchInput = document.getElementById('glossary-search');
+        const searchClearBtn = document.getElementById('search-clear-btn');
+        const termsTotal = document.getElementById('terms-total');
+        const bookmarksBadge = document.getElementById('bookmarks-badge');
+        const toggleBookmarksBtn = document.getElementById('toggle-bookmarks-btn');
+        const activeFilterLabel = document.getElementById('active-filter-label');
+        const resetFiltersBtn = document.getElementById('reset-filters-btn');
+        const langBtnRu = document.getElementById('lang-btn-ru');
+        const langBtnEn = document.getElementById('lang-btn-en');
+        const categoryBtns = document.querySelectorAll('.category-filter-btn');
+
+        function updateLangUI() {
+            const isRu = state.lang === 'ru';
+            langBtnRu.classList.toggle('bg-emerald-600', isRu);
+            langBtnRu.classList.toggle('text-white', isRu);
+            langBtnRu.classList.toggle('shadow-sm', isRu);
+            langBtnRu.classList.toggle('text-slate-600', !isRu);
+            langBtnRu.setAttribute('aria-pressed', String(isRu));
+
+            langBtnEn.classList.toggle('bg-emerald-600', !isRu);
+            langBtnEn.classList.toggle('text-white', !isRu);
+            langBtnEn.classList.toggle('shadow-sm', !isRu);
+            langBtnEn.classList.toggle('text-slate-600', isRu);
+            langBtnEn.setAttribute('aria-pressed', String(!isRu));
+
+            document.getElementById('glossary-desc').textContent = isRu
+                ? 'Ключевые понятия, стандарты и дисциплины методологии генеративной разработки ПО.'
+                : 'Core concepts, standards, and disciplines of generative software development lifecycle.';
+            
+            searchInput.placeholder = isRu
+                ? 'Поиск по терминам, определениям или аббревиатурам (RU / EN)...'
+                : 'Search terms, definitions, or aliases (RU / EN)...';
+
+            document.getElementById('empty-title').textContent = isRu ? 'Ничего не найдено' : 'No matching terms found';
+            document.getElementById('empty-desc').textContent = isRu
+                ? 'Попробуйте изменить поисковый запрос или сбросить фильтры.'
+                : 'Try adjusting your search query or reset active filters.';
+            resetFiltersBtn.textContent = isRu ? 'Сбросить поиск' : 'Reset search';
+        }
+
+        function filterTerms() {
+            const q = state.query.trim().toLowerCase();
+            return data.filter(item => {
+                if (state.onlyBookmarks && !state.bookmarks.has(item.id)) {
+                    return false;
+                }
+                if (state.category !== 'all' && item.category !== state.category) {
+                    return false;
+                }
+                if (!q) return true;
+
+                // Match against RU / EN title, aliases, definition, context, tags
+                const haystack = [
+                    item.term_ru,
+                    item.term_en,
+                    ...(item.aliases || []),
+                    ...(item.tags || []),
+                    item.definition_ru,
+                    item.definition_en,
+                    item.context_ru,
+                    item.context_en
+                ].join(' ').toLowerCase();
+
+                return haystack.includes(q);
+            });
+        }
+
+        function render() {
+            const filtered = filterTerms();
+            termsTotal.textContent = filtered.length;
+            bookmarksBadge.textContent = state.bookmarks.size;
+
+            if (filtered.length === 0) {
+                termsGrid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                termsGrid.innerHTML = filtered.map(item => {
+                    const isBookmarked = state.bookmarks.has(item.id);
+                    const title = state.lang === 'ru' ? item.term_ru : item.term_en;
+                    const altTitle = state.lang === 'ru' ? item.term_en : item.term_ru;
+                    const def = state.lang === 'ru' ? item.definition_ru : item.definition_en;
+                    const ctx = state.lang === 'ru' ? item.context_ru : item.context_en;
+
+                    const titleHighlighted = highlightMatch(title, state.query);
+                    const defHighlighted = highlightMatch(def, state.query);
+                    const ctxHighlighted = highlightMatch(ctx, state.query);
+
+                    return `
+                    <article id="term-${item.id}" class="term-card bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-start justify-between gap-3 mb-2">
+                                <div class="min-w-0">
+                                    <h2 class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
+                                        <a href="#term-${item.id}" class="term-permalink hover:text-emerald-700 transition-colors" title="Ссылка на термин">
+                                            ${titleHighlighted}
+                                        </a>
+                                    </h2>
+                                    <div class="text-xs text-slate-400 mt-0.5">${escapeHtml(altTitle)}</div>
+                                </div>
+                                <div class="flex items-center gap-1 shrink-0">
+                                    <button type="button" class="bookmark-btn p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-400 ${isBookmarked ? 'active text-amber-500' : ''}" data-id="${item.id}" title="${isBookmarked ? 'Удалить из закладок' : 'В закладки'}" aria-label="Закладка">
+                                        <i class="fa-${isBookmarked ? 'solid' : 'regular'} fa-bookmark"></i>
+                                    </button>
+                                    <button type="button" class="copy-link-btn p-2 rounded-xl hover:bg-slate-100 transition-colors text-slate-400 hover:text-emerald-600" data-anchor="term-${item.id}" title="Скопировать ссылку" aria-label="Скопировать ссылку">
+                                        <i class="fa-solid fa-link text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <p class="text-sm text-slate-700 leading-relaxed mb-4">
+                                ${defHighlighted}
+                            </p>
+
+                            ${ctx ? `
+                            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-3 text-xs text-slate-600 mb-4">
+                                <span class="font-semibold text-emerald-800 uppercase tracking-wider block mb-1">
+                                    ${state.lang === 'ru' ? 'Контекст в AI-Disrupt PDLC' : 'AI-Disrupt PDLC Context'}:
+                                </span>
+                                ${ctxHighlighted}
+                            </div>` : ''}
+                        </div>
+
+                        <div class="flex flex-wrap items-center gap-1.5 pt-2 border-t border-slate-100">
+                            ${(item.tags || []).map(tag => `<span class="px-2.5 py-1 text-[11px] font-medium bg-slate-100 text-slate-600 rounded-lg">${escapeHtml(tag)}</span>`).join('')}
+                        </div>
+                    </article>
+                    `;
+                }).join('');
+            }
+
+            // Highlight target anchor if hash is present
+            if (location.hash) {
+                const targetEl = document.querySelector(location.hash);
+                if (targetEl) targetEl.classList.add('highlight-target');
+            }
+        }
+
+        // Search events
+        searchInput.addEventListener('input', e => {
+            state.query = e.target.value;
+            searchClearBtn.classList.toggle('hidden', !state.query);
+            render();
+        });
+
+        searchClearBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            state.query = '';
+            searchClearBtn.classList.add('hidden');
+            render();
+            searchInput.focus();
+        });
+
+        resetFiltersBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            state.query = '';
+            searchClearBtn.classList.add('hidden');
+            state.category = 'all';
+            state.onlyBookmarks = false;
+            categoryBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.category === 'all'));
+            activeFilterLabel.classList.add('hidden');
+            render();
+        });
+
+        // Category filter buttons
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-emerald-600', 'text-white');
+                    b.classList.add('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                });
+                btn.classList.add('active', 'bg-emerald-600', 'text-white');
+                btn.classList.remove('bg-white', 'text-slate-600', 'border', 'border-slate-200');
+                state.category = btn.dataset.category;
+                render();
+            });
+        });
+
+        // Toggle bookmarks filter
+        toggleBookmarksBtn.addEventListener('click', () => {
+            state.onlyBookmarks = !state.onlyBookmarks;
+            toggleBookmarksBtn.classList.toggle('bg-amber-50', state.onlyBookmarks);
+            toggleBookmarksBtn.classList.toggle('border-amber-300', state.onlyBookmarks);
+            activeFilterLabel.classList.toggle('hidden', !state.onlyBookmarks);
+            render();
+        });
+
+        // Language toggle
+        langBtnRu.addEventListener('click', () => {
+            if (state.lang === 'ru') return;
+            state.lang = 'ru';
+            localStorage.setItem(STORAGE_KEY_LANG, 'ru');
+            updateLangUI();
+            render();
+        });
+
+        langBtnEn.addEventListener('click', () => {
+            if (state.lang === 'en') return;
+            state.lang = 'en';
+            localStorage.setItem(STORAGE_KEY_LANG, 'en');
+            updateLangUI();
+            render();
+        });
+
+        // Delegate bookmark clicks & copy-link clicks on cards
+        termsGrid.addEventListener('click', e => {
+            const bookmarkBtn = e.target.closest('.bookmark-btn');
+            if (bookmarkBtn) {
+                const id = bookmarkBtn.dataset.id;
+                if (state.bookmarks.has(id)) {
+                    state.bookmarks.delete(id);
+                } else {
+                    state.bookmarks.add(id);
+                }
+                saveBookmarks();
+                render();
+                return;
+            }
+
+            const copyBtn = e.target.closest('.copy-link-btn');
+            if (copyBtn) {
+                const anchor = copyBtn.dataset.anchor;
+                const url = new URL(location.href);
+                url.hash = '#' + anchor;
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url.href).then(() => {
+                        const icon = copyBtn.querySelector('i');
+                        icon.className = 'fa-solid fa-check text-xs text-emerald-600';
+                        setTimeout(() => { icon.className = 'fa-solid fa-link text-xs'; }, 1500);
+                    }).catch(() => {});
+                }
+                location.hash = '#' + anchor;
+            }
+        });
+
+        // Initial setup
+        updateLangUI();
+        render();
+
+        // Scroll to hash on page load if present
+        if (location.hash) {
+            setTimeout(() => {
+                const el = document.querySelector(location.hash);
+                if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 200);
+        }
+    })();
+    </script>
+</body>
+</html>

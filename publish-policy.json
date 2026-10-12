@@ -23,6 +23,8 @@
   "allowed_web_files": [
     "web/antipatterns.html",
     "web/diagnosis.html",
+    "web/glossary.html",
+    "web/glossary-data.js",
     "web/index.html",
     "web/methodologies.html",
     "web/roadmap.html",
