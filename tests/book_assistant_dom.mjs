@@ -2,11 +2,13 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { JSDOM } from 'jsdom';
 
-const html = fs.readFileSync(new URL('../web/diagnosis.html', import.meta.url), 'utf8');
 const code = fs.readFileSync(new URL('../web/book-assistant-widget.js', import.meta.url), 'utf8');
-const dom = new JSDOM(html, { url: 'https://xsa-dev.github.io/ai-disrupt-pdlc-coach/diagnosis.html', runScripts: 'outside-only' });
+const pages = fs.readdirSync(new URL('../web/', import.meta.url)).filter(name => name.endsWith('.html'));
+for (const page of pages) {
+const html = fs.readFileSync(new URL(`../web/${page}`, import.meta.url), 'utf8');
+const dom = new JSDOM(html, { url: `https://xsa-dev.github.io/ai-disrupt-pdlc-coach/${page}`, runScripts: 'outside-only' });
 const script = dom.window.document.querySelector('script[src="book-assistant-widget.js"]');
-assert.ok(script, 'diagnosis page must include the widget');
+assert.equal(dom.window.document.querySelectorAll('script[src="book-assistant-widget.js"]').length, 1, `${page} must include the widget exactly once`);
 assert.equal(script.dataset.assistantUrl, 'https://0xhash.ru/pdlc');
 Object.defineProperty(dom.window.document, 'currentScript', { get: () => script });
 dom.window.eval(code);
@@ -29,6 +31,7 @@ assert.equal(root.activeElement, launcher);
 launcher.click();
 launcher.dispatchEvent(new dom.window.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
 assert.equal(panel.hidden, true);
-assert.ok(dom.window.document.querySelector('#start-screen'), 'diagnosis workflow is preserved');
+if (page === 'diagnosis.html') assert.ok(dom.window.document.querySelector('#start-screen'), 'diagnosis workflow is preserved');
 dom.window.close();
-console.log('book assistant: lazy load, HTTPS path, close, Escape and focus checks passed');
+}
+console.log(`book assistant: lazy load, HTTPS path, close, Escape and focus checks passed on ${pages.length} pages`);

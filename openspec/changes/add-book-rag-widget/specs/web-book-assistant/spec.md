@@ -1,7 +1,7 @@
 ## ADDED Requirements
 
 ### Requirement: Open a source-grounded book chat
-The diagnosis page SHALL provide an explicit action to open the separately hosted AI-Disrupt PDLC book assistant without uploading team assessments automatically.
+Every public HTML page SHALL provide an explicit action to open the separately hosted AI-Disrupt PDLC book assistant without uploading team assessments automatically.
 
 #### Scenario: Explicit opening
 - **WHEN** the user presses the book assistant button
@@ -9,7 +9,7 @@ The diagnosis page SHALL provide an explicit action to open the separately hoste
 - **AND** no team profile or maturity answer is included in the iframe URL
 
 #### Scenario: Lazy loading
-- **WHEN** the diagnosis page loads before the user opens the assistant
+- **WHEN** any public page loads before the user opens the assistant
 - **THEN** the iframe has no source and does not load the backend
 
 ### Requirement: Preserve the page workflow
