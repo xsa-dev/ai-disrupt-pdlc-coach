@@ -39,6 +39,7 @@ jobs:
           node tests/quiz_v1_share.mjs
           node tests/glossary_dom.mjs
           node tests/contact_modal_dom.mjs
+          node tests/book_assistant_dom.mjs
       - name: Install Google Chrome for CDP viewport tests
         run: |
           npx --yes @puppeteer/browsers install chrome@stable

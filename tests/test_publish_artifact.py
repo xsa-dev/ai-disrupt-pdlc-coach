@@ -38,6 +38,7 @@ class PathPolicyTests(unittest.TestCase):
             "web/web-mobile.css",
             "web/course-gate.css",
             "web/course-gate.js",
+            "web/book-assistant-widget.js",
         ])
         generated = [p for p in self.policy["forbidden_prefixes"] if p.startswith(".") and p not in (".github/prompts/", ".github/skills/")]
         self.assertEqual(len(generated), 31)
