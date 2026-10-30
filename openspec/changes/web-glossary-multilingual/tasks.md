@@ -30,5 +30,5 @@
   - `node tests/quiz_v1_*.mjs`
   - `node tests/contact_modal_dom.mjs`
   - `node tests/viewport_contact_modal.mjs`
-- [ ] 2.3 Создать PR, проверить прохождение CI-чеков GitHub Actions.
-- [ ] 2.4 Смёржить PR, дождаться GitHub Pages deploy и верифицировать live HTTP 200.
+- [x] 2.3 Создать PR, проверить прохождение CI-чеков GitHub Actions.
+- [x] 2.4 Смёржить PR, дождаться GitHub Pages deploy и верифицировать live HTTP 200.

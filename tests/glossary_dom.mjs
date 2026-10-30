@@ -121,6 +121,42 @@ assert.strictEqual(activeNavLink.textContent.trim(), "Глоссарий", "Acti
 
 assert(doc.querySelector("footer[data-site-footer]"), "data-site-footer must be present");
 const footerText = doc.querySelector("footer[data-site-footer]").textContent;
-assert(footerText.includes("aipdlc.ru") && footerText.includes("Сбербанк") && footerText.includes("xsa-dev"), "Footer must include full attribution contract");
+assert(footerText.includes("Кирилл Меньшов") && footerText.includes("ПАО Сбербанк") && footerText.includes("xsa-dev"), "Footer must include full attribution contract");
+const footerAttrLink = doc.querySelector("footer[data-site-footer] a[href='https://aipdlc.ru/ru/']");
+assert(footerAttrLink, "Footer must link to https://aipdlc.ru/ru/");
+const footerLegalLink = doc.querySelector("footer[data-site-footer] a[href='https://aipdlc.ru/ru/legal-info']");
+assert(footerLegalLink, "Footer must link to https://aipdlc.ru/ru/legal-info");
 
-console.log(`GLOSSARY_DOM_PASS terms=${totalTerms} search=ok lang=ok bookmarks=ok header=ok footer=ok`);
+// 8. Citation Reference Box and Clipboard Interaction
+const citationBox = doc.querySelector("[data-citation-box]");
+assert(citationBox, "Citation reference box [data-citation-box] must exist");
+
+const citationSample = doc.getElementById("citation-sample-text");
+assert(citationSample, "Citation sample text element must exist");
+assert(citationSample.textContent.includes("Меньшов К. А. AI-Disrupt PDLC. Инженерия намерения"), "Sample text must match official ГОСТ citation");
+assert(citationSample.textContent.includes("(дата обращения: ДД.ММ.ГГГГ)"), "Sample text must include date placeholder");
+
+const copyBtn = doc.getElementById("copy-citation-btn");
+assert(copyBtn, "Copy citation button must exist");
+assert.strictEqual(copyBtn.getAttribute("aria-label"), "Скопировать образец библиографической ссылки", "Copy button must have accessible aria-label");
+
+const legalRuleLink = citationBox.querySelector("a[href='https://aipdlc.ru/ru/legal-info']");
+assert(legalRuleLink, "Citation box must link to https://aipdlc.ru/ru/legal-info");
+assert.strictEqual(legalRuleLink.getAttribute("target"), "_blank", "Link to legal-info must open in _blank");
+assert(legalRuleLink.getAttribute("rel")?.includes("noopener"), "Link to legal-info must include rel=noopener");
+
+// Test click on copy button with mocked clipboard
+let copiedPayload = null;
+win.navigator.clipboard = {
+  writeText: async (str) => {
+    copiedPayload = str;
+    return true;
+  }
+};
+
+copyBtn.click();
+await new Promise(r => setTimeout(r, 10));
+assert.strictEqual(copiedPayload, citationSample.textContent.trim(), "Copied payload must match citation text");
+assert.strictEqual(doc.getElementById("copy-citation-text").textContent, "Скопировано!", "Button text must update to 'Скопировано!'");
+
+console.log(`GLOSSARY_DOM_PASS terms=${totalTerms} search=ok lang=ok bookmarks=ok citation=ok header=ok footer=ok`);
