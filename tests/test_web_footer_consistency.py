@@ -15,9 +15,11 @@ PAGES = [
 ]
 
 GUIDE_URL = "https://aipdlc.ru/documents/ru/whitepaper_full_ru.pdf"
-METHODOLOGY_ATTRIBUTION = "aipdlc.ru"
-METHODOLOGY_ORG = "Сбербанк"
+CONCEPT_AUTHOR = "Кирилл Меньшов"
+COPYRIGHT_HOLDER = "ПАО Сбербанк"
 DEVELOPER_NICK = "xsa-dev"
+AIPDLC_URL = "https://aipdlc.ru/ru/"
+LEGAL_INFO_URL = "https://aipdlc.ru/ru/legal-info"
 
 
 class FooterParser(HTMLParser):
@@ -79,11 +81,19 @@ def test_page_renders_shared_semantic_footer(page):
 
     # Check attribution
     text = " ".join(parsed.footer_text.split())
-    assert METHODOLOGY_ATTRIBUTION in text, f"{page} missing methodology attribution '{METHODOLOGY_ATTRIBUTION}'"
-    assert METHODOLOGY_ORG in text, f"{page} missing methodology org '{METHODOLOGY_ORG}'"
+    assert CONCEPT_AUTHOR in text, f"{page} missing concept author '{CONCEPT_AUTHOR}'"
+    assert COPYRIGHT_HOLDER in text, f"{page} missing copyright holder '{COPYRIGHT_HOLDER}'"
     assert DEVELOPER_NICK in text, f"{page} missing developer attribution '{DEVELOPER_NICK}'"
 
-    # Check attribution links (aipdlc.ru and github.com/xsa-dev)
+    # Check attribution links (aipdlc.ru/ru/, legal-info, and github.com/xsa-dev)
+    aipdlc_links = [link for link in parsed.links if link["attrs"].get("href") == AIPDLC_URL]
+    assert len(aipdlc_links) >= 1, f"{page} missing link to {AIPDLC_URL} in footer"
+    assert any(link["attrs"].get("target") == "_blank" and "noopener" in link["attrs"].get("rel", "") for link in aipdlc_links)
+
+    legal_links = [link for link in parsed.links if link["attrs"].get("href") == LEGAL_INFO_URL]
+    assert len(legal_links) >= 1, f"{page} missing link to {LEGAL_INFO_URL} in footer"
+    assert any(link["attrs"].get("target") == "_blank" and "noopener" in link["attrs"].get("rel", "") for link in legal_links)
+
     gh_links = [link for link in parsed.links if "github.com/xsa-dev" in link["attrs"].get("href", "")]
     assert len(gh_links) >= 1, f"{page} missing link to https://github.com/xsa-dev in footer"
 
@@ -91,3 +101,4 @@ def test_page_renders_shared_semantic_footer(page):
     assert "Отказ от ответственности:" in text or "отказ от ответственности" in text.lower(), (
         f"{page} missing disclaimer text"
     )
+    assert "некоммерческ" in text.lower(), f"{page} missing non-commercial indicator in disclaimer"

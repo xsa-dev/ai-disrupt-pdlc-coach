@@ -90,10 +90,10 @@
       el('div', { class: 'back-frame' }, [backAvatar]),
       el('p', { class: 'back-name', text: 'AI Disrupt PDLC Coach' }),
       el('div', { class: 'back-attribution' }, [
-        el('div', { class: 'back-attr-line', text: 'Методология: aipdlc.ru (Сбербанк)' }),
+        el('div', { class: 'back-attr-line', text: 'Автор концепции: Кирилл Меньшов (ПАО Сбербанк)' }),
         el('div', { class: 'back-attr-line', text: 'Разработка сайта: xsa-dev' })
       ]),
-      el('p', { class: 'back-disclaimer', text: 'Отказ от ответственности: независимый образовательный инструмент. Оценки носят ознакомительный характер.' }),
+      el('p', { class: 'back-disclaimer', text: 'Отказ от ответственности: независимый некоммерческий образовательный инструмент. Цитирование материалов aipdlc.ru.' }),
       el('p', { class: 'flip-hint', text: 'Спасибо, что заглянули' })
     ]);
 

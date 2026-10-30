@@ -74,10 +74,12 @@ async function run() {
     const back = doc.querySelector('.flip-back');
     if (!back) return false;
     const txt = back.textContent;
-    return txt.includes('aipdlc.ru') &&
+    return txt.includes('Кирилл Меньшов') &&
       txt.includes('Сбербанк') &&
       txt.includes('xsa-dev') &&
-      txt.includes('Отказ от ответственности');
+      txt.includes('aipdlc.ru') &&
+      txt.includes('Отказ от ответственности') &&
+      txt.includes('некоммерческий');
   })());
 
   // NO message form and NO network path (form was removed with this change)
