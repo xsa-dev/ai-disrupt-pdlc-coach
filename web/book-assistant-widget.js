@@ -4,7 +4,7 @@
   const assistantUrl = new URL(script.dataset.assistantUrl || '../', script.src);
   const development = ['localhost', '127.0.0.1'].includes(assistantUrl.hostname);
   if (assistantUrl.protocol !== 'https:' && !(development && assistantUrl.protocol === 'http:')) throw new Error('Assistant URL must use HTTPS');
-  assistantUrl.pathname = assistantUrl.pathname.replace(/\/$/, '') + '/'; assistantUrl.search = '?embed=1&v=2'; assistantUrl.hash = '';
+  assistantUrl.pathname = assistantUrl.pathname.replace(/\/$/, '') + '/'; assistantUrl.search = '?embed=1&v=3'; assistantUrl.hash = '';
   const host = document.createElement('div'); document.body.append(host);
   const root = host.attachShadow({mode: 'open'});
   const style = document.createElement('style');
