@@ -50,7 +50,9 @@
     "web/web-mobile.css",
     "web/course-gate.css",
     "web/course-gate.js",
-    "web/book-assistant-widget.js"
+    "web/book-assistant-widget.js",
+    "web/books-fork-modal.css",
+    "web/books-fork-modal.js"
   ],
   "forbidden_prefixes": [
     ".agent/",

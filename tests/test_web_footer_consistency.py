@@ -102,3 +102,8 @@ def test_page_renders_shared_semantic_footer(page):
         f"{page} missing disclaimer text"
     )
     assert "некоммерческ" in text.lower(), f"{page} missing non-commercial indicator in disclaimer"
+
+    # Check fork trigger button in footer guide
+    raw_content = (ROOT / "web" / page).read_text(encoding="utf-8")
+    assert 'class="site-footer__fork-btn"' in raw_content, f"{page} missing site-footer__fork-btn in footer"
+    assert "data-books-fork-trigger" in raw_content, f"{page} missing data-books-fork-trigger in footer"
