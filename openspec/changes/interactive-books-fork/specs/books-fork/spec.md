@@ -24,9 +24,9 @@ When activated by any fork trigger, the application SHALL display a modal dialog
 2. The dialog SHALL contain a close button with `aria-label="Закрыть"` and an accessible touch target of at least 44x44 CSS pixels.
 3. The dialog backdrop overlay SHALL have `z-index: 2147483001` to ensure clean overlaying above all page layers, including the book assistant widget host (`z-index: 2147483000`).
 4. The left wing SHALL feature **AI-Disrupt PSLC**:
-   - An explicit indicator or badge denoting the engineering track (`← Инженерный трек` / `← Код`).
+   - An explicit indicator or badge denoting the operations track (`← Эксплуатация ПО`).
    - The book title "AI-Disrupt PSLC".
-   - Concise summary covering the problem-solving lifecycle, intention engineering, and generative architectures.
+   - The expansion "Product Service Lifecycle" and a concise summary covering software operations and maintenance, service reliability, and collaboration between people and AI agents.
    - A direct external link to `https://aipdlc.ru/ru/pslc` with `target="_blank"` and `rel="noopener"`.
 5. The right wing SHALL feature **Vibe PPM**:
    - An explicit indicator or badge denoting the product & portfolio track (`Продуктовый трек →` / `Продукт →`).
