@@ -42,9 +42,9 @@
       '<div class="books-fork__grid">' +
         '<a href="https://aipdlc.ru/ru/pslc" target="_blank" rel="noopener" class="books-fork__card books-fork__card--pslc">' +
           '<div>' +
-            '<span class="books-fork__card-tag books-fork__card-tag--pslc">← Инженерный трек</span>' +
+            '<span class="books-fork__card-tag books-fork__card-tag--pslc">← Эксплуатация ПО</span>' +
             '<h3 class="books-fork__card-title">AI-Disrupt PSLC</h3>' +
-            '<p class="books-fork__card-text">Problem-Solving Life Cycle: инженерия намерения в коде, генеративная архитектура, мультиагентные пайплайны и устранение барьеров разработки.</p>' +
+            '<p class="books-fork__card-text">Product Service Lifecycle: жизненный цикл эксплуатации и сопровождения ПО, надёжность сервисов и совместная работа людей и ИИ-агентов.</p>' +
           '</div>' +
           '<div class="books-fork__card-action books-fork__card-action--pslc">' +
             '<span>Изучить PSLC ←</span>' +

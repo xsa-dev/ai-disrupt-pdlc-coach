@@ -111,6 +111,10 @@ assert.ok(pslcLink, 'PSLC link must exist');
 assert.equal(pslcLink.getAttribute('target'), '_blank');
 assert.equal(pslcLink.getAttribute('rel'), 'noopener');
 assert.ok(pslcLink.textContent.includes('AI-Disrupt PSLC'), 'PSLC card text');
+assert.ok(pslcLink.textContent.includes('Product Service Lifecycle'), 'PSLC canonical expansion');
+assert.ok(pslcLink.textContent.includes('эксплуатации и сопровождения ПО'), 'PSLC operations scope');
+assert.ok(pslcLink.textContent.includes('← Эксплуатация ПО'), 'PSLC operations label');
+assert.ok(!pslcLink.textContent.includes('Problem-Solving'), 'Reject incorrect PSLC expansion');
 
 const vibeLink = dialog.querySelector('a[href="https://aipdlc.ru/ru/vibeppm"]');
 assert.ok(vibeLink, 'Vibe PPM link must exist');
